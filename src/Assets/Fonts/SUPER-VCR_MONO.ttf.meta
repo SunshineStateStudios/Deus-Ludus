@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 367d49a59259a641cb4758139bfc513b
+guid: 527903ecef95cff9b9dcf28905f174ad
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Alex Brush
+  - SUPER-VCR MONO
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

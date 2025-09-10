@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ed70736ed093725acaceb2f1c9723334
+guid: 82e26539752ff0e298b1c0765e3c53ce
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Amerika
+  - GallaeciaForte
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
