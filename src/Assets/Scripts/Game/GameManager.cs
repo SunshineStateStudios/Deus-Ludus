@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         meshRenderer.materials = materials;
     }
 
-    public void DrawCard(int player)
+    public object DrawCard(int player)
     {
         if (shuffledDeck.Count > 0)
         {
@@ -113,7 +113,8 @@ public class GameManager : MonoBehaviour
                         drawButton.SetActive(false);
                         deckText.SetText("Well in! You got exactly 21 points in your deck!");
                         deckText.color = Color.green;
-                    } else
+                    }
+                    else
                     {
                         deckText.SetText("Your deck's value: " + playerTotal.ToString());
                         deckText.color = Color.white;
@@ -131,45 +132,156 @@ public class GameManager : MonoBehaviour
                     SetMaterial(newCard, "Textures/Cards/Materials/unknown");
                 }
             }
+
+            return data;
         }
-        
+
         if (shuffledDeck.Count == 0)
         {
             CreateDeck();
         }
+
+        return null;
     }
     
     public void PlayerDrawCard()
     {
         DrawCard(1);
-        int playerTotal = GetHandTotal(placedNumberCards_Player);
-
-        if (playerTotal > 21)
-        {
-            Debug.Log("Player Busts!");
-        }
     }
 
-    public void EnemyDrawCard()
+    public CardData EnemyDrawCard()
     {
-        DrawCard(2);
-        int enemyTotal = GetHandTotal(placedNumberCards_Enemy);
-        Debug.Log("Enemy's Total: " + enemyTotal);
-
-        if (enemyTotal > 21)
-        {
-            Debug.Log("Enemy Busts!");
-        }
+        CardData data = (CardData) DrawCard(2);
+        return data;
     }
 
-    public void PlayerEndTurn()
+    private IEnumerator PlayerEndTurn()
     {
         drawButton.SetActive(false);
+        endTurnButton.SetActive(false);
+
+        TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
+        deckText.SetText("The enemy is thinking...");
+        deckText.color = Color.white;
+
+        // AI's turn
+
+        // Set first card of enemy to the correct texture
+        GameObject firstEnemyCard = placedNumberCards_Enemy[0];
+        SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCard.GetComponent<CardData>().value.ToString());
+
+        int enemyTotal = GetHandTotal(placedNumberCards_Enemy);
+        int playerTotal = GetHandTotal(placedNumberCards_Player);
+        // Guarantee a hit if total is < 17.
+        while (enemyTotal < 17)
+        {
+            CardData data = EnemyDrawCard();
+            enemyTotal += data.value;
+            yield return new WaitForSecondsRealtime(0.65f);
+        }
+
+        // Take a gamble to draw an extra time (30% chance)
+        if (Random.value <= 0.3)
+        {
+            CardData data = EnemyDrawCard();
+            enemyTotal += data.value;
+        }
+
+        int gameResult;
+        /*
+
+            0 = draw
+            1 = player win
+            2 = opponent win
+
+        */
+
+        if (playerTotal > 21 && enemyTotal > 21)
+        {
+            gameResult = 0;
+        }
+        else if (playerTotal > 21)
+        {
+            if (enemyTotal > 21 && playerTotal < enemyTotal)
+            {
+                gameResult = 1;
+            } else
+            {
+                gameResult = 2;
+            }
+        }
+        else if (enemyTotal > 21)
+        {
+            if (playerTotal > 21 && enemyTotal < playerTotal)
+            {
+                gameResult = 2;
+            } else
+            {
+                gameResult = 1;
+            }
+        }
+        else if (playerTotal > enemyTotal)
+        {
+            gameResult = 1;
+        }
+        else if (enemyTotal > playerTotal)
+        {
+            gameResult = 2;
+        }
+        else
+        {
+            gameResult = 0;
+        }
+
+        string resultingText = "";
+        switch (gameResult)
+        {
+            case 0:
+                resultingText = "Draw! Nobody won.";
+                deckText.color = Color.yellow;
+                break;
+            case 1:
+                resultingText = "You won!";
+                deckText.color = Color.green;
+                break;
+            case 2:
+                resultingText = "You lost...";
+                deckText.color = Color.red;
+                break;
+        }
+        resultingText = resultingText + "\nYour deck: " + playerTotal + " | Their deck: " + enemyTotal + " | A new round will begin in 5 seconds.";
+        deckText.SetText(resultingText);
+
+        yield return new WaitForSecondsRealtime(5);
+        Cleanup();
+    }
+
+    public void PlayerEndTurnCoroutine()
+    {
+        StartCoroutine(PlayerEndTurn());
+    }
+
+    private void ClearAllChildren(Transform parentObject)
+    {
+        foreach (Transform child in parentObject)
+        {
+            Destroy(child.gameObject);
+        }
     }
     
-    public void EnemyEndTurn()
+    public void Cleanup()
     {
-        
+        ClearAllChildren(playerHand);
+        ClearAllChildren(enemyHand);
+
+        endTurnButton.SetActive(true);
+        drawButton.SetActive(true);
+
+        placedNumberCards_Player = new List<GameObject>();
+        placedNumberCards_Enemy = new List<GameObject>();
+
+        for (int i = 0; i < 2; i++) { PlayerDrawCard(); }
+        for (int i = 0; i < 2; i++) { EnemyDrawCard(); }
     }
 
     public int GetHandTotal(List<GameObject> hand)
