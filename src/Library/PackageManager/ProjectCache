@@ -5,7 +5,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638954560870000000
+      ticks: 638957069730000000
     m_Hash: 1390295855
   m_LockFileStatus:
     m_FilePath: /home/jam/Documents/GitHub/Deus-Ludus/src/Packages/packages-lock.json
@@ -13,7 +13,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638954560870000000
+      ticks: 638957069730000000
     m_Hash: 539179058
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
@@ -126,6 +126,7 @@ m_ResolvedPackages:
     - 2.9.1
     - 2.9.2
     - 2.9.3
+    - 2.10.0
     compatible:
     - 2.7.1
     - 2.8.1
@@ -133,6 +134,7 @@ m_ResolvedPackages:
     - 2.9.1
     - 2.9.2
     - 2.9.3
+    - 2.10.0
     recommended: 2.7.1
     deprecated: []
   dependencies: []
@@ -3793,9 +3795,11 @@ m_ResolvedPackages:
     - 2.0.0
     - 2.0.1
     - 2.1.0
+    - 2.1.1
     compatible:
     - 2.1.0
-    recommended: 2.1.0
+    - 2.1.1
+    recommended: 2.1.1
     deprecated: []
   dependencies: []
   resolvedDependencies: []

@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
                 if (playerTotal > 21)
                 {
                     drawButton.SetActive(false);
-                    deckText.SetText("Oh no! It's a bust! (Went over 21, you had " + playerTotal.ToString() + " points)");
+                    deckText.SetText("Oh no! It's a bust! (Went over 21, you have " + playerTotal.ToString() + " points)");
                     deckText.color = Color.red;
                 }
                 else
@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
         // Set first card of enemy to the correct texture
         GameObject firstEnemyCard = placedNumberCards_Enemy[0];
         SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCard.GetComponent<CardData>().value.ToString());
+        yield return new WaitForSecondsRealtime(0.85f);
 
         int enemyTotal = GetHandTotal(placedNumberCards_Enemy);
         int playerTotal = GetHandTotal(placedNumberCards_Player);
@@ -177,15 +178,37 @@ public class GameManager : MonoBehaviour
         {
             CardData data = EnemyDrawCard();
             enemyTotal += data.value;
-            yield return new WaitForSecondsRealtime(0.65f);
+            yield return new WaitForSecondsRealtime(0.85f);
         }
 
-        // Take a gamble to draw an extra time (30% chance)
-        if (Random.value <= 0.3)
+        // If we're under 21, take a gamble.
+        if (enemyTotal < 21)
         {
-            CardData data = EnemyDrawCard();
-            enemyTotal += data.value;
+            float chanceToDrawAgain = 0f;
+            switch (enemyTotal)
+            {
+                case 17:
+                    chanceToDrawAgain = 0.3f;
+                    break;
+                case 18:
+                    chanceToDrawAgain = 0.2f;
+                    break;
+                case 19:
+                    chanceToDrawAgain = 0.1f;
+                    break;
+                case 20:
+                    chanceToDrawAgain = 0.05f;
+                    break;
+            }
+
+            if (Random.value <= chanceToDrawAgain)
+            {
+                CardData data = EnemyDrawCard();
+                enemyTotal += data.value;
+            }
         }
+        
+        yield return new WaitForSecondsRealtime(0.5f);
 
         int gameResult;
         /*
@@ -196,28 +219,26 @@ public class GameManager : MonoBehaviour
 
         */
 
-        if (playerTotal > 21 && enemyTotal > 21)
-        {
-            gameResult = 0;
-        }
-        else if (playerTotal > 21)
+        if (playerTotal > 21)
         {
             if (enemyTotal > 21 && playerTotal < enemyTotal)
             {
                 gameResult = 1;
-            } else
+            }
+            else
             {
                 gameResult = 2;
             }
         }
         else if (enemyTotal > 21)
         {
-            if (playerTotal > 21 && enemyTotal < playerTotal)
-            {
-                gameResult = 2;
-            } else
+            if (playerTotal > 21 && playerTotal < enemyTotal)
             {
                 gameResult = 1;
+            }
+            else
+            {
+                gameResult = 2;
             }
         }
         else if (playerTotal > enemyTotal)
@@ -227,8 +248,13 @@ public class GameManager : MonoBehaviour
         else if (enemyTotal > playerTotal)
         {
             gameResult = 2;
-        }
-        else
+        } else if(playerTotal == 21 && enemyTotal != 21)
+        {
+            gameResult = 1;
+        } else if (enemyTotal == 21 && playerTotal != 21)
+        {
+            gameResult = 2;
+        } else
         {
             gameResult = 0;
         }
@@ -291,21 +317,13 @@ public class GameManager : MonoBehaviour
         foreach (var cardObj in hand)
         {
             CardData card = cardObj.GetComponent<CardData>();
-            total += card.value;
-        }
 
-        // Subtract by 10 for each ace there are (whenever applicable)
-        if (total > 21)
-        {
-            foreach (var cardObj in hand)
+            int val = card.value;
+            if ((total > 21 || total + val > 21) && card.value == 11)
             {
-                CardData card = cardObj.GetComponent<CardData>();
-                if (card.value == 11)
-                {
-                    total -= 10;
-                    if (total <= 21) { break; }
-                }
+                val = 1;
             }
+            total += val;
         }
 
         return total;
