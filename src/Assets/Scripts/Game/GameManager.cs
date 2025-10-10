@@ -81,67 +81,63 @@ public class GameManager : MonoBehaviour
 
     public object DrawCard(int player)
     {
-        if (shuffledDeck.Count > 0)
+        CardData drawnCard = shuffledDeck[0];
+        shuffledDeck.RemoveAt(0);
+
+        GameObject newCard = Instantiate(cardPrefab, playerHand);
+        CardData data = newCard.GetComponent<CardData>();
+        data.value = drawnCard.value;
+        data.suit = drawnCard.suit;
+        SetMaterial(newCard, "Textures/Cards/Materials/" + drawnCard.value.ToString());
+
+        if (player == 1)
         {
-            CardData drawnCard = shuffledDeck[0];
-            shuffledDeck.RemoveAt(0);
+            placedNumberCards_Player.Add(newCard);
+            newCard.transform.SetParent(playerHand);
+            newCard.transform.position -= new Vector3(0, 0, 2.3f * (placedNumberCards_Player.Count - 1));
 
-            GameObject newCard = Instantiate(cardPrefab, playerHand);
-            CardData data = newCard.GetComponent<CardData>();
-            data.value = drawnCard.value;
-            data.suit = drawnCard.suit;
-            SetMaterial(newCard, "Textures/Cards/Materials/" + drawnCard.value.ToString());
-
-            if (player == 1)
+            int playerTotal = GetHandTotal(placedNumberCards_Player);
+            TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
+            if (playerTotal > 21)
             {
-                placedNumberCards_Player.Add(newCard);
-                newCard.transform.SetParent(playerHand);
-                newCard.transform.position -= new Vector3(0, 0, 2.3f * (placedNumberCards_Player.Count - 1));
-
-                int playerTotal = GetHandTotal(placedNumberCards_Player);
-                TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
-                if (playerTotal > 21)
-                {
-                    drawButton.SetActive(false);
-                    deckText.SetText("Oh no! It's a bust! (Went over 21, you have " + playerTotal.ToString() + " points)");
-                    deckText.color = Color.red;
-                }
-                else
-                {
-                    if (playerTotal == 21)
-                    {
-                        drawButton.SetActive(false);
-                        deckText.SetText("Well in! You got exactly 21 points in your deck!");
-                        deckText.color = Color.green;
-                    }
-                    else
-                    {
-                        deckText.SetText("Your deck's value: " + playerTotal.ToString());
-                        deckText.color = Color.white;
-                    }
-                }
+                drawButton.SetActive(false);
+                deckText.SetText("Oh no! It's a bust! (Went over 21, you have " + playerTotal.ToString() + " points)");
+                deckText.color = Color.red;
             }
             else
             {
-                placedNumberCards_Enemy.Add(newCard);
-                newCard.transform.SetParent(enemyHand);
-                newCard.transform.position -= new Vector3(-8, 0, 2.3f * (placedNumberCards_Enemy.Count - 1));
-
-                if (placedNumberCards_Enemy.Count == 1)
+                if (playerTotal == 21)
                 {
-                    SetMaterial(newCard, "Textures/Cards/Materials/unknown");
+                    drawButton.SetActive(false);
+                    deckText.SetText("Well in! You got exactly 21 points in your deck!");
+                    deckText.color = Color.green;
+                }
+                else
+                {
+                    deckText.SetText("Your deck's value: " + playerTotal.ToString());
+                    deckText.color = Color.white;
                 }
             }
+        }
+        else
+        {
+            placedNumberCards_Enemy.Add(newCard);
+            newCard.transform.SetParent(enemyHand);
+            newCard.transform.position -= new Vector3(-8, 0, 2.3f * (placedNumberCards_Enemy.Count - 1));
 
-            return data;
+            if (placedNumberCards_Enemy.Count == 1)
+            {
+                SetMaterial(newCard, "Textures/Cards/Materials/unknown");
+            }
         }
 
         if (shuffledDeck.Count == 0)
         {
             CreateDeck();
+            ShuffleDeck();
         }
 
-        return null;
+        return data;
     }
     
     public void PlayerDrawCard()
@@ -224,6 +220,9 @@ public class GameManager : MonoBehaviour
             if (enemyTotal > 21 && playerTotal < enemyTotal)
             {
                 gameResult = 1;
+            } else if (playerTotal == enemyTotal)
+            {
+                gameResult = 0;
             }
             else
             {
@@ -234,11 +233,14 @@ public class GameManager : MonoBehaviour
         {
             if (playerTotal > 21 && playerTotal < enemyTotal)
             {
-                gameResult = 1;
+                gameResult = 2;
+            } else if (playerTotal == enemyTotal)
+            {
+                gameResult = 0;
             }
             else
             {
-                gameResult = 2;
+                gameResult = 1;
             }
         }
         else if (playerTotal > enemyTotal)
