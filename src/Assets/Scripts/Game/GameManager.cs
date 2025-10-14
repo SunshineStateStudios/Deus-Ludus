@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         string[] suits = { "Hearts", "Diamonds", "Clubs", "Spades" };
         for (int i = 0; i < suits.Length; i++)
         {
-            for (int j = 1; j <= 10; j++)
+            for (int j = 1; j <= 11; j++)
             {
                 CardData card = new CardData(j, suits[i]);
                 deck.Add(card);
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
                 deck.Add(card);
             }
 
-            CardData ace = new CardData(11, suits[i]);
+            CardData ace = new CardData(13, suits[i]);
             deck.Add(ace);
         }
     }
@@ -88,7 +88,14 @@ public class GameManager : MonoBehaviour
         CardData data = newCard.GetComponent<CardData>();
         data.value = drawnCard.value;
         data.suit = drawnCard.suit;
-        SetMaterial(newCard, "Textures/Cards/Materials/" + drawnCard.value.ToString());
+
+        if (data.value == 13)
+        {
+            SetMaterial(newCard, "Textures/Cards/Materials/ace");
+        } else
+        {
+            SetMaterial(newCard, "Textures/Cards/Materials/" + drawnCard.value.ToString());
+        }
 
         if (player == 1)
         {
@@ -164,7 +171,14 @@ public class GameManager : MonoBehaviour
 
         // Set first card of enemy to the correct texture
         GameObject firstEnemyCard = placedNumberCards_Enemy[0];
-        SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCard.GetComponent<CardData>().value.ToString());
+        CardData firstEnemyCardData = firstEnemyCard.GetComponent<CardData>();
+        if (firstEnemyCardData.value == 13)
+        {
+            SetMaterial(firstEnemyCard, "Textures/Cards/Materials/ace");
+        } else {
+            SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCardData.value.ToString());
+        }
+        
         yield return new WaitForSecondsRealtime(0.85f);
 
         int enemyTotal = GetHandTotal(placedNumberCards_Enemy);
@@ -321,10 +335,19 @@ public class GameManager : MonoBehaviour
             CardData card = cardObj.GetComponent<CardData>();
 
             int val = card.value;
-            if ((total > 21 || total + val > 21) && card.value == 11)
+
+            if (card.value == 13)
             {
-                val = 1;
+                if ((total > 21 || total + 11 > 21))
+                {
+                    val = 1;
+                }
+                else
+                {
+                    val = 11;
+                }
             }
+            
             total += val;
         }
 
