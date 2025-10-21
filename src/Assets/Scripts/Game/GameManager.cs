@@ -11,7 +11,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,8 +30,8 @@ public class GameManager : MonoBehaviour
     {
         CreateDeck();
         ShuffleDeck();
-        for (int i = 0; i < 2; i++) { PlayerDrawCard(); }
-        for (int i = 0; i < 2; i++) { EnemyDrawCard(); }
+        for (int i = 0; i < 2; i++) { DrawCard(1); }
+        for (int i = 0; i < 2; i++) { DrawCard(2); }
     }
 
     // Create a deck of 52 cards
@@ -105,23 +104,20 @@ public class GameManager : MonoBehaviour
 
             int playerTotal = GetHandTotal(placedNumberCards_Player);
             TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
+
+            deckText.SetText("Your deck's value: " + playerTotal.ToString());
             if (playerTotal > 21)
             {
-                drawButton.SetActive(false);
-                deckText.SetText("Oh no! It's a bust! (Went over 21, you have " + playerTotal.ToString() + " points)");
                 deckText.color = Color.red;
             }
             else
             {
                 if (playerTotal == 21)
                 {
-                    drawButton.SetActive(false);
-                    deckText.SetText("Well in! You got exactly 21 points in your deck!");
                     deckText.color = Color.green;
                 }
                 else
                 {
-                    deckText.SetText("Your deck's value: " + playerTotal.ToString());
                     deckText.color = Color.white;
                 }
             }
@@ -146,161 +142,204 @@ public class GameManager : MonoBehaviour
 
         return data;
     }
-    
+
     public void PlayerDrawCard()
     {
         DrawCard(1);
+        StartCoroutine(EndPlayerTurn(false));
+    }
+
+    public void PlayerStay()
+    {
+        StartCoroutine(EndPlayerTurn(true));
+    }
+
+    private string DetermineWinner(int playerValue, int enemyValue)
+    {
+        if (playerValue > 21 && enemyValue > 21)
+        {
+            if (playerValue < enemyValue)
+            {
+                return "Player";
+            }
+            else if (enemyValue < playerValue)
+            {
+                return "Enemey";
+            }
+            else
+            {
+                return "Draw";
+            }
+        }
+
+        if (playerValue > 21)
+        {
+            return "Enemy";
+        }
+
+        if (enemyValue > 21)
+        {
+            return "Player";
+        }
+
+        if (playerValue > enemyValue)
+        {
+            return "Player";
+        }
+        else if (enemyValue > playerValue)
+        {
+            return "Enemy";
+        } else
+        {
+            return "Draw";
+        }
+    }
+
+    private IEnumerator EndPlayerTurn(bool didPlayerStay)
+    {
+        drawButton.SetActive(false);
+        endTurnButton.SetActive(false);
+
+        yield return new WaitForSeconds(1.5f);
+
+        TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
+        deckText.SetText("The AI is thinking...");
+        deckText.color = Color.white;
+
+        /*
+
+        AI thought process:
+            Are we at 21 or over 21?
+                Stay (ends turn)
+            Are we under 17?
+                Draw (ends turn)
+            Otherwise...
+                Store "chance" variable, which determines how likely the AI is to draw from 0-100%.
+                Are we at 18?
+                    chance = 20%
+                Are we at 19?
+                    chance = 15%
+                Are we at 20?
+                    chance = 5%
+                Are we at 21?
+                    chance = 0%
+                
+                If "chance"/100 <= Random.value...
+                    Draw (ends turn)
+                Otherwise...
+                    Stay (ends turn)
+
+        */
+
+        yield return new WaitForSeconds(2);
+
+        bool didEnemyStay = false;
+        int enemyHandTotal = GetHandTotal(placedNumberCards_Enemy);
+
+        if (enemyHandTotal > 21 || enemyHandTotal == 21)
+        {
+            didEnemyStay = true;
+        }
+        else if (enemyHandTotal < 17)
+        {
+            DrawCard(2);
+        }
+        else
+        {
+            float chance = 0;
+
+            switch (enemyHandTotal)
+            {
+                case 18:
+                    chance = 0.2f;
+                    break;
+                case 19:
+                    chance = 0.15f;
+                    break;
+                case 20:
+                    chance = 0.05f;
+                    break;
+            }
+
+            if (chance <= Random.value)
+            {
+                DrawCard(2);
+            }
+            else
+            {
+                didEnemyStay = true;
+            }
+        }
+
+        // Checking to see if both players stayed. If so, end the round.
+        if (didEnemyStay && didPlayerStay)
+        {
+            deckText.SetText("Both players have stayed, calculating results...");
+
+            yield return new WaitForSeconds(1.5f);
+
+            // Set first card of enemy to the correct texture
+            GameObject firstEnemyCard = placedNumberCards_Enemy[0];
+            CardData firstEnemyCardData = firstEnemyCard.GetComponent<CardData>();
+            if (firstEnemyCardData.value == 13)
+            {
+                SetMaterial(firstEnemyCard, "Textures/Cards/Materials/ace");
+            } else {
+                SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCardData.value.ToString());
+            }
+
+            enemyHandTotal = GetHandTotal(placedNumberCards_Enemy);
+            int playerTotalValue = GetHandTotal(placedNumberCards_Player);
+
+            string whoWon = DetermineWinner(playerTotalValue, enemyHandTotal);
+
+            switch (whoWon)
+            {
+                case "Player":
+                    deckText.SetText("You won!");
+                    deckText.color = Color.green;
+                    break;
+                case "Enemy":
+                    deckText.SetText("You lost...");
+                    deckText.color = Color.red;
+                    break;
+                case "Draw":
+                    deckText.SetText("Stalemate! Nobody won.");
+                    deckText.color = Color.yellow;
+                    break;
+            }
+
+            yield return new WaitForSeconds(5);
+            Cleanup();
+        }
+        else
+        {
+            int playerTotalValue = GetHandTotal(placedNumberCards_Player);
+            deckText.SetText("Your deck's value: " + playerTotalValue.ToString());
+
+            if (playerTotalValue == 21)
+            {
+                deckText.color = Color.green;
+                drawButton.SetActive(true);
+            }
+            else if (playerTotalValue > 21)
+            {
+                deckText.color = Color.red;
+            }
+            else
+            {
+                deckText.color = Color.white;
+                drawButton.SetActive(true);
+            }
+
+            endTurnButton.SetActive(true);
+        }
     }
 
     public CardData EnemyDrawCard()
     {
         CardData data = (CardData) DrawCard(2);
         return data;
-    }
-
-    private IEnumerator PlayerEndTurn()
-    {
-        drawButton.SetActive(false);
-        endTurnButton.SetActive(false);
-
-        TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
-        deckText.SetText("The enemy is thinking...");
-        deckText.color = Color.white;
-
-        // AI's turn
-
-        // Set first card of enemy to the correct texture
-        GameObject firstEnemyCard = placedNumberCards_Enemy[0];
-        CardData firstEnemyCardData = firstEnemyCard.GetComponent<CardData>();
-        if (firstEnemyCardData.value == 13)
-        {
-            SetMaterial(firstEnemyCard, "Textures/Cards/Materials/ace");
-        } else {
-            SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCardData.value.ToString());
-        }
-        
-        yield return new WaitForSecondsRealtime(0.85f);
-
-        int enemyTotal = GetHandTotal(placedNumberCards_Enemy);
-        int playerTotal = GetHandTotal(placedNumberCards_Player);
-        // Guarantee a hit if total is < 17.
-        while (enemyTotal < 17)
-        {
-            CardData data = EnemyDrawCard();
-            enemyTotal += data.value;
-            yield return new WaitForSecondsRealtime(0.85f);
-        }
-
-        // If we're under 21, take a gamble.
-        if (enemyTotal < 21)
-        {
-            float chanceToDrawAgain = 0f;
-            switch (enemyTotal)
-            {
-                case 17:
-                    chanceToDrawAgain = 0.3f;
-                    break;
-                case 18:
-                    chanceToDrawAgain = 0.2f;
-                    break;
-                case 19:
-                    chanceToDrawAgain = 0.1f;
-                    break;
-                case 20:
-                    chanceToDrawAgain = 0.05f;
-                    break;
-            }
-
-            if (Random.value <= chanceToDrawAgain)
-            {
-                CardData data = EnemyDrawCard();
-                enemyTotal += data.value;
-            }
-        }
-        
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        int gameResult;
-        /*
-
-            0 = draw
-            1 = player win
-            2 = opponent win
-
-        */
-
-        if (playerTotal > 21)
-        {
-            if (enemyTotal > 21 && playerTotal < enemyTotal)
-            {
-                gameResult = 1;
-            } else if (playerTotal == enemyTotal)
-            {
-                gameResult = 0;
-            }
-            else
-            {
-                gameResult = 2;
-            }
-        }
-        else if (enemyTotal > 21)
-        {
-            if (playerTotal > 21 && playerTotal < enemyTotal)
-            {
-                gameResult = 2;
-            } else if (playerTotal == enemyTotal)
-            {
-                gameResult = 0;
-            }
-            else
-            {
-                gameResult = 1;
-            }
-        }
-        else if (playerTotal > enemyTotal)
-        {
-            gameResult = 1;
-        }
-        else if (enemyTotal > playerTotal)
-        {
-            gameResult = 2;
-        } else if(playerTotal == 21 && enemyTotal != 21)
-        {
-            gameResult = 1;
-        } else if (enemyTotal == 21 && playerTotal != 21)
-        {
-            gameResult = 2;
-        } else
-        {
-            gameResult = 0;
-        }
-
-        string resultingText = "";
-        switch (gameResult)
-        {
-            case 0:
-                resultingText = "Draw! Nobody won.";
-                deckText.color = Color.yellow;
-                break;
-            case 1:
-                resultingText = "You won!";
-                deckText.color = Color.green;
-                break;
-            case 2:
-                resultingText = "You lost...";
-                deckText.color = Color.red;
-                break;
-        }
-        resultingText = resultingText + "\nYour deck: " + playerTotal + " | Their deck: " + enemyTotal + " | A new round will begin in 5 seconds.";
-        deckText.SetText(resultingText);
-
-        yield return new WaitForSecondsRealtime(5);
-        Cleanup();
-    }
-
-    public void PlayerEndTurnCoroutine()
-    {
-        StartCoroutine(PlayerEndTurn());
     }
 
     private void ClearAllChildren(Transform parentObject)
@@ -322,8 +361,8 @@ public class GameManager : MonoBehaviour
         placedNumberCards_Player = new List<GameObject>();
         placedNumberCards_Enemy = new List<GameObject>();
 
-        for (int i = 0; i < 2; i++) { PlayerDrawCard(); }
-        for (int i = 0; i < 2; i++) { EnemyDrawCard(); }
+        for (int i = 0; i < 2; i++) { DrawCard(1); }
+        for (int i = 0; i < 2; i++) { DrawCard(2); }
     }
 
     public int GetHandTotal(List<GameObject> hand)
@@ -338,7 +377,7 @@ public class GameManager : MonoBehaviour
 
             if (card.value == 13)
             {
-                if ((total > 21 || total + 11 > 21))
+                if (total > 21 || total + 11 > 21)
                 {
                     val = 1;
                 }
