@@ -25,9 +25,12 @@ public class GameManager : MonoBehaviour
 
     private List<CardData> deck = new List<CardData>();
     private List<CardData> shuffledDeck = new List<CardData>();
+    private AudioSource audioSource;
 
     void Start()
     {
+        audioSource = gameObject.GetComponent<AudioSource>();
+
         CreateDeck();
         ShuffleDeck();
         for (int i = 0; i < 2; i++) { DrawCard(1); }
@@ -68,6 +71,12 @@ public class GameManager : MonoBehaviour
             shuffledDeck[i] = shuffledDeck[randomIndex];
             shuffledDeck[randomIndex] = temp;
         }
+    }
+
+    private void PlaySound(string pathToClip)
+    {
+        audioSource.clip = Resources.Load<AudioClip>(pathToClip);
+        audioSource.Play();
     }
 
     private void SetMaterial(GameObject obj, string texture)
@@ -140,11 +149,13 @@ public class GameManager : MonoBehaviour
             ShuffleDeck();
         }
 
+
         return data;
     }
 
     public void PlayerDrawCard()
     {
+        PlaySound("Sounds/draw");
         DrawCard(1);
         StartCoroutine(EndPlayerTurn(false));
     }
@@ -284,9 +295,12 @@ public class GameManager : MonoBehaviour
             if (firstEnemyCardData.value == 13)
             {
                 SetMaterial(firstEnemyCard, "Textures/Cards/Materials/ace");
-            } else {
+            }
+            else
+            {
                 SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCardData.value.ToString());
             }
+            PlaySound("Sounds/reveal_card");
 
             enemyHandTotal = GetHandTotal(placedNumberCards_Enemy);
             int playerTotalValue = GetHandTotal(placedNumberCards_Player);
@@ -303,7 +317,7 @@ public class GameManager : MonoBehaviour
                     deckText.SetText("You lost...");
                     deckText.color = Color.red;
                     break;
-                case "Draw":
+                default:
                     deckText.SetText("Stalemate! Nobody won.");
                     deckText.color = Color.yellow;
                     break;
@@ -338,6 +352,7 @@ public class GameManager : MonoBehaviour
 
     public CardData EnemyDrawCard()
     {
+        PlaySound("Sounds/draw");
         CardData data = (CardData) DrawCard(2);
         return data;
     }

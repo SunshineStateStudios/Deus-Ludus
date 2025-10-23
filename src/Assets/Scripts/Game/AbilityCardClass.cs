@@ -9,11 +9,11 @@ Written by plexinator-9000.
 using UnityEngine;
 
 [System.Serializable]
-public class AbilityCardClass : MonoBehaviour
+public class AbilityCard : MonoBehaviour
 {
     public string suit;
 
-    public AbilityCardClass(string suit)
+    public AbilityCard(string suit)
     {
         this.suit = suit;
     }
