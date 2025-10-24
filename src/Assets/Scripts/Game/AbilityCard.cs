@@ -11,14 +11,14 @@ using UnityEngine;
 [System.Serializable]
 public class AbilityCard : MonoBehaviour
 {
-    public string suit;
+    private string NiceName = "";
 
-    public AbilityCard(string suit)
+    public virtual string GetName()
     {
-        this.suit = suit;
+        return NiceName;
     }
 
-    public void Execute()
+    public virtual void Execute()
     {
         
     }

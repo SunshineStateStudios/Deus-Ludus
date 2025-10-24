@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,10 +23,15 @@ public class GameManager : MonoBehaviour
     public GameObject drawButton;
     public GameObject endTurnButton;
     public GameObject deckValueText;
+    public GameObject inventoryPanel;
+    public GameObject abilityCardUIPrefab;
 
     private List<CardData> deck = new List<CardData>();
     private List<CardData> shuffledDeck = new List<CardData>();
     private AudioSource audioSource;
+    private string[] possibleAbilityCards = { "test1", "test2" };
+    private List<AbilityCard> playerInventory = new List<AbilityCard>();
+    private List<AbilityCard> enemyInventory = new List<AbilityCard>();
 
     void Start()
     {
@@ -35,6 +41,9 @@ public class GameManager : MonoBehaviour
         ShuffleDeck();
         for (int i = 0; i < 2; i++) { DrawCard(1); }
         for (int i = 0; i < 2; i++) { DrawCard(2); }
+
+        for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
+        for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
     }
 
     // Create a deck of 52 cards
@@ -73,6 +82,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void UpdateInventory()
+    {
+        ClearAllChildren(inventoryPanel.transform);
+
+        for (int i = 0; i < playerInventory.Count; i++)
+        {
+            AbilityCard card = playerInventory[i];
+            GameObject uiCard = Instantiate(abilityCardUIPrefab, inventoryPanel.transform);
+            AbilityCardUI uiCard_script = uiCard.GetComponent<AbilityCardUI>();
+            TextMeshProUGUI uiCard_text = uiCard.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+
+            uiCard_script.index = i;
+            uiCard_text.SetText(card.GetName());
+        }
+    }
+
+    private void GiveAbilityCard(int player)
+    {
+        if ((player == 1 && playerInventory.Count < 10) || (player == 2 && enemyInventory.Count < 10))
+        {
+            string chosenCardName = possibleAbilityCards[Random.Range(0, possibleAbilityCards.Length)];
+            GameObject abilityCardPrefab = Resources.Load<GameObject>("Prefabs/AbilityCards/" + chosenCardName);
+            AbilityCard abilityCard = abilityCardPrefab.GetComponent<AbilityCard>();
+
+            if (player == 1)
+            {
+                playerInventory.Add(abilityCard);
+                UpdateInventory();
+            } else
+            {
+                enemyInventory.Add(abilityCard);
+            }
+        }
+    }
+
     private void PlaySound(string pathToClip)
     {
         audioSource.clip = Resources.Load<AudioClip>(pathToClip);
@@ -96,6 +140,8 @@ public class GameManager : MonoBehaviour
         CardData data = newCard.GetComponent<CardData>();
         data.value = drawnCard.value;
         data.suit = drawnCard.suit;
+
+        PlaySound("Sounds/draw");
 
         if (data.value == 13)
         {
@@ -155,7 +201,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDrawCard()
     {
-        PlaySound("Sounds/draw");
         DrawCard(1);
         StartCoroutine(EndPlayerTurn(false));
     }
@@ -325,6 +370,8 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(5);
             Cleanup();
+            for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
+            for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
         }
         else
         {
@@ -348,13 +395,6 @@ public class GameManager : MonoBehaviour
 
             endTurnButton.SetActive(true);
         }
-    }
-
-    public CardData EnemyDrawCard()
-    {
-        PlaySound("Sounds/draw");
-        CardData data = (CardData) DrawCard(2);
-        return data;
     }
 
     private void ClearAllChildren(Transform parentObject)
