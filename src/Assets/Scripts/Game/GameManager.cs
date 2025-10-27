@@ -255,6 +255,7 @@ public class GameManager : MonoBehaviour
     {
         drawButton.SetActive(false);
         endTurnButton.SetActive(false);
+        inventoryPanel.SetActive(false);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -372,6 +373,7 @@ public class GameManager : MonoBehaviour
             Cleanup();
             for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
             for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
+            inventoryPanel.SetActive(true);
         }
         else
         {
@@ -394,6 +396,7 @@ public class GameManager : MonoBehaviour
             }
 
             endTurnButton.SetActive(true);
+            inventoryPanel.SetActive(true);
         }
     }
 
