@@ -6,6 +6,7 @@ Written by plexinator-9000.
 
 */
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,6 @@ public class AbilityCardUI : MonoBehaviour
 
     private void OnClick()
     {
-        
+        Debug.Log("used ablity card AAHHHHH HELP MEEEE!!!!");
     }
 }

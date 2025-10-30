@@ -11,7 +11,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -307,14 +306,17 @@ public class GameManager : MonoBehaviour
 
             switch (enemyHandTotal)
             {
-                case 18:
+                case 17:
                     chance = 0.2f;
                     break;
-                case 19:
+                case 18:
                     chance = 0.15f;
                     break;
-                case 20:
+                case 19:
                     chance = 0.05f;
+                    break;
+                case 20:
+                    chance = 0.01f;
                     break;
             }
 
@@ -435,17 +437,20 @@ public class GameManager : MonoBehaviour
 
             if (card.value == 13)
             {
-                if (total > 21 || total + 11 > 21)
-                {
-                    val = 1;
-                }
-                else
-                {
-                    val = 11;
-                }
+                val = 11;
             }
-            
             total += val;
+        }
+
+        foreach (var cardObj in hand)
+        {
+            CardData card = cardObj.GetComponent<CardData>();
+
+            if (card.value == 13 && total > 21)
+            {
+                total -= 10;
+            }
+
         }
 
         return total;
