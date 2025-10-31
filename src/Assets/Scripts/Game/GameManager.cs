@@ -69,6 +69,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void DrawAbilityCard(int index, int player)
+    {
+        
+    }
+
     void ShuffleDeck()
     {
         shuffledDeck = new List<CardData>(deck);

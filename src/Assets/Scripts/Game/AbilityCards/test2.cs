@@ -6,11 +6,10 @@ Written by plexinator-9000.
 
 */
 
-[System.Serializable]
 public class test2 : AbilityCard
 {
     private string NiceName = "Test 2";
-    private bool isPassive = true;
+    private bool isPassive = false;
 
     public override string GetName()
     {
@@ -20,9 +19,9 @@ public class test2 : AbilityCard
     {
         return isPassive;
     }
-
-    public override void Execute()
+    
+    public override void Execute(int player)
     {
-        
+
     }
 }

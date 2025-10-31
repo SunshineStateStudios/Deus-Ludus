@@ -6,7 +6,6 @@ Written by plexinator-9000.
 
 */
 
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +23,9 @@ public class AbilityCardUI : MonoBehaviour
 
     private void OnClick()
     {
-        Debug.Log("used ablity card AAHHHHH HELP MEEEE!!!!");
+        GameObject gameManagerObj = GameObject.Find("GameManager");
+        GameManager gameManagerScript = gameManagerObj.GetComponent<GameManager>();
+        gameManagerScript.DrawAbilityCard(index, 1);
+        Destroy(gameObject);
     }
 }

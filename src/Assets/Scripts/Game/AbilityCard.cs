@@ -18,7 +18,7 @@ public class AbilityCard : MonoBehaviour
         return NiceName;
     }
 
-    public virtual void Execute()
+    public virtual void Execute(int player)
     {
         
     }
