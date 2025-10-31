@@ -26,6 +26,5 @@ public class AbilityCardUI : MonoBehaviour
         GameObject gameManagerObj = GameObject.Find("GameManager");
         GameManager gameManagerScript = gameManagerObj.GetComponent<GameManager>();
         gameManagerScript.DrawAbilityCard(index, 1);
-        Destroy(gameObject);
     }
 }

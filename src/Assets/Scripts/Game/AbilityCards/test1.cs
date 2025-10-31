@@ -9,16 +9,16 @@ Written by plexinator-9000.
 public class test1 : AbilityCard
 {
     private string NiceName = "Test 1";
-    private bool isPassive = true;
+    private int decayTime = 1; // How many rounds until this card expires. 0 = instant
 
     public override string GetName()
     {
         return NiceName;
     }
     
-    public bool GetPassivity()
+    public int GetDecayTime()
     {
-        return isPassive;
+        return decayTime;
     }
     
     public override void Execute(int player)

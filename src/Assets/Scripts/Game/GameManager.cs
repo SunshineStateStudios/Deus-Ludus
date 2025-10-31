@@ -9,6 +9,7 @@ Written by plexinator-9000.
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -71,7 +72,20 @@ public class GameManager : MonoBehaviour
 
     public void DrawAbilityCard(int index, int player)
     {
-        
+        AbilityCard chosenCard;
+        if (player == 1)
+        {
+            chosenCard = playerInventory.ElementAt(index);
+            chosenCard.Execute(1);
+            playerInventory.Remove(chosenCard);
+
+            UpdateInventory();
+        } else
+        {
+            chosenCard = enemyInventory.ElementAt(index);
+            chosenCard.Execute(2);
+            enemyInventory.Remove(chosenCard);
+        }
     }
 
     void ShuffleDeck()
@@ -92,7 +106,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < playerInventory.Count; i++)
         {
-            AbilityCard card = playerInventory[i];
+            AbilityCard card = playerInventory.ElementAt(i);
             GameObject uiCard = Instantiate(abilityCardUIPrefab, inventoryPanel.transform);
             AbilityCardUI uiCard_script = uiCard.GetComponent<AbilityCardUI>();
             TextMeshProUGUI uiCard_text = uiCard.transform.Find("Text").GetComponent<TextMeshProUGUI>();
