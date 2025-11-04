@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     // Create a deck of 52 cards
     void CreateDeck()
     {
-        string[] suits = { "Hearts", "Diamonds", "Clubs", "Spades" };
+        string[] suits = { "hearts", "diamonds", "clubs", "spades" };
         for (int i = 0; i < suits.Length; i++)
         {
             for (int j = 1; j <= 11; j++)
@@ -163,10 +163,10 @@ public class GameManager : MonoBehaviour
 
         if (data.value == 13)
         {
-            SetMaterial(newCard, "Textures/Cards/Materials/ace");
+            SetMaterial(newCard, "Textures/Cards/Materials/ace_" + data.suit);
         } else
         {
-            SetMaterial(newCard, "Textures/Cards/Materials/" + drawnCard.value.ToString());
+            SetMaterial(newCard, "Textures/Cards/Materials/" + drawnCard.value.ToString() + "_" + data.suit);
         }
 
         if (player == 1)
@@ -361,11 +361,11 @@ public class GameManager : MonoBehaviour
             CardData firstEnemyCardData = firstEnemyCard.GetComponent<CardData>();
             if (firstEnemyCardData.value == 13)
             {
-                SetMaterial(firstEnemyCard, "Textures/Cards/Materials/ace");
+                SetMaterial(firstEnemyCard, "Textures/Cards/Materials/ace_" + firstEnemyCardData.suit);
             }
             else
             {
-                SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCardData.value.ToString());
+                SetMaterial(firstEnemyCard, "Textures/Cards/Materials/" + firstEnemyCardData.value.ToString() + "_" + firstEnemyCardData.suit);
             }
             PlaySound("Sounds/reveal_card");
 
