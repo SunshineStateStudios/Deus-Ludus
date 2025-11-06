@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -25,11 +26,11 @@ public class GameManager : MonoBehaviour
     public GameObject deckValueText;
     public GameObject inventoryPanel;
     public GameObject abilityCardUIPrefab;
+    public int threshold = 21;
 
     private List<CardData> deck = new List<CardData>();
     private List<CardData> shuffledDeck = new List<CardData>();
     private AudioSource audioSource;
-    private string[] possibleAbilityCards = { "test1", "test2" };
     private List<AbilityCard> playerInventory = new List<AbilityCard>();
     private List<AbilityCard> enemyInventory = new List<AbilityCard>();
 
@@ -44,6 +45,10 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
         for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
+
+        foreach (AbilityCard card in Resources.LoadAll<AbilityCard>("Scripts/AbilityCards")) {
+            Debug.Log(card.GetName());
+        }
     }
 
     // Create a deck of 52 cards
@@ -58,13 +63,6 @@ public class GameManager : MonoBehaviour
                 deck.Add(card);
             }
 
-            string[] faceCards = { "Jack", "Queen", "King" };
-            foreach (var face in faceCards)
-            {
-                CardData card = new CardData(10, suits[i]);
-                deck.Add(card);
-            }
-
             CardData ace = new CardData(13, suits[i]);
             deck.Add(ace);
         }
@@ -72,20 +70,16 @@ public class GameManager : MonoBehaviour
 
     public void DrawAbilityCard(int index, int player)
     {
-        AbilityCard chosenCard;
-        if (player == 1)
-        {
-            chosenCard = playerInventory.ElementAt(index);
-            chosenCard.Execute(1);
-            playerInventory.Remove(chosenCard);
+        List<AbilityCard> inventory = (player == 1) ? playerInventory : enemyInventory;
 
-            UpdateInventory();
-        } else
-        {
-            chosenCard = enemyInventory.ElementAt(index);
-            chosenCard.Execute(2);
-            enemyInventory.Remove(chosenCard);
-        }
+        if (index < 0 || index >= inventory.Count) return;
+
+        AbilityCard card = inventory[index];
+        if (card.drawn) return;
+
+        card.Execute(player);
+        card.drawn = true;
+        UpdateInventory();
     }
 
     void ShuffleDeck()
@@ -102,37 +96,75 @@ public class GameManager : MonoBehaviour
 
     private void UpdateInventory()
     {
+        if (inventoryPanel == null) {
+            Debug.LogWarning("Inventory panel is missing in the inspector!");
+            return;
+        }
+
+        if (abilityCardUIPrefab == null) {
+            Debug.LogWarning("Ability card UI prefab is missing in the inspector!");
+            return;
+        }
+
         ClearAllChildren(inventoryPanel.transform);
 
-        for (int i = 0; i < playerInventory.Count; i++)
-        {
-            AbilityCard card = playerInventory.ElementAt(i);
-            GameObject uiCard = Instantiate(abilityCardUIPrefab, inventoryPanel.transform);
-            AbilityCardUI uiCard_script = uiCard.GetComponent<AbilityCardUI>();
-            TextMeshProUGUI uiCard_text = uiCard.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        if (playerInventory == null || playerInventory.Count == 0) {
+            Debug.Log("Player has no ability cards to display.");
+            return;
+        }
 
-            uiCard_script.index = i;
-            uiCard_text.SetText(card.GetName());
+        for (int i = 0; i < playerInventory.Count; i++) {
+            AbilityCard card = playerInventory.ElementAt(i);
+            if (card == null) {
+                Debug.LogWarning($"Null ability card at index {i} -- skipping.");
+                continue;
+            }
+
+            if (card.drawn) {
+                Debug.Log("Skipping drawn card.");
+                continue;
+            }
+
+            GameObject uiCard = Instantiate(abilityCardUIPrefab, inventoryPanel.transform);
+            AbilityCardUI uiCardScript = uiCard.GetComponent<AbilityCardUI>();
+
+            TextMeshProUGUI uiCardText = uiCard.transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
+
+            if (uiCardScript == null || uiCardText == null) {
+                Debug.LogWarning($"AbilityCardUI prefab missing required components (AbilityCardUI or Text).");
+                Destroy(uiCard);
+                continue;
+            }
+
+            uiCardScript.index = i;
+            uiCardText.SetText(card.GetName());
         }
     }
 
     private void GiveAbilityCard(int player)
     {
-        if ((player == 1 && playerInventory.Count < 10) || (player == 2 && enemyInventory.Count < 10))
-        {
-            string chosenCardName = possibleAbilityCards[Random.Range(0, possibleAbilityCards.Length)];
-            GameObject abilityCardPrefab = Resources.Load<GameObject>("Prefabs/AbilityCards/" + chosenCardName);
-            AbilityCard abilityCard = abilityCardPrefab.GetComponent<AbilityCard>();
+        List<AbilityCard> inventory = (player == 1) ? playerInventory : enemyInventory;
 
-            if (player == 1)
-            {
-                playerInventory.Add(abilityCard);
-                UpdateInventory();
-            } else
-            {
-                enemyInventory.Add(abilityCard);
-            }
+        if (inventory.Count >= 10) return;
+
+        AbilityCard[] allCards = Resources.LoadAll<AbilityCard>("AbilityCards");
+
+        if (allCards.Length == 0) {
+            Debug.LogWarning("No ability cards found in Resources/AbilityCards!");
+            return;
         }
+
+        AbilityCard baseCard = allCards[Random.Range(0, allCards.Length)];
+        AbilityCard newCard = ScriptableObject.Instantiate(baseCard);
+
+        while (inventory.Any(c => c.GetName() == newCard.GetName()) && inventory.Count < allCards.Length) {
+            newCard = allCards[Random.Range(0, allCards.Length)];
+        }
+
+        newCard.drawn = false;
+        inventory.Add(newCard);
+
+        if (player == 1) UpdateInventory();
     }
 
     private void PlaySound(string pathToClip)
@@ -179,13 +211,13 @@ public class GameManager : MonoBehaviour
             TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
 
             deckText.SetText("Your deck's value: " + playerTotal.ToString());
-            if (playerTotal > 21)
+            if (playerTotal > threshold)
             {
                 deckText.color = Color.red;
             }
             else
             {
-                if (playerTotal == 21)
+                if (playerTotal == threshold)
                 {
                     deckText.color = Color.green;
                 }
@@ -230,7 +262,7 @@ public class GameManager : MonoBehaviour
 
     private string DetermineWinner(int playerValue, int enemyValue)
     {
-        if (playerValue > 21 && enemyValue > 21)
+        if (playerValue > threshold && enemyValue > threshold)
         {
             if (playerValue < enemyValue)
             {
@@ -246,12 +278,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (playerValue > 21)
+        if (playerValue > threshold)
         {
             return "Enemy";
         }
 
-        if (enemyValue > 21)
+        if (enemyValue > threshold)
         {
             return "Player";
         }
@@ -266,6 +298,20 @@ public class GameManager : MonoBehaviour
         } else
         {
             return "Draw";
+        }
+    }
+
+    private void DestroyRedundantAbilityCards(List<AbilityCard> inventory)
+    {
+        int whichPlayer = 1;
+        if (inventory == enemyInventory) whichPlayer = 2;
+
+        for (int i = inventory.Count - 1; i >= 0; i--) {
+            AbilityCard card = inventory[i];
+            if (card.drawn && card.GetDecayTime() >= card.GetLifeTime()) {
+                card.Destroyed(whichPlayer);
+                inventory.RemoveAt(i);
+            }
         }
     }
 
@@ -311,7 +357,7 @@ public class GameManager : MonoBehaviour
         bool didEnemyStay = false;
         int enemyHandTotal = GetHandTotal(placedNumberCards_Enemy);
 
-        if (enemyHandTotal > 21 || enemyHandTotal == 21)
+        if (enemyHandTotal > threshold || enemyHandTotal == threshold)
         {
             didEnemyStay = true;
         }
@@ -323,20 +369,14 @@ public class GameManager : MonoBehaviour
         {
             float chance = 0;
 
-            switch (enemyHandTotal)
-            {
-                case 17:
-                    chance = 0.2f;
-                    break;
-                case 18:
-                    chance = 0.15f;
-                    break;
-                case 19:
-                    chance = 0.05f;
-                    break;
-                case 20:
-                    chance = 0.01f;
-                    break;
+            if (enemyHandTotal == (threshold-4)) {
+                chance = 0.2f;
+            } else if (enemyHandTotal == (threshold-3)) {
+                chance = 0.15f;
+            } else if (enemyHandTotal == (threshold-2)) {
+                chance = 0.05f;
+            } else if (enemyHandTotal == (threshold-1)) {
+                chance = 0.01f;
             }
 
             if (chance <= Random.value)
@@ -394,6 +434,10 @@ public class GameManager : MonoBehaviour
             Cleanup();
             for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
             for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
+
+            DestroyRedundantAbilityCards(playerInventory);
+            DestroyRedundantAbilityCards(enemyInventory);
+
             inventoryPanel.SetActive(true);
         }
         else
@@ -401,12 +445,12 @@ public class GameManager : MonoBehaviour
             int playerTotalValue = GetHandTotal(placedNumberCards_Player);
             deckText.SetText("Your deck's value: " + playerTotalValue.ToString());
 
-            if (playerTotalValue == 21)
+            if (playerTotalValue == threshold)
             {
                 deckText.color = Color.green;
                 drawButton.SetActive(true);
             }
-            else if (playerTotalValue > 21)
+            else if (playerTotalValue > threshold)
             {
                 deckText.color = Color.red;
             }
@@ -465,7 +509,7 @@ public class GameManager : MonoBehaviour
         {
             CardData card = cardObj.GetComponent<CardData>();
 
-            if (card.value == 13 && total > 21)
+            if (card.value == 13 && total > threshold)
             {
                 total -= 10;
             }

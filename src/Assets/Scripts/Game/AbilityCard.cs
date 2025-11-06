@@ -8,18 +8,14 @@ Written by plexinator-9000.
 
 using UnityEngine;
 
-[System.Serializable]
-public class AbilityCard : MonoBehaviour
+public abstract class AbilityCard : ScriptableObject
 {
-    private string NiceName = "";
+    public bool drawn; // shared field across all abilities
 
-    public virtual string GetName()
-    {
-        return NiceName;
-    }
-
-    public virtual void Execute(int player)
-    {
-        
-    }
+    public abstract string GetName();
+    public abstract string GetDescription();
+    public abstract int GetDecayTime();
+    public abstract int GetLifeTime();
+    public abstract void Execute(int player);
+    public abstract void Destroyed(int drawer);
 }
