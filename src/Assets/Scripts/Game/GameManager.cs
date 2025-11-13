@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public GameObject inventoryPanel;
     public GameObject abilityCardUIPrefab;
     public int threshold = 21;
+    public string state = "PlayerTurn";
 
     private List<CardData> deck = new List<CardData>();
     private List<CardData> shuffledDeck = new List<CardData>();
@@ -181,6 +182,31 @@ public class GameManager : MonoBehaviour
         meshRenderer.materials = materials;
     }
 
+    public int UpdateHandValueText() {
+        int playerTotal = GetHandTotal(placedNumberCards_Player);
+        TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
+
+        deckText.SetText("Your deck's value: " + playerTotal.ToString() + " (" + threshold.ToString() + ")");
+        if (playerTotal > threshold)
+        {
+            deckText.color = Color.red;
+            return 2;
+        }
+        else
+        {
+            if (playerTotal == threshold)
+            {
+                deckText.color = Color.green;
+                return 1;
+            }
+            else
+            {
+                deckText.color = Color.white;
+                return 0;
+            }
+        }
+    }
+
     public object DrawCard(int player)
     {
         CardData drawnCard = shuffledDeck[0];
@@ -207,25 +233,7 @@ public class GameManager : MonoBehaviour
             newCard.transform.SetParent(playerHand);
             newCard.transform.position -= new Vector3(0, 0, 2.3f * (placedNumberCards_Player.Count - 1));
 
-            int playerTotal = GetHandTotal(placedNumberCards_Player);
-            TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
-
-            deckText.SetText("Your deck's value: " + playerTotal.ToString());
-            if (playerTotal > threshold)
-            {
-                deckText.color = Color.red;
-            }
-            else
-            {
-                if (playerTotal == threshold)
-                {
-                    deckText.color = Color.green;
-                }
-                else
-                {
-                    deckText.color = Color.white;
-                }
-            }
+            UpdateHandValueText();
         }
         else
         {
@@ -308,9 +316,12 @@ public class GameManager : MonoBehaviour
 
         for (int i = inventory.Count - 1; i >= 0; i--) {
             AbilityCard card = inventory[i];
-            if (card.drawn && card.GetDecayTime() >= card.GetLifeTime()) {
-                card.Destroyed(whichPlayer);
-                inventory.RemoveAt(i);
+            if (card.drawn) {
+                card.IncrementDecayTime();
+                if (card.GetDecayTime() >= card.GetLifeTime()) {
+                    card.Destroyed(whichPlayer);
+                    inventory.RemoveAt(i);
+                }
             }
         }
     }
@@ -320,6 +331,7 @@ public class GameManager : MonoBehaviour
         drawButton.SetActive(false);
         endTurnButton.SetActive(false);
         inventoryPanel.SetActive(false);
+        state = "AITurn";
 
         yield return new WaitForSeconds(1.5f);
 
@@ -393,6 +405,7 @@ public class GameManager : MonoBehaviour
         if (didEnemyStay && didPlayerStay)
         {
             deckText.SetText("Both players have stayed, calculating results...");
+            state = "Results";
 
             yield return new WaitForSeconds(1.5f);
 
@@ -443,26 +456,16 @@ public class GameManager : MonoBehaviour
         else
         {
             int playerTotalValue = GetHandTotal(placedNumberCards_Player);
-            deckText.SetText("Your deck's value: " + playerTotalValue.ToString());
+            int didPlayerLose = UpdateHandValueText();
 
-            if (playerTotalValue == threshold)
-            {
-                deckText.color = Color.green;
-                drawButton.SetActive(true);
-            }
-            else if (playerTotalValue > threshold)
-            {
-                deckText.color = Color.red;
-            }
-            else
-            {
-                deckText.color = Color.white;
-                drawButton.SetActive(true);
-            }
+            if (didPlayerLose == 0) drawButton.SetActive(true);
+
 
             endTurnButton.SetActive(true);
             inventoryPanel.SetActive(true);
         }
+
+        state = "PlayerTurn";
     }
 
     private void ClearAllChildren(Transform parentObject)

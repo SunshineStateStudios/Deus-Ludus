@@ -15,6 +15,8 @@ public class Thuban : AbilityCard
     [SerializeField] private int lifeTime = 1;  // number of turns this passive lasts
     [SerializeField] private int decayTime = 0; // increments while active
 
+    private int appliedReduction = 0;
+
     public override string GetName()
     {
         return cardName;
@@ -28,6 +30,10 @@ public class Thuban : AbilityCard
     public override int GetDecayTime()
     {
         return decayTime;
+    }
+
+    public override void IncrementDecayTime() {
+        decayTime = decayTime + 1;
     }
 
     public override int GetLifeTime() {
@@ -44,12 +50,19 @@ public class Thuban : AbilityCard
         }
 
         Debug.Log($"[Thuban] {cardName} activated by Player {player}!");
+
+        int originalThreshold = gm.threshold;
         gm.threshold -= 4;
         if (gm.threshold < 7) gm.threshold = 7;
+
+        appliedReduction = originalThreshold - gm.threshold;
+        gm.UpdateHandValueText();
     }
 
     public override void Destroyed(int drawer)
     {
-        
+        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        gm.threshold += appliedReduction;
+        gm.UpdateHandValueText();
     }
 }

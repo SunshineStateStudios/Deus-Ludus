@@ -15,6 +15,7 @@ public abstract class AbilityCard : ScriptableObject
     public abstract string GetName();
     public abstract string GetDescription();
     public abstract int GetDecayTime();
+    public abstract void IncrementDecayTime();
     public abstract int GetLifeTime();
     public abstract void Execute(int player);
     public abstract void Destroyed(int drawer);
