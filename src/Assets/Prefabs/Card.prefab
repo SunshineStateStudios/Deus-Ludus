@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 510706911205673411}
   - component: {fileID: 7216374674534876133}
   - component: {fileID: 2990233079771911193}
+  - component: {fileID: 5350030740623785807}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -59,10 +60,15 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14fa1b31292cc02b8849a5bc7a31e1f4, type: 2}
+  - {fileID: 2100000, guid: e8536f24a541026749121b3fcd82a29d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,6 +86,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -98,3 +105,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 0
   suit: 
+--- !u!114 &5350030740623785807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751983444043679548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6bc7ad3c072176195f7903c9ac23cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardFloat
+  amplitude: 0
+  frequency: 0
