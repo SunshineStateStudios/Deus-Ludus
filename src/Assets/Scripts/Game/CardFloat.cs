@@ -20,7 +20,7 @@ public class CardFloat : MonoBehaviour
         amplitude = Random.Range(4000,10000)/1000;
         frequency = Random.Range(3000,4000)/1000;
 
-        deltaTime = 0;
+        deltaTime = Random.Range(0,3600);
         originalPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 
