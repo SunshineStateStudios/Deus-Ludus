@@ -159,7 +159,28 @@ public class GameManager : MonoBehaviour
         AbilityCard newCard = ScriptableObject.Instantiate(baseCard);
 
         while (inventory.Any(c => c.GetName() == newCard.GetName()) && inventory.Count < allCards.Length) {
-            newCard = allCards[Random.Range(0, allCards.Length)];
+            for (int i = 0; i < allCards.Length; i++) {
+                AbilityCard iteratedCard = allCards[i];
+                int cardTier = iteratedCard.GetTier();
+                float chanceToGive = 0;
+
+                switch(cardTier) {
+                    case 1:
+                        chanceToGive = 0.75f;
+                        break;
+                    case 2:
+                        chanceToGive = 0.35f;
+                        break;
+                    case 3:
+                        chanceToGive = 0.15f;
+                        break;
+                }
+
+                if (chanceToGive <= Random.value) {
+                    newCard = iteratedCard;
+                    break;
+                }
+            }
         }
 
         newCard.drawn = false;

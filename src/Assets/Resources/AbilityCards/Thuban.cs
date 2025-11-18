@@ -14,12 +14,17 @@ public class Thuban : AbilityCard
     [SerializeField] private string description = "Protects you from busting once. If your hand exceeds 21, reduce your total by 5 automatically.";
     [SerializeField] private int lifeTime = 1;  // number of turns this passive lasts
     [SerializeField] private int decayTime = 0; // increments while active
+    [SerializeField] private int tier = 2;
 
     private int appliedReduction = 0;
 
     public override string GetName()
     {
         return cardName;
+    }
+
+    public override int GetTier() {
+        return tier;
     }
 
     public override string GetDescription()

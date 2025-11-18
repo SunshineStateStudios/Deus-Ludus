@@ -11,7 +11,9 @@ using UnityEngine;
 public abstract class AbilityCard : ScriptableObject
 {
     public bool drawn; // shared field across all abilities
+    private int tier; // determines card rarity
 
+    public abstract int GetTier();
     public abstract string GetName();
     public abstract string GetDescription();
     public abstract int GetDecayTime();
