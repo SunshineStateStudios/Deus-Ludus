@@ -11,7 +11,6 @@ using UnityEngine;
 public class Thuban : AbilityCard
 {
     [SerializeField] private string cardName = "Thuban";
-    [SerializeField] private string description = "Protects you from busting once. If your hand exceeds 21, reduce your total by 5 automatically.";
     [SerializeField] private int lifeTime = 1;  // number of turns this passive lasts
     [SerializeField] private int decayTime = 0; // increments while active
     [SerializeField] private int tier = 2;
@@ -29,7 +28,7 @@ public class Thuban : AbilityCard
 
     public override string GetDescription()
     {
-        return description;
+        return "<color=#ffffff>Subtracts the current </color><color=#ff0000>threshold </color>by 4. Lasts one round.";
     }
 
     public override int GetDecayTime()

@@ -39,14 +39,4 @@ public class CardFloat : MonoBehaviour
         // Make object go up and down
         gameObject.transform.position = originalPosition + new Vector3(0,Mathf.Sin(deltaTime * (frequency/2)) * amplitude/20,0);
     }
-
-    void OnMouseEnter() {
-        amplitude += 1;
-        frequency += 8;
-    }
-
-    void OnMouseExit() {
-        amplitude -= 1;
-        frequency -= 8;
-    }
 }

@@ -19,12 +19,16 @@ public class GameManager : MonoBehaviour
     public List<GameObject> placedNumberCards_Player = new List<GameObject>();
     public List<GameObject> placedNumberCards_Enemy = new List<GameObject>();
     public GameObject cardPrefab;
+    public GameObject abilityCardPrefab;
     public Transform playerHand;
+    public Transform playerAbilityHand;
     public Transform enemyHand;
     public GameObject drawButton;
     public GameObject endTurnButton;
     public GameObject deckValueText;
     public GameObject inventoryPanel;
+    public GameObject descriptionMenu;
+    public TextMeshProUGUI descriptionText;
     public GameObject abilityCardUIPrefab;
     public int threshold = 21;
     public string state = "PlayerTurn";
@@ -80,6 +84,24 @@ public class GameManager : MonoBehaviour
 
         card.Execute(player);
         card.drawn = true;
+
+        GameObject physicalCard = Instantiate(abilityCardPrefab, playerAbilityHand);
+        physicalCard.name = index.ToString();
+
+        int drawnCards = 0;
+        for (int i = 0; i < inventory.Count; i++) {
+            AbilityCard loopCard = inventory[i];
+            if (!loopCard.drawn) { continue; }
+            drawnCards++;
+        }
+
+        physicalCard.transform.position -= new Vector3(0, 0, 1.85f * (drawnCards-1));
+
+        AbilityCardDescMenu physicalCardScript = physicalCard.GetComponent<AbilityCardDescMenu>();
+        physicalCardScript.description = card.GetDescription();
+        physicalCardScript.descriptionMenu = descriptionMenu;
+        physicalCardScript.descriptionLabel = descriptionText;
+
         UpdateInventory();
     }
 
@@ -128,6 +150,11 @@ public class GameManager : MonoBehaviour
 
             GameObject uiCard = Instantiate(abilityCardUIPrefab, inventoryPanel.transform);
             AbilityCardUI uiCardScript = uiCard.GetComponent<AbilityCardUI>();
+
+            AbilityCardDescMenu2D uiCardDescScript = uiCard.GetComponent<AbilityCardDescMenu2D>();
+            uiCardDescScript.description = card.GetDescription();
+            uiCardDescScript.descriptionMenu = descriptionMenu;
+            uiCardDescScript.descriptionLabel = descriptionText;
 
             TextMeshProUGUI uiCardText = uiCard.transform.Find("Text")?.GetComponent<TextMeshProUGUI>();
 

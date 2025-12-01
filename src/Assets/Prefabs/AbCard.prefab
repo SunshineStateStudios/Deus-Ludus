@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 3180208933506158550}
   - component: {fileID: 510706911205673411}
   - component: {fileID: 7216374674534876133}
-  - component: {fileID: 2990233079771911193}
+  - component: {fileID: 4146096608078804144}
+  - component: {fileID: -3592642404666515806}
+  - component: {fileID: 7829412261016103911}
   m_Layer: 0
   m_Name: AbCard
   m_TagString: Untagged
@@ -90,7 +92,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2990233079771911193
+--- !u!114 &4146096608078804144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,8 +101,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 751983444043679548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf9556c54c827e28e9c553870d4dfc59, type: 3}
+  m_Script: {fileID: 11500000, guid: ad6bc7ad3c072176195f7903c9ac23cb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  value: 0
-  suit: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardFloat
+  amplitude: 0
+  frequency: 0
+--- !u!65 &-3592642404666515806
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751983444043679548}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 0.02, z: 1.9999999}
+  m_Center: {x: 0.08782166, y: -0.000000007450581, z: 0.000000059604645}
+--- !u!114 &7829412261016103911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751983444043679548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4edc50a4c08d165399a439f32aefb6ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityCardDesc
