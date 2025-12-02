@@ -212,6 +212,7 @@ public class GameManager : MonoBehaviour
 
         newCard.drawn = false;
         inventory.Add(newCard);
+        inventory.Sort();
 
         if (player == 1) UpdateInventory();
     }
@@ -369,9 +370,20 @@ public class GameManager : MonoBehaviour
                 if (card.GetDecayTime() >= card.GetLifeTime()) {
                     card.Destroyed(whichPlayer);
                     inventory.RemoveAt(i);
+
+                    Transform physicalCardTransform = playerAbilityHand.transform.Find(i.ToString());
+                    if (physicalCardTransform == null) continue;
+                    GameObject physicalCard = physicalCardTransform.gameObject;
+                    Destroy(physicalCard);
+
+                    foreach (Transform child in playerAbilityHand.transform) {
+                        child.position -= new Vector3(0,0,1.85f);
+                    }
                 }
             }
         }
+
+        inventory.Sort();
     }
 
     private IEnumerator EndPlayerTurn(bool didPlayerStay)
@@ -493,11 +505,12 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(5);
             Cleanup();
-            for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
-            for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
 
             DestroyRedundantAbilityCards(playerInventory);
             DestroyRedundantAbilityCards(enemyInventory);
+
+            for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
+            for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
 
             inventoryPanel.SetActive(true);
         }
