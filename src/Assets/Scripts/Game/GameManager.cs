@@ -13,6 +13,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject abilityCardUIPrefab;
     public int threshold = 21;
     public string state = "PlayerTurn";
+    public GameObject camera;
 
     private List<CardData> deck = new List<CardData>();
     private List<CardData> shuffledDeck = new List<CardData>();
@@ -57,20 +59,19 @@ public class GameManager : MonoBehaviour
     }
 
     // Create a deck of 52 cards
-    void CreateDeck()
+    private void CreateDeck()
     {
+        deck = new List<CardData>();
         string[] suits = { "hearts", "diamonds", "clubs", "spades" };
-        for (int i = 0; i < suits.Length; i++)
-        {
-            for (int j = 1; j <= 11; j++)
-            {
-                CardData card = new CardData(j, suits[i]);
-                deck.Add(card);
-            }
 
-            CardData ace = new CardData(13, suits[i]);
-            deck.Add(ace);
+        for (int j = 1; j <= 11; j++)
+        {
+            CardData card = new CardData(j, suits[Random.Range(0,3)]);
+            deck.Add(card);
         }
+
+        CardData ace = new CardData(13, suits[Random.Range(0,3)]);
+        deck.Add(ace);
     }
 
     public void DrawAbilityCard(int index, int player)
@@ -85,27 +86,32 @@ public class GameManager : MonoBehaviour
         card.Execute(player);
         card.drawn = true;
 
-        GameObject physicalCard = Instantiate(abilityCardPrefab, playerAbilityHand);
-        physicalCard.name = index.ToString();
+        if (card.GetLifeTime() > 0) {
+            GameObject physicalCard = Instantiate(abilityCardPrefab, playerAbilityHand);
+            physicalCard.name = index.ToString();
 
-        int drawnCards = 0;
-        for (int i = 0; i < inventory.Count; i++) {
-            AbilityCard loopCard = inventory[i];
-            if (!loopCard.drawn) { continue; }
-            drawnCards++;
+            int drawnCards = 0;
+            for (int i = 0; i < inventory.Count; i++) {
+                AbilityCard loopCard = inventory[i];
+                if (!loopCard.drawn) { continue; }
+                drawnCards++;
+            }
+
+            physicalCard.transform.position -= new Vector3(0, 0, 1.85f * (drawnCards-1));
+
+            AbilityCardDescMenu physicalCardScript = physicalCard.GetComponent<AbilityCardDescMenu>();
+            physicalCardScript.description = card.GetDescription();
+            physicalCardScript.descriptionMenu = descriptionMenu;
+            physicalCardScript.descriptionLabel = descriptionText;
+        } else {
+            inventory.RemoveAt(index);
+            inventory.Sort();
         }
-
-        physicalCard.transform.position -= new Vector3(0, 0, 1.85f * (drawnCards-1));
-
-        AbilityCardDescMenu physicalCardScript = physicalCard.GetComponent<AbilityCardDescMenu>();
-        physicalCardScript.description = card.GetDescription();
-        physicalCardScript.descriptionMenu = descriptionMenu;
-        physicalCardScript.descriptionLabel = descriptionText;
 
         UpdateInventory();
     }
 
-    void ShuffleDeck()
+    private void ShuffleDeck()
     {
         shuffledDeck = new List<CardData>(deck);
         for (int i = 0; i < shuffledDeck.Count; i++)
@@ -236,6 +242,11 @@ public class GameManager : MonoBehaviour
         TextMeshProUGUI deckText = deckValueText.GetComponent<TextMeshProUGUI>();
 
         deckText.SetText("Your deck's value: " + playerTotal.ToString() + " (" + threshold.ToString() + ")");
+
+        if (playerTotal < threshold) {
+            drawButton.SetActive(true); 
+        }
+
         if (playerTotal > threshold)
         {
             deckText.color = Color.red;
@@ -254,6 +265,20 @@ public class GameManager : MonoBehaviour
                 return 0;
             }
         }
+    }
+
+    private void MoveCamera() {
+        int OutOfBoundCards = 0;
+
+        if (placedNumberCards_Enemy.Count > 4) {
+            OutOfBoundCards = placedNumberCards_Enemy.Count - 5;
+        }
+
+        if (placedNumberCards_Player.Count > 4 && placedNumberCards_Player.Count - 5 > OutOfBoundCards) {
+            OutOfBoundCards = placedNumberCards_Player.Count - 5;
+        }
+
+        camera.DOMove(new Vector3(-4.65f + OutOfBoundCards, 18.54f, 0.07f), 1.5f);
     }
 
     public object DrawCard(int player)
@@ -302,6 +327,7 @@ public class GameManager : MonoBehaviour
             ShuffleDeck();
         }
 
+        MoveCamera();
 
         return data;
     }
@@ -505,9 +531,13 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(5);
             Cleanup();
+            
+            CreateDeck();
 
             DestroyRedundantAbilityCards(playerInventory);
             DestroyRedundantAbilityCards(enemyInventory);
+
+            if (threshold != 21) threshold = 21;
 
             for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
             for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
@@ -581,5 +611,13 @@ public class GameManager : MonoBehaviour
         }
 
         return total;
+    }
+
+    // Methods that are specific to ability cards
+
+    public void OuroborosCard(int player) {
+        ClearAllChildren(playerHand);
+        placedNumberCards_Player = new List<GameObject>();
+        for (int i = 0; i < 2; i++) { DrawCard(1); }
     }
 }

@@ -1,26 +1,26 @@
 /*
 
-"Thuban" ability card. Passive ability card that lowers threshold by 4.
+"Vega" ability card. Passive ability card that adds threshold by 6.
 
 Written by plexinator-9000
 */
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Thuban", menuName = "AbilityCards/Thuban")]
-public class Thuban : AbilityCard
+[CreateAssetMenu(fileName = "Vega", menuName = "AbilityCards/Vega")]
+public class Vega : AbilityCard
 {
     private int lifeTime = 1;  // number of turns this passive lasts
     private int decayTime = 0; // increments while active
 
     private int appliedReduction = 0;
 
-    public override string GetName() => "Thuban";
+    public override string GetName() => "Vega";
     public override int GetTier() => 2;
 
     public override string GetDescription()
     {
-        return "<color=#ffffff>Subtracts the current </color><color=#ff0000>threshold </color>by 4. Lasts one round.";
+        return "<color=#ffffff>Adds the current </color><color=#ff0000>threshold </color>by 6. Lasts one round.";
     }
 
     public override int GetDecayTime()
@@ -41,24 +41,24 @@ public class Thuban : AbilityCard
         GameManager gm = GameObject.FindObjectOfType<GameManager>();
         if (gm == null)
         {
-            Debug.LogError("[Thuban] GameManager not found in scene.");
+            Debug.LogError("[Vega] GameManager not found in scene.");
             return;
         }
 
-        Debug.Log($"[Thuban] Thuban activated by Player {player}!");
+        Debug.Log($"[Vega] Vega activated by Player {player}!");
 
         int originalThreshold = gm.threshold;
-        gm.threshold -= 4;
-        if (gm.threshold < 7) gm.threshold = 7;
+        gm.threshold += 6;
+        if (gm.threshold > 30) gm.threshold = 30;
 
-        appliedReduction = originalThreshold - gm.threshold;
+        appliedReduction = gm.threshold - originalThreshold;
         gm.UpdateHandValueText();
     }
 
     public override void Destroyed(int drawer)
     {
         GameManager gm = GameObject.FindObjectOfType<GameManager>();
-        gm.threshold += appliedReduction;
+        gm.threshold -= appliedReduction;
         gm.UpdateHandValueText();
     }
 }
