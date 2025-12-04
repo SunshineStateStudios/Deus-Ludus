@@ -270,15 +270,15 @@ public class GameManager : MonoBehaviour
     private void MoveCamera() {
         int OutOfBoundCards = 0;
 
-        if (placedNumberCards_Enemy.Count > 4) {
-            OutOfBoundCards = placedNumberCards_Enemy.Count - 5;
+        if (placedNumberCards_Enemy.Count > 3) {
+            OutOfBoundCards = placedNumberCards_Enemy.Count - 4;
         }
 
-        if (placedNumberCards_Player.Count > 4 && placedNumberCards_Player.Count - 5 > OutOfBoundCards) {
-            OutOfBoundCards = placedNumberCards_Player.Count - 5;
+        if (placedNumberCards_Player.Count > 3 && placedNumberCards_Player.Count - 4 > OutOfBoundCards) {
+            OutOfBoundCards = placedNumberCards_Player.Count - 4;
         }
 
-        camera.DOMove(new Vector3(-4.65f + OutOfBoundCards, 18.54f, 0.07f), 1.5f);
+        camera.transform.DOMove(new Vector3(-4.65f, 18.54f, 0.07f - OutOfBoundCards), 0.75f);
     }
 
     public object DrawCard(int player)
@@ -537,8 +537,6 @@ public class GameManager : MonoBehaviour
             DestroyRedundantAbilityCards(playerInventory);
             DestroyRedundantAbilityCards(enemyInventory);
 
-            if (threshold != 21) threshold = 21;
-
             for (int i = 0; i < 2; i++) { GiveAbilityCard(1); }
             for (int i = 0; i < 2; i++) { GiveAbilityCard(2); }
 
@@ -555,6 +553,8 @@ public class GameManager : MonoBehaviour
             endTurnButton.SetActive(true);
             inventoryPanel.SetActive(true);
         }
+
+        if (threshold != 21) threshold = 21;
 
         state = "PlayerTurn";
     }
