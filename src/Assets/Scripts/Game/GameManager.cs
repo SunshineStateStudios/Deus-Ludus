@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public GameObject abilityCardPrefab;
     public Transform playerHand;
     public Transform playerAbilityHand;
+    public Transform enemyAbilityHand;
     public Transform enemyHand;
     public GameObject drawButton;
     public GameObject endTurnButton;
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
     public void DrawAbilityCard(int index, int player)
     {
         List<AbilityCard> inventory = (player == 1) ? playerInventory : enemyInventory;
+        Transform abilityHand = (player == 1) ? playerAbilityHand : enemyAbilityHand;
 
         if (index < 0 || index >= inventory.Count) return;
 
@@ -85,9 +87,11 @@ public class GameManager : MonoBehaviour
 
         card.Execute(player);
         card.drawn = true;
+        PlaySound("Sounds/draw_ability");
 
         if (card.GetLifeTime() > 0) {
-            GameObject physicalCard = Instantiate(abilityCardPrefab, playerAbilityHand);
+            GameObject physicalCard = Instantiate(abilityCardPrefab, abilityHand);
+            
             physicalCard.name = index.ToString();
 
             int drawnCards = 0;
@@ -97,7 +101,7 @@ public class GameManager : MonoBehaviour
                 drawnCards++;
             }
 
-            physicalCard.transform.position -= new Vector3(0, 0, 1.85f * (drawnCards-1));
+            physicalCard.transform.position -= new Vector3(0, 0, 2f * (drawnCards-1));
 
             AbilityCardDescMenu physicalCardScript = physicalCard.GetComponent<AbilityCardDescMenu>();
             physicalCardScript.description = card.GetDescription();
@@ -105,10 +109,9 @@ public class GameManager : MonoBehaviour
             physicalCardScript.descriptionLabel = descriptionText;
         } else {
             inventory.RemoveAt(index);
-            inventory.Sort();
         }
 
-        UpdateInventory();
+        if (player == 1) UpdateInventory();
     }
 
     private void ShuffleDeck()
@@ -278,7 +281,7 @@ public class GameManager : MonoBehaviour
             OutOfBoundCards = placedNumberCards_Player.Count - 4;
         }
 
-        camera.transform.DOMove(new Vector3(-4.65f, 18.54f, 0.07f - OutOfBoundCards), 0.75f);
+        camera.transform.DOMove(new Vector3(-5.07f, 21.12f, 0.07f - OutOfBoundCards), 0.07f);
     }
 
     public object DrawCard(int player)
@@ -313,7 +316,7 @@ public class GameManager : MonoBehaviour
         {
             placedNumberCards_Enemy.Add(newCard);
             newCard.transform.SetParent(enemyHand);
-            newCard.transform.position -= new Vector3(-8, 0, 2.3f * (placedNumberCards_Enemy.Count - 1));
+            newCard.transform.position -= new Vector3(-9, 0, 2.3f * (placedNumberCards_Enemy.Count - 1));
 
             if (placedNumberCards_Enemy.Count == 1)
             {
@@ -389,6 +392,8 @@ public class GameManager : MonoBehaviour
         int whichPlayer = 1;
         if (inventory == enemyInventory) whichPlayer = 2;
 
+        Transform abilityHand = (whichPlayer == 1) ? playerAbilityHand : enemyAbilityHand;
+
         for (int i = inventory.Count - 1; i >= 0; i--) {
             AbilityCard card = inventory[i];
             if (card.drawn) {
@@ -397,12 +402,12 @@ public class GameManager : MonoBehaviour
                     card.Destroyed(whichPlayer);
                     inventory.RemoveAt(i);
 
-                    Transform physicalCardTransform = playerAbilityHand.transform.Find(i.ToString());
+                    Transform physicalCardTransform = abilityHand.transform.Find(i.ToString());
                     if (physicalCardTransform == null) continue;
                     GameObject physicalCard = physicalCardTransform.gameObject;
                     Destroy(physicalCard);
 
-                    foreach (Transform child in playerAbilityHand.transform) {
+                    foreach (Transform child in abilityHand.transform) {
                         child.position -= new Vector3(0,0,1.85f);
                     }
                 }
@@ -451,6 +456,19 @@ public class GameManager : MonoBehaviour
         */
 
         yield return new WaitForSeconds(2);
+
+        // Draw ability cards
+        int currentAbilityIndex = 0;
+        while (currentAbilityIndex < enemyInventory.Count)
+        {
+            AbilityCard currentCard = enemyInventory[currentAbilityIndex];
+            currentAbilityIndex++;
+            if (!currentCard.AIDrawAbilityCard()) { continue; }
+            DrawAbilityCard(currentAbilityIndex-1, 2);
+            yield return new WaitForSeconds(1);
+        }
+
+        yield return new WaitForSeconds(1);
 
         bool didEnemyStay = false;
         int enemyHandTotal = GetHandTotal(placedNumberCards_Enemy);
@@ -544,17 +562,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            int playerTotalValue = GetHandTotal(placedNumberCards_Player);
             int didPlayerLose = UpdateHandValueText();
 
             if (didPlayerLose == 0) drawButton.SetActive(true);
 
-
             endTurnButton.SetActive(true);
             inventoryPanel.SetActive(true);
         }
-
-        if (threshold != 21) threshold = 21;
 
         state = "PlayerTurn";
     }
@@ -616,8 +630,15 @@ public class GameManager : MonoBehaviour
     // Methods that are specific to ability cards
 
     public void OuroborosCard(int player) {
-        ClearAllChildren(playerHand);
-        placedNumberCards_Player = new List<GameObject>();
-        for (int i = 0; i < 2; i++) { DrawCard(1); }
+        if (player == 1)
+        {
+            ClearAllChildren(playerHand);
+            placedNumberCards_Player = new List<GameObject>();
+            for (int i = 0; i < 2; i++) { DrawCard(1); }
+            return;
+        }
+        ClearAllChildren(enemyHand);
+        placedNumberCards_Enemy = new List<GameObject>();
+        for (int i = 0; i < 2; i++) { DrawCard(2); }
     }
 }

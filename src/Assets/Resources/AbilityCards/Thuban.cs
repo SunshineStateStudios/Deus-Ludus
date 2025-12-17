@@ -38,7 +38,7 @@ public class Thuban : AbilityCard
 
     public override void Execute(int player)
     {
-        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
         if (gm == null)
         {
             Debug.LogError("[Thuban] GameManager not found in scene.");
@@ -57,8 +57,22 @@ public class Thuban : AbilityCard
 
     public override void Destroyed(int drawer)
     {
-        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
         gm.threshold += appliedReduction;
         gm.UpdateHandValueText();
+    }
+
+    public override bool AIDrawAbilityCard()
+    {
+        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
+        int enemyHandTotal = gm.GetHandTotal(gm.placedNumberCards_Enemy);
+
+        if (enemyHandTotal == gm.threshold) { return false; }
+        if (gm.threshold + 3 < enemyHandTotal || enemyHandTotal < gm.threshold)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -7,6 +7,7 @@ Written by plexinator-9000.
 */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AbilityCard : ScriptableObject, IComparable<AbilityCard>
@@ -22,9 +23,10 @@ public abstract class AbilityCard : ScriptableObject, IComparable<AbilityCard>
     public abstract int GetLifeTime();
     public abstract void Execute(int player);
     public abstract void Destroyed(int drawer);
+    public abstract bool AIDrawAbilityCard();
 
     public int CompareTo(AbilityCard other) {
         if (other == null) return 1;
-        return this.GetTier().CompareTo(other.GetTier());
+        return GetTier().CompareTo(other.GetTier());
     }
 }

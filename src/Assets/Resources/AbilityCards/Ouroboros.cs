@@ -6,6 +6,7 @@ Written by plexinator-9000
 */
 
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Ouroboros", menuName = "AbilityCards/Ouroboros")]
 public class Ouroboros : AbilityCard
@@ -38,7 +39,7 @@ public class Ouroboros : AbilityCard
 
     public override void Execute(int player)
     {
-        GameManager gm = GameObject.FindObjectOfType<GameManager>();
+        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
         if (gm == null)
         {
             Debug.LogError("[Polaris] GameManager not found in scene.");
@@ -47,6 +48,27 @@ public class Ouroboros : AbilityCard
 
         Debug.Log($"[Polaris] Polaris activated by Player {player}!");
         gm.OuroborosCard(player);
+    }
+
+    public override bool AIDrawAbilityCard()
+    {
+        GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
+        if (gm == null) { return false; }
+
+        int handTotal = gm.GetHandTotal(gm.placedNumberCards_Enemy);
+
+        if (handTotal > gm.threshold)
+        {
+            return true;
+        } else
+        {
+            if (handTotal >= gm.threshold-2 && handTotal != gm.threshold)
+            {
+                return Random.value <= 0.2 && true || false;
+            }
+        }
+
+        return false;
     }
 
     public override void Destroyed(int drawer)
