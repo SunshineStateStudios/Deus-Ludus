@@ -256,10 +256,6 @@ public class GameManager : MonoBehaviour
 
         deckText.SetText("Your deck's value: " + playerTotal.ToString() + " (" + threshold.ToString() + ")");
 
-        if (playerTotal < threshold) {
-            drawButton.SetActive(true); 
-        }
-
         if (playerTotal > threshold)
         {
             deckText.color = Color.red;
@@ -473,7 +469,7 @@ public class GameManager : MonoBehaviour
         {
             AbilityCard currentCard = enemyInventory[currentAbilityIndex];
             currentAbilityIndex++;
-            if (!currentCard.AIDrawAbilityCard()) { continue; }
+            if (!currentCard.AIDrawAbilityCard()) continue;
             DrawAbilityCard(currentAbilityIndex-1, 2);
             yield return new WaitForSeconds(1);
         }
