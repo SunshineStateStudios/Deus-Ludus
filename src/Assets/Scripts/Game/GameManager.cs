@@ -32,9 +32,17 @@ public class GameManager : MonoBehaviour
     public GameObject descriptionMenu;
     public TextMeshProUGUI descriptionText;
     public GameObject abilityCardUIPrefab;
+    public TextMeshProUGUI DmgOpp; // Ryzer damage display
+    public TextMeshProUGUI DmgYour; // Your Damage display
+    public TextMeshProUGUI playerHPs; // HP display
     public int threshold = 21;
     public string state = "PlayerTurn";
     public GameObject camera;
+
+    public int oppDMG = 1; //ryzer's damage 
+    public int youDMG = 1; //your damage 
+    public int oppHP = 10; //ryzer's HP
+    public int youHP = 10; //your HP 
 
     private List<CardData> deck = new List<CardData>();
     private List<CardData> shuffledDeck = new List<CardData>();
@@ -57,6 +65,8 @@ public class GameManager : MonoBehaviour
         foreach (AbilityCard card in Resources.LoadAll<AbilityCard>("Scripts/AbilityCards")) {
             Debug.Log(card.GetName());
         }
+        DmgOpp.SetText(oppDMG + "");
+        DmgYour.SetText(youDMG + "");
     }
 
     // Create a deck of 52 cards
@@ -546,6 +556,7 @@ public class GameManager : MonoBehaviour
                     deckText.color = Color.yellow;
                     break;
             }
+            setHP(oppDMG, youDMG, oppHP, youHP); // calculates hp changes
 
             yield return new WaitForSeconds(5);
             Cleanup();
@@ -640,5 +651,54 @@ public class GameManager : MonoBehaviour
         ClearAllChildren(enemyHand);
         placedNumberCards_Enemy = new List<GameObject>();
         for (int i = 0; i < 2; i++) { DrawCard(2); }
+    }
+
+    public void setHP(int oppdmg, int youdmg, int opphp, int youhp)
+    {
+        int playerTotalValue2 = GetHandTotal(placedNumberCards_Player);
+        int enemyHandTotal2 = GetHandTotal(placedNumberCards_Enemy);
+        string whoWon2 = DetermineWinner(playerTotalValue2, enemyHandTotal2);
+        switch (whoWon2)
+            {
+                case "Player":
+                    youdmg *= 2;
+                    oppdmg -= youdmg;
+                    if(oppdmg < 0)
+                    {
+                        opphp += oppdmg;
+                        youhp -= oppdmg;
+                    }
+
+                    playerHPs.SetText(opphp + " --- " + youhp);
+                    youHP = youhp;
+                    oppHP = opphp;
+                    youDMG = 1;
+                    oppDMG = 1;
+                    DmgOpp.SetText(oppDMG + "");
+                    DmgYour.SetText(youDMG + "");
+
+                    break;
+                case "Enemy":
+                    oppdmg *= 2;
+                    youdmg -= oppdmg;
+                    if(youdmg < 0)
+                    {
+                        youhp += youdmg;
+                        opphp -= youdmg;
+                    }
+
+                    playerHPs.SetText(opphp + " --- " + youhp);
+                    youHP = youhp;
+                    oppHP = opphp;
+                    youDMG = 1;
+                    oppDMG = 1;
+                    DmgOpp.SetText(oppDMG + "");
+                    DmgYour.SetText(youDMG + "");
+            
+
+                    break;
+                default:
+                    break;
+            }
     }
 }

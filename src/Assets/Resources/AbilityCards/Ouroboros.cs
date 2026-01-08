@@ -42,11 +42,11 @@ public class Ouroboros : AbilityCard
         GameManager gm = GameObject.FindFirstObjectByType<GameManager>();
         if (gm == null)
         {
-            Debug.LogError("[Polaris] GameManager not found in scene.");
+            Debug.LogError("[Ouroboros] GameManager not found in scene.");
             return;
         }
 
-        Debug.Log($"[Polaris] Polaris activated by Player {player}!");
+        Debug.Log($"[Ouroboros] Ouroboros activated by Player {player}!");
         gm.OuroborosCard(player);
     }
 

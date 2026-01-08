@@ -20,7 +20,7 @@ public class Vega : AbilityCard
 
     public override string GetDescription()
     {
-        return "<color=#ffffff>Adds the current </color><color=#ff0000>threshold </color>by 6. Lasts one round.";
+        return "<color=#ffffff>Adds </color><color=#ff0000>6 </color><color=#ffffff>to the current <color=#ff0000>threshold.</color> Lasts one round.";
     }
 
     public override int GetDecayTime()

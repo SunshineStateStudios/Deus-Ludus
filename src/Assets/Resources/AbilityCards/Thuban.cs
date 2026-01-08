@@ -20,7 +20,7 @@ public class Thuban : AbilityCard
 
     public override string GetDescription()
     {
-        return "<color=#ffffff>Subtracts the current </color><color=#ff0000>threshold </color>by 4. Lasts one round.";
+        return "<color=#ffffff>Subtracts </color><color=#ff0000>4 </color><color=#ffffff>from the current <color=#ff0000>threshold.</color> Lasts one round.";
     }
 
     public override int GetDecayTime()
