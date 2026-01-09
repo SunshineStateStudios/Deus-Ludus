@@ -70,8 +70,9 @@ public class GameManager : MonoBehaviour
         foreach (AbilityCard card in Resources.LoadAll<AbilityCard>("Scripts/AbilityCards")) {
             Debug.Log(card.GetName());
         }
-        DmgOpp.SetText(oppDMG + "");
-        DmgYour.SetText(youDMG + "");
+        DmgOpp.SetText("</color><color=#ff0000>" + oppDMG);
+        DmgYour.SetText("</color><color=#1e90ff>" + youDMG);
+        playerHPs.SetText("</color><color=#ff0000>" + oppHP + "</color> --- </color><color=#1e90ff>" + youHP);
     }
 
     // Create a deck of 52 cards
@@ -227,7 +228,7 @@ public class GameManager : MonoBehaviour
                         break;
                 }
 
-                if (chanceToGive <= Random.value) {
+                if (chanceToGive >= Random.value) {
                     newCard = iteratedCard;
                     break;
                 }
@@ -672,13 +673,13 @@ public class GameManager : MonoBehaviour
                         youhp -= oppdmg;
                     }
 
-                    playerHPs.SetText(opphp + " --- " + youhp);
+                    playerHPs.SetText("</color><color=#ff0000>" + opphp + "</color> --- </color><color=#1e90ff>" + youhp);
                     youHP = youhp;
                     oppHP = opphp;
                     youDMG = 1;
                     oppDMG = 1;
-                    DmgOpp.SetText(oppDMG + "");
-                    DmgYour.SetText(youDMG + "");
+                    DmgOpp.SetText("</color><color=#ff0000>" + oppDMG);
+                    DmgYour.SetText("</color><color=#1e90ff>" + youDMG);
 
                     break;
                 case "Enemy":
@@ -690,13 +691,13 @@ public class GameManager : MonoBehaviour
                         opphp -= youdmg;
                     }
 
-                    playerHPs.SetText(opphp + " --- " + youhp);
+                    playerHPs.SetText("</color><color=#ff0000>" + opphp + "</color> --- </color><color=#1e90ff>" + youhp);
                     youHP = youhp;
                     oppHP = opphp;
                     youDMG = 1;
                     oppDMG = 1;
-                    DmgOpp.SetText(oppDMG + "");
-                    DmgYour.SetText(youDMG + "");
+                    DmgOpp.SetText("</color><color=#ff0000>" + oppDMG);
+                    DmgYour.SetText("</color><color=#1e90ff>" + youDMG);
             
 
                     break;
