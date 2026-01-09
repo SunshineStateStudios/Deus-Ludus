@@ -30,13 +30,13 @@ public class CardFloat : MonoBehaviour
         deltaTime += Time.deltaTime;
 
         // X & Z coordinates: points of contention.
-        gameObject.transform.eulerAngles = new Vector3(
+        gameObject.transform.localRotation = Quaternion.Euler(
             Mathf.Sin(deltaTime * frequency) * amplitude,
-            0,
+            0f,
             Mathf.Cos(deltaTime * frequency) * amplitude
         );
 
         // Make object go up and down
-        gameObject.transform.position = originalPosition + new Vector3(0,Mathf.Sin(deltaTime * (frequency/2)) * amplitude/20,0);
+        gameObject.transform.localPosition = originalPosition + new Vector3(0,Mathf.Sin(deltaTime * (frequency/2)) * amplitude/20,0);
     }
 }
