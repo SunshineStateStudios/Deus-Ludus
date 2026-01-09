@@ -107,6 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 0
   suit: 
+  isFromEnemy: 0
 --- !u!114 &5350030740623785807
 MonoBehaviour:
   m_ObjectHideFlags: 0

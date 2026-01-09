@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4146096608078804144}
   - component: {fileID: -3592642404666515806}
   - component: {fileID: 7829412261016103911}
+  - component: {fileID: -6949254641556786060}
   m_Layer: 0
   m_Name: AbCard
   m_TagString: Untagged
@@ -139,3 +140,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4edc50a4c08d165399a439f32aefb6ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityCardDesc
+  description: 
+  descriptionMenu: {fileID: 0}
+  descriptionLabel: {fileID: 0}
+--- !u!95 &-6949254641556786060
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751983444043679548}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1ae87ec9b1e9f1577a8a99b257d86865, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

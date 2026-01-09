@@ -49,9 +49,14 @@ public class GameManager : MonoBehaviour
     private AudioSource audioSource;
     private List<AbilityCard> playerInventory = new List<AbilityCard>();
     private List<AbilityCard> enemyInventory = new List<AbilityCard>();
+    private Vector3 originalCamPosition;
 
     void Start()
     {
+	if (camera != null) {
+	     originalCamPosition = camera.transform.position;
+	}
+
         audioSource = gameObject.GetComponent<AudioSource>();
 
         CreateDeck();
@@ -101,7 +106,7 @@ public class GameManager : MonoBehaviour
 
         if (card.GetLifeTime() > 0) {
             GameObject physicalCard = Instantiate(abilityCardPrefab, abilityHand);
-            
+
             physicalCard.name = index.ToString();
 
             int drawnCards = 0;
@@ -111,7 +116,7 @@ public class GameManager : MonoBehaviour
                 drawnCards++;
             }
 
-            physicalCard.transform.position -= new Vector3(0, 0, 2f * (drawnCards-1));
+            physicalCard.transform.position += new Vector3(0, 0, 2f * (drawnCards-1));
 
             AbilityCardDescMenu physicalCardScript = physicalCard.GetComponent<AbilityCardDescMenu>();
             physicalCardScript.description = card.GetDescription();
@@ -287,7 +292,7 @@ public class GameManager : MonoBehaviour
             OutOfBoundCards = placedNumberCards_Player.Count - 4;
         }
 
-        camera.transform.DOMove(new Vector3(-5.07f, 21.12f, 0.07f - OutOfBoundCards), 0.07f);
+        camera.transform.DOMove(originalCamPosition + new Vector3(0, 0, OutOfBoundCards), 0.07f);
     }
 
     public object DrawCard(int player)
@@ -314,7 +319,7 @@ public class GameManager : MonoBehaviour
         {
             placedNumberCards_Player.Add(newCard);
             newCard.transform.SetParent(playerHand);
-            newCard.transform.position -= new Vector3(0, 0, 2.3f * (placedNumberCards_Player.Count - 1));
+            newCard.transform.position += new Vector3(0, 0, 2.3f * (placedNumberCards_Player.Count - 1));
 
             UpdateHandValueText();
         }
@@ -322,7 +327,9 @@ public class GameManager : MonoBehaviour
         {
             placedNumberCards_Enemy.Add(newCard);
             newCard.transform.SetParent(enemyHand);
-            newCard.transform.position -= new Vector3(-9, 0, 2.3f * (placedNumberCards_Enemy.Count - 1));
+            newCard.transform.position += new Vector3(-43.5f, 0, 2.3f * (placedNumberCards_Enemy.Count - 1));
+
+	    data.isFromEnemy = true;
 
             if (placedNumberCards_Enemy.Count == 1)
             {

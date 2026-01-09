@@ -14,14 +14,12 @@ public class CardFloat : MonoBehaviour
     public float frequency;
 
     private float deltaTime;
-    private Vector3 originalPosition;
 
     void Start() {
         amplitude = Random.Range(4000,10000)/1000;
         frequency = Random.Range(3000,4000)/1000;
 
         deltaTime = Random.Range(0,3600);
-        originalPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 
     // Update is called once per frame
@@ -35,8 +33,5 @@ public class CardFloat : MonoBehaviour
             0f,
             Mathf.Cos(deltaTime * frequency) * amplitude
         );
-
-        // Make object go up and down
-        gameObject.transform.localPosition = originalPosition + new Vector3(0,Mathf.Sin(deltaTime * (frequency/2)) * amplitude/20,0);
-    }
+     }
 }
