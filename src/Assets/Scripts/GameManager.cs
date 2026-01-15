@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     {
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
-        phase = GamePhase.Draw;
+        phase = GamePhase.PlayerTurn;
     }
 
     void DrawCard(Player ply)
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    void ResolveCombat(Player attacker, Player defender)
+    void ResolveCombat(Player attacker, Player defender, float counterMultiplier = 1f)
     {
         int attackPower = attacker.TotalDamage;
         int defencePower = defender.TotalHealth;
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
     void CombatPhase(Player first, Player second)
     {
         ResolveCombat(first, second);
-        ResolveCombat(second, first);
+        ResolveCombat(second, first, 0.5f);
     }
 
     void Cleanup()

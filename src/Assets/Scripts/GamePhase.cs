@@ -1,6 +1,7 @@
 public enum GamePhase
 {
-    Draw,
+    PlayerTurn,
+    AITurn,
     BlackjackResolution,
     Combat,
     Cleanup

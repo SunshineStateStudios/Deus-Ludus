@@ -1,7 +1,5 @@
-public class AbilityCard : Card
+public abstract class AbilityCard : Card
 {
-    public void Activate(Player owner, Player opponent)
-    {
-        
-    }
+    public abstract void Apply(Player owner, Player opponent);
+    public abstract void Remove(Player owner, Player opponent);
 }
