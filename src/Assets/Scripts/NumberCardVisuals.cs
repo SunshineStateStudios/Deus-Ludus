@@ -6,17 +6,12 @@ using Microsoft.Unity.VisualStudio.Editor;
 
 public class NumberCardVisuals : MonoBehaviour
 {
+    public GameObject GodCubePrefab;
     public ParticleSystem particles;
     private GameObject whiteOverlay;
     private Tween whiteOverlayTween;
     private RawImage whiteOverlayImage;
     private AudioSource sound;
-
-    IEnumerator SlowTween()
-    {
-        yield return new WaitForSeconds(1.2f);
-        whiteOverlayTween = whiteOverlayImage.DOColor(new Color(69/255, 76/255, 181/255,0.35f), .9f);
-    }
 
     IEnumerator CardSound()
     {
@@ -30,10 +25,9 @@ public class NumberCardVisuals : MonoBehaviour
         whiteOverlayImage = whiteOverlay.GetComponent<RawImage>();
         sound = GetComponent<AudioSource>();
 
-        whiteOverlayImage.color = new Color(69/255, 76/255, 181/255, 0f);
+        whiteOverlayImage.color = new Color(69f, 76f, 181f, 0f);
 
         StartCoroutine(CardSound());
-        StartCoroutine(SlowTween());
     }
 
     public void DoTheParticle()
@@ -41,7 +35,9 @@ public class NumberCardVisuals : MonoBehaviour
         particles.Emit(60);
 
         whiteOverlayTween.Kill();
-        whiteOverlayImage.color = new Color(69/255, 76/255, 181/255,1f);
+        whiteOverlayImage.color = new Color(69f, 76f, 181f, 1f);
         whiteOverlayTween = whiteOverlayImage.DOColor(new Color(69/255, 76/255, 181/255,0f), 1.5f);
+
+        GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,-.2f), Quaternion.identity, transform);
     }
 }
