@@ -33,6 +33,7 @@ public class CanvasManager : MonoBehaviour
 
     public void CallbackDrawNumberCard()
     {
+        Debug.Log("fucking piece of shit");
         if (!panelHidden) return;
     }
 
