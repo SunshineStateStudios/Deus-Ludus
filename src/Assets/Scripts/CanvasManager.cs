@@ -9,6 +9,7 @@ public class CanvasManager : MonoBehaviour
     public GameObject stayButtonObj;
     public GameObject inventoryButtonObj;
     public GameObject inventoryPanelObj;
+    public GameObject gameManager;
 
     private RectTransform drawNumberCardButton;
     private RectTransform stayButton;
@@ -17,12 +18,16 @@ public class CanvasManager : MonoBehaviour
 
     private bool panelHidden = true;
     private Tween[] tweens = new Tween[4];
+    private GameManager gameManagerScript;
+
     void Start()
     {
         drawNumberCardButton = drawNumberCardButtonObj.GetComponent<RectTransform>();
         stayButton = stayButtonObj.GetComponent<RectTransform>();
         inventoryButton = inventoryButtonObj.GetComponent<RectTransform>();
         inventoryPanel = inventoryPanelObj.GetComponent<RectTransform>();
+
+        gameManagerScript = gameManager.GetComponent<GameManager>();
     }
 
     public void CallbackStay()
@@ -32,8 +37,8 @@ public class CanvasManager : MonoBehaviour
 
     public void CallbackDrawNumberCard()
     {
-        Debug.Log("fucking piece of shit");
         if (!panelHidden) return;
+        gameManagerScript.DrawNumberCard(1);
     }
 
     public void ResolvePanel()

@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        ply1 = new Player();
+        ply2 = new Player();
+        deck = new Deck();
+
         StartNewRound();
     }
 
@@ -16,32 +20,36 @@ public class GameManager : MonoBehaviour
     {
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
+
+        for (int i = 0; i < 2; i++)
+        {
+            DrawNumberCard(ply1);
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            DrawNumberCard(ply2);
+        }
+
         phase = GamePhase.PlayerTurn;
     }
 
-    void DrawCard(Player ply)
+    void DrawNumberCard(Player ply)
     {
-        Card card = deck.Draw();
+        NumberCard card = deck.Draw();
+        ply.NumberCards.Add(card);
+    }
 
-        if (card is NumberCard numberCard)
+    public void DrawNumberCard(int ply)
+    {
+        Player plyToUse = ply2;
+
+        if (ply == 1)
         {
-            ply.NumberCards.Add(numberCard);
-            SpawnGod(numberCard);
-        } else if (card is AbilityCard abilityCard)
-        {
-            ply.AbilityCards.Add(abilityCard);
-            SpawnAbilityBehindLastCard();
+            plyToUse = ply1;
         }
-    }
 
-    void SpawnGod(NumberCard numberCard)
-    {
-        // TO BE WRITTEN LATER
-    }
-
-    void SpawnAbilityBehindLastCard()
-    {
-        // TO BE WRITTEN LATER
+        DrawNumberCard(plyToUse);
     }
 
     void DestroyAllSpawnedCardObjects()
