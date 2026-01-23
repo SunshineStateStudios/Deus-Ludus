@@ -3,15 +3,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Microsoft.Unity.VisualStudio.Editor;
+using System;
 
 public class NumberCardVisuals : MonoBehaviour
 {
+    public GameObject canvas;
     public GameObject GodCubePrefab;
     public ParticleSystem particles;
     private GameObject whiteOverlay;
     private Tween whiteOverlayTween;
     private RawImage whiteOverlayImage;
     private AudioSource sound;
+    private bool canShowVisuals = false;
 
     IEnumerator CardSound()
     {
@@ -30,6 +33,15 @@ public class NumberCardVisuals : MonoBehaviour
         StartCoroutine(CardSound());
     }
 
+    void OnMouseEnter() {
+        if (!canShowVisuals) { return; }
+        canvas.SetActive(true);
+    }
+
+    void OnMouseExit() {
+        canvas.SetActive(false);
+    }
+
     public void DoTheParticle()
     {
         particles.Emit(60);
@@ -39,5 +51,6 @@ public class NumberCardVisuals : MonoBehaviour
         whiteOverlayTween = whiteOverlayImage.DOColor(new Color(69/255, 76/255, 181/255,0f), 1.5f);
 
         GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,-.2f), Quaternion.identity, transform);
+        canShowVisuals = true;
     }
 }

@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class CardView : MonoBehaviour
 {
-    public Card CardData;
+    public NumberCard CardData;
 
-    public void Initialise(Card card)
+    public void Initialise(NumberCard card)
     {
         CardData = card;
         // Update UI
