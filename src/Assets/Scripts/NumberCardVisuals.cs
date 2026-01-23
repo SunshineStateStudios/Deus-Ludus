@@ -24,7 +24,7 @@ public class NumberCardVisuals : MonoBehaviour
 
     void Start()
     {
-        whiteOverlay = GameObject.Find("Canvas/WhiteOverlay");
+        whiteOverlay = GameObject.Find("Main Camera/Canvas/WhiteOverlay");
         whiteOverlayImage = whiteOverlay.GetComponent<RawImage>();
         sound = GetComponent<AudioSource>();
 

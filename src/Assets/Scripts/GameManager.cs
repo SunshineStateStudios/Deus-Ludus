@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,16 +8,20 @@ public class GameManager : MonoBehaviour
     public Deck deck;
     public GamePhase phase;
 
+    public GameObject numberCard;
+    public GameObject playerNumberCards;
+    public GameObject enemyNumberCards;
+
     void Start()
     {
         ply1 = new Player();
         ply2 = new Player();
         deck = new Deck();
 
-        StartNewRound();
+        StartCoroutine(StartNewRound());
     }
 
-    void StartNewRound()
+    IEnumerator StartNewRound()
     {
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
@@ -24,11 +29,14 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             DrawNumberCard(ply1);
+            yield return new WaitForSeconds(0.5f);
         }
 
         for (int i = 0; i < 2; i++)
         {
             DrawNumberCard(ply2);
+            Debug.Log("jz");
+            yield return new WaitForSeconds(0.5f);
         }
 
         phase = GamePhase.PlayerTurn;
@@ -38,6 +46,19 @@ public class GameManager : MonoBehaviour
     {
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
+
+        GameObject parent = playerNumberCards;
+        Vector3 origin = new Vector3(-1.065f,0.084f,-8.168f);
+
+        if (ply == ply2)
+        {
+            Debug.Log("adljfshf");
+            parent = enemyNumberCards;
+            origin = new Vector3(-1.065f,0.084f,-6.78f);
+        }
+        origin += new Vector3(3 * (ply.NumberCards.Count-1), 0f, 0f);
+
+        GameObject cardRepresentation = Instantiate(numberCard, origin, Quaternion.identity, parent.transform);
     }
 
     public void DrawNumberCard(int ply)
