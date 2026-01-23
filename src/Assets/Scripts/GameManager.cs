@@ -43,14 +43,17 @@ public class GameManager : MonoBehaviour
         GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
         GameObject stayButton = GameObject.Find("Canvas/StayButton");
         GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
+        GameObject text = GameObject.Find("Canvas/ProgressText");
 
         RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
         RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
         RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
+        RectTransform textRect = text.GetComponent<RectTransform>();
 
         inventoryButtonRect.DOAnchorPos(new Vector2(-60f, 57f), 0.75f).SetEase(Ease.OutSine);
         stayButtonRect.DOAnchorPos(new Vector2(52f, 158f), 0.75f).SetEase(Ease.OutSine);
         drawButtonRect.DOAnchorPos(new Vector2(52f, 57f), 0.75f).SetEase(Ease.OutSine);
+        textRect.DOAnchorPos(new Vector2(0f, -57f), 0.75f).SetEase(Ease.OutSine);
     }
 
     IEnumerator StartNewRound()
@@ -71,6 +74,32 @@ public class GameManager : MonoBehaviour
         }
 
         phase = GamePhase.PlayerTurn;
+    }
+
+    public IEnumerator EndRound(bool didStay)
+    {
+        Debug.Log(didStay);
+        GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
+        GameObject inventoryPanel = GameObject.Find("Canvas/InventoryPanel");
+        GameObject stayButton = GameObject.Find("Canvas/StayButton");
+        GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
+
+        inventoryButton.SetActive(false);
+        stayButton.SetActive(false);
+        drawButton.SetActive(false);
+        inventoryPanel.SetActive(false);
+
+        if (!didStay)
+        {
+            DrawNumberCard(ply1);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        inventoryButton.SetActive(true);
+        stayButton.SetActive(true);
+        drawButton.SetActive(true);
+        inventoryPanel.SetActive(true);
     }
 
     void DrawNumberCard(Player ply)

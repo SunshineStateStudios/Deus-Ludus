@@ -31,12 +31,13 @@ public class CanvasManager : MonoBehaviour
     public void CallbackStay()
     {
         if (!panelHidden) return;
+        StartCoroutine(gameManagerScript.EndRound(true));
     }
 
     public void CallbackDrawNumberCard()
     {
         if (!panelHidden) return;
-        gameManagerScript.DrawNumberCard(1);
+        StartCoroutine(gameManagerScript.EndRound(false));
     }
 
     public void ResolvePanel()
