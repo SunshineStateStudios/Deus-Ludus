@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,37 @@ public class GameManager : MonoBehaviour
         deck = new Deck();
 
         StartCoroutine(StartNewRound());
+
+        GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
+        GameObject stayButton = GameObject.Find("Canvas/StayButton");
+        GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
+
+        RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
+        RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
+        RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
+
+        inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
+        stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
+        drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
+
+        StartCoroutine(ShowUIButtons());
+    }
+
+    IEnumerator ShowUIButtons()
+    {
+        yield return new WaitForSeconds(3.5f);
+
+        GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
+        GameObject stayButton = GameObject.Find("Canvas/StayButton");
+        GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
+
+        RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
+        RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
+        RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
+
+        inventoryButtonRect.DOAnchorPos(new Vector2(-60f, 57f), 0.75f).SetEase(Ease.OutSine);
+        stayButtonRect.DOAnchorPos(new Vector2(52f, 158f), 0.75f).SetEase(Ease.OutSine);
+        drawButtonRect.DOAnchorPos(new Vector2(52f, 57f), 0.75f).SetEase(Ease.OutSine);
     }
 
     IEnumerator StartNewRound()
@@ -35,7 +67,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             DrawNumberCard(ply2);
-            Debug.Log("jz");
             yield return new WaitForSeconds(0.5f);
         }
 
@@ -48,17 +79,14 @@ public class GameManager : MonoBehaviour
         ply.NumberCards.Add(card);
 
         GameObject parent = playerNumberCards;
-        Vector3 origin = new Vector3(-1.065f,0.084f,-8.168f);
 
         if (ply == ply2)
         {
-            Debug.Log("adljfshf");
             parent = enemyNumberCards;
-            origin = new Vector3(-1.065f,0.084f,-6.78f);
         }
-        origin += new Vector3(3 * (ply.NumberCards.Count-1), 0f, 0f);
 
-        GameObject cardRepresentation = Instantiate(numberCard, origin, Quaternion.identity, parent.transform);
+        GameObject cardRepresentation = Instantiate(numberCard, parent.transform, false);
+        cardRepresentation.transform.localPosition = new Vector3(3f - (ply.NumberCards.Count - 1), 0f, 0f);
     }
 
     public void DrawNumberCard(int ply)

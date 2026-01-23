@@ -1,18 +1,13 @@
-using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using Microsoft.Unity.VisualStudio.Editor;
-using System;
 
 public class NumberCardVisuals : MonoBehaviour
 {
     public GameObject canvas;
     public GameObject GodCubePrefab;
     public ParticleSystem particles;
-    private GameObject whiteOverlay;
-    private Tween whiteOverlayTween;
-    private RawImage whiteOverlayImage;
+    private WhiteFlash whiteOverlayScript;
     private AudioSource sound;
     private bool canShowVisuals = false;
 
@@ -20,15 +15,13 @@ public class NumberCardVisuals : MonoBehaviour
     {
         yield return new WaitForSeconds(.3f);
         sound.Play();
+        whiteOverlayScript = GameObject.Find("Canvas/WhiteOverlay").GetComponent<WhiteFlash>(); // need to do delay :(
+        Debug.Log(whiteOverlayScript == null);
     }
 
     void Start()
     {
-        whiteOverlay = GameObject.Find("Main Camera/Canvas/WhiteOverlay");
-        whiteOverlayImage = whiteOverlay.GetComponent<RawImage>();
         sound = GetComponent<AudioSource>();
-
-        whiteOverlayImage.color = new Color(69f, 76f, 181f, 0f);
 
         StartCoroutine(CardSound());
     }
@@ -45,12 +38,9 @@ public class NumberCardVisuals : MonoBehaviour
     public void DoTheParticle()
     {
         particles.Emit(60);
+        whiteOverlayScript.Flash(new Color(1f,1f,1f,0.5f));
 
-        whiteOverlayTween.Kill();
-        whiteOverlayImage.color = new Color(69f, 76f, 181f, 1f);
-        whiteOverlayTween = whiteOverlayImage.DOColor(new Color(69/255, 76/255, 181/255,0f), 1.5f);
-
-        GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,-.2f), Quaternion.identity, transform);
+        GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,-0.2f), Quaternion.identity, transform);
         canShowVisuals = true;
     }
 }
