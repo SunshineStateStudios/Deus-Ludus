@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,43 +13,54 @@ public class GameManager : MonoBehaviour
     public GameObject numberCard;
     public GameObject playerNumberCards;
     public GameObject enemyNumberCards;
+    public GameObject Camera;
+    public int BlackjackThreshold = 21;
+
+    // Attributes for the drawn/stayed overlay
+    public GameObject notificationUI;
+
+    private AudioSource decidedSound;
+    private Vector3 oldCameraPos;
+    // Misc
+    private GameObject inventoryButton;
+    private GameObject inventoryPanel;
+    private GameObject stayButton;
+    private GameObject drawButton;
+    private GameObject notificationUIText;
+    private GameObject progressText;
 
     void Start()
     {
+        oldCameraPos = Camera.transform.position;
+        decidedSound = GetComponent<AudioSource>();
+
+        inventoryButton = GameObject.Find("Canvas/InventoryButton");
+        inventoryPanel = GameObject.Find("Canvas/InventoryPanel");
+        stayButton = GameObject.Find("Canvas/StayButton");
+        drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
+        notificationUIText = GameObject.Find("Canvas/Notification/Label");
+        progressText = GameObject.Find("Canvas/ProgressText");
+
         ply1 = new Player();
         ply2 = new Player();
         deck = new Deck();
 
         StartCoroutine(StartNewRound());
-
-        GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
-        GameObject stayButton = GameObject.Find("Canvas/StayButton");
-        GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
-
-        RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
-        RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
-        RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
-
-        inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
-        stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
-        drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
-
         StartCoroutine(ShowUIButtons());
     }
 
     IEnumerator ShowUIButtons()
     {
-        yield return new WaitForSeconds(3.5f);
-
-        GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
-        GameObject stayButton = GameObject.Find("Canvas/StayButton");
-        GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
-        GameObject text = GameObject.Find("Canvas/ProgressText");
-
         RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
         RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
         RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
-        RectTransform textRect = text.GetComponent<RectTransform>();
+        RectTransform textRect = progressText.GetComponent<RectTransform>();
+
+        inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
+        stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
+        drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
+
+        yield return new WaitForSeconds(3.5f);
 
         inventoryButtonRect.DOAnchorPos(new Vector2(-60f, 57f), 0.75f).SetEase(Ease.OutSine);
         stayButtonRect.DOAnchorPos(new Vector2(52f, 158f), 0.75f).SetEase(Ease.OutSine);
@@ -74,28 +86,156 @@ public class GameManager : MonoBehaviour
         }
 
         phase = GamePhase.PlayerTurn;
+
+        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal.ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
     }
 
     public IEnumerator EndRound(bool didStay)
     {
         Debug.Log(didStay);
-        GameObject inventoryButton = GameObject.Find("Canvas/InventoryButton");
-        GameObject inventoryPanel = GameObject.Find("Canvas/InventoryPanel");
-        GameObject stayButton = GameObject.Find("Canvas/StayButton");
-        GameObject drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
+        
+        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
+
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal.ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+
+        progressText.SetActive(false);
+        TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
+        
+        Debug.Log(didStay);
+        if (didStay)
+        {
+            notificationTxt.text = "STAYED";
+        } else
+        {
+            notificationTxt.text = "DRAWN";
+        }
+
+        decidedSound.Play();
+        Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
+        notificationUIAnimator.Play("Notification_Popup", 0, 0);
+        notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
 
         inventoryButton.SetActive(false);
         stayButton.SetActive(false);
         drawButton.SetActive(false);
         inventoryPanel.SetActive(false);
 
+        yield return new WaitForSeconds(1.5f);
+
         if (!didStay)
         {
             DrawNumberCard(ply1);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
+        progressText.SetActive(true);
+        progressTxtObj.text = "It's the opponent's turn!";
+        phase = GamePhase.AITurn;
+
+        yield return new WaitForSeconds(1.5f);
+
+        bool draw = false;
+
+        if (!ply2.IsBust)
+        {
+            int BlackjackTotal = ply2.BlackjackTotal;
+            int difference = BlackjackThreshold - BlackjackTotal;
+
+            if (difference > 0)
+            {
+                switch (difference)
+                {
+                    case 5:
+                        draw = Random.Range(1, 20) == 1;
+                        break;
+
+                    case 4:
+                        draw = Random.Range(1, 40) == 1;
+                        break;
+
+                    case 3:
+                        draw = Random.Range(1, 60) == 1;
+                        break;
+
+                    case 2:
+                        draw = Random.Range(1, 80) == 1;
+                        break;
+
+                    case 1:
+                        draw = false;
+                        break;
+
+                    default:
+                        draw = true;
+                        break;
+                }
+            }
+        }
+
+        decidedSound.Play();
+        notificationTxt.color = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
+        notificationUIAnimator.Play("Notification_Popup", 0, 0);
+
+        if (draw)
+        {
+            notificationTxt.text = "DRAWN";
+        } else
+        {
+            notificationTxt.text = "STAYED";
+        }
+
+        yield return new WaitForSeconds(1.5f);
+
+        if (draw) { DrawNumberCard(ply2); yield return new WaitForSeconds(0.5f); }
+
+        if (!draw && didStay)
+        {
+            StartCoroutine(CombatSection());
+        } else
+        {
+            phase = GamePhase.PlayerTurn;
+            inventoryButton.SetActive(true);
+            stayButton.SetActive(true);
+            drawButton.SetActive(true);
+            inventoryPanel.SetActive(true);
+            progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal.ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        }
+    }
+
+    IEnumerator CombatSection()
+    {
+        phase = GamePhase.Combat;
+
+        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
+
+        progressTxtObj.text = "They're gonna fight!";
+        TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
+
+        Player whoWon = DetermineBlackjackWinner();
+
+        yield return new WaitForSeconds(1.5f);
+
+        decidedSound.Play();
+        Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
+        notificationUIAnimator.Play("Notification_Popup", 0, 0);
+        
+        if (whoWon == ply1)
+        {
+            notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
+            notificationTxt.text = "YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>";
+        } else
+        {
+            notificationTxt.color = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
+            notificationTxt.text = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
+        }
+
+        yield return new WaitForSeconds(1.65f);
+
+        Cleanup();
+        StartCoroutine(StartNewRound());
+        StartCoroutine(ShowUIButtons());
         inventoryButton.SetActive(true);
         stayButton.SetActive(true);
         drawButton.SetActive(true);
@@ -115,7 +255,30 @@ public class GameManager : MonoBehaviour
         }
 
         GameObject cardRepresentation = Instantiate(numberCard, parent.transform, false);
-        cardRepresentation.transform.localPosition = new Vector3(3f - (ply.NumberCards.Count - 1), 0f, 0f);
+        cardRepresentation.transform.localPosition = new Vector3(3f + (ply.NumberCards.Count - 1), 0f, 0f);
+
+        Player otherPlayer;
+
+        if (ply == ply1)
+        {
+            otherPlayer = ply2;
+        } else
+        {
+            otherPlayer = ply1;
+        }
+
+        int amountOfCards = ply.NumberCards.Count;
+        if (amountOfCards < otherPlayer.NumberCards.Count)
+        {
+            amountOfCards = otherPlayer.NumberCards.Count;
+        }
+
+        Vector3 newPos = oldCameraPos;
+        if (amountOfCards > 3)
+        {
+            newPos = oldCameraPos + new Vector3(1f * (amountOfCards-3), 0f, 0f);
+        }
+        Camera.transform.DOMove(newPos, 1f);
     }
 
     public void DrawNumberCard(int ply)
@@ -132,7 +295,15 @@ public class GameManager : MonoBehaviour
 
     void DestroyAllSpawnedCardObjects()
     {
-        // TO BE WRITTEN LATER
+        foreach (Transform child in playerNumberCards.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in enemyNumberCards.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     Player DetermineBlackjackWinner()
