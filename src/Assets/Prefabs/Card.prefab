@@ -5414,7 +5414,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f75ae6b3f05c08640b4bfe61f3a59eeb, type: 2}
+  - {fileID: 2100000, guid: 277f9da8222760f4fb24348ab93f2a18, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5472,7 +5472,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NumberCardVisuals
   canvas: {fileID: 8304665995044973702}
-  whiteOverlay: {fileID: 0}
   GodCubePrefab: {fileID: 6855623370456457537, guid: be19ffe7add2b2d6b9e21f9924c62d3f, type: 3}
   particles: {fileID: 2796229753542076709}
 --- !u!82 &8832922791768079780
