@@ -93,8 +93,6 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator EndRound(bool didStay)
     {
-        Debug.Log(didStay);
-        
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
 
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal.ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
@@ -102,7 +100,6 @@ public class GameManager : MonoBehaviour
         progressText.SetActive(false);
         TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
         
-        Debug.Log(didStay);
         if (didStay)
         {
             notificationTxt.text = "STAYED";
@@ -204,6 +201,60 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator Fight(Player attacker)
+    {
+        GameObject physicalAttackerCards = playerNumberCards;
+        GameObject physicalDefenderCards = enemyNumberCards;
+
+        Player defender = ply2;
+
+        if (attacker == ply2)
+        {
+            physicalAttackerCards = enemyNumberCards;
+            physicalDefenderCards = playerNumberCards;
+        }
+
+        int attackerTotalAttackPoints = 0;
+        int defenderTotalDefendPoints = 0;
+
+        foreach (NumberCard card in attacker.NumberCards)
+        {
+            attackerTotalAttackPoints += card.Damage;
+        }
+
+        foreach (NumberCard card in defender.NumberCards)
+        {
+            defenderTotalDefendPoints += card.Health;
+        }
+
+        // Playing combat animations
+
+        foreach (Transform child in physicalAttackerCards.transform)
+        {
+            Transform childTransform = child.Find("GodCube(Clone)");
+            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
+            if (cubeTransform == null)
+            {
+                Debug.Log("AAAHHH!!");
+                continue;
+            }
+
+            childTransform.transform.rotation = Quaternion.identity;
+
+            GameObject cube = cubeTransform.gameObject;
+            Animator cubeAnimator = cube.GetComponent<Animator>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                // debugging purposes
+                cubeAnimator.Play("Attack", 0, 0);
+                yield return new WaitForSeconds(1f);
+            }
+        }
+
+        yield return new WaitForSeconds(1.5f);
+    }
+
     IEnumerator CombatSection()
     {
         phase = GamePhase.Combat;
@@ -233,13 +284,17 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.65f);
 
-        Cleanup();
+        StartCoroutine(Fight(whoWon));
+
+        yield return new WaitForSeconds(1.5f);
+
+        /*Cleanup();
         StartCoroutine(StartNewRound());
         StartCoroutine(ShowUIButtons());
         inventoryButton.SetActive(true);
         stayButton.SetActive(true);
         drawButton.SetActive(true);
-        inventoryPanel.SetActive(true);
+        inventoryPanel.SetActive(true);*/
     }
 
     void DrawNumberCard(Player ply)

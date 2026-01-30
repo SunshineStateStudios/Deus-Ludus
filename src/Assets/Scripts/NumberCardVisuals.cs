@@ -16,7 +16,6 @@ public class NumberCardVisuals : MonoBehaviour
         yield return new WaitForSeconds(.3f);
         sound.Play();
         whiteOverlayScript = GameObject.Find("Canvas/WhiteOverlay").GetComponent<WhiteFlash>(); // need to do delay :(
-        Debug.Log(whiteOverlayScript == null);
     }
 
     void Start()
@@ -42,5 +41,6 @@ public class NumberCardVisuals : MonoBehaviour
 
         GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,-0.2f), Quaternion.identity, transform);
         canShowVisuals = true;
+        godCubeInstance.transform.rotation = Quaternion.identity;
     }
 }
