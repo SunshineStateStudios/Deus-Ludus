@@ -5,6 +5,9 @@ using UnityEngine.UI;
 public class NumberCardVisuals : MonoBehaviour
 {
     public GameObject canvas;
+    public GameObject dashLabel;
+    public GameObject damageLabel;
+    public GameObject healthLabel;
     public GameObject GodCubePrefab;
     public ParticleSystem particles;
     private WhiteFlash whiteOverlayScript;
@@ -27,19 +30,24 @@ public class NumberCardVisuals : MonoBehaviour
 
     void OnMouseEnter() {
         if (!canShowVisuals) { return; }
-        canvas.SetActive(true);
+        dashLabel.SetActive(true);
+        healthLabel.SetActive(true);
+        damageLabel.SetActive(true);
     }
 
     void OnMouseExit() {
-        canvas.SetActive(false);
+        dashLabel.SetActive(false);
+        healthLabel.SetActive(false);
+        damageLabel.SetActive(false);
     }
 
     public void DoTheParticle()
     {
         particles.Emit(60);
         whiteOverlayScript.Flash(new Color(1f,1f,1f,0.5f));
+        canvas.SetActive(true);
 
-        GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,-0.2f), Quaternion.identity, transform);
+        GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
         canShowVisuals = true;
         godCubeInstance.transform.rotation = Quaternion.identity;
     }
