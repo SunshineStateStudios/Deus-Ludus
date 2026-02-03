@@ -233,23 +233,26 @@ public class GameManager : MonoBehaviour
         {
             Transform childTransform = child.Find("GodCube(Clone)");
             Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
-            if (cubeTransform == null)
-            {
-                Debug.Log("AAAHHH!!");
-                continue;
-            }
-
             childTransform.transform.rotation = Quaternion.identity;
 
             GameObject cube = cubeTransform.gameObject;
             Animator cubeAnimator = cube.GetComponent<Animator>();
 
-            for (int i = 0; i < 5; i++)
-            {
-                // debugging purposes
-                cubeAnimator.Play("Attack", 0, 0);
-                yield return new WaitForSeconds(1f);
-            }
+            cubeAnimator.Play("Attack", 0, 0);
+        }
+
+        yield return new WaitForSeconds(0.7f);
+
+        foreach (Transform child in physicalDefenderCards.transform)
+        {
+            Transform childTransform = child.Find("GodCube(Clone)");
+            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
+            childTransform.transform.rotation = Quaternion.identity;
+
+            GameObject cube = cubeTransform.gameObject;
+            Animator cubeAnimator = cube.GetComponent<Animator>();
+
+            cubeAnimator.Play("Defend", 0, 0);
         }
 
         yield return new WaitForSeconds(1.5f);
@@ -282,7 +285,7 @@ public class GameManager : MonoBehaviour
             notificationTxt.text = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
         }
 
-        yield return new WaitForSeconds(1.65f);
+        yield return new WaitForSeconds(2.3f);
 
         StartCoroutine(Fight(whoWon));
 
@@ -311,6 +314,21 @@ public class GameManager : MonoBehaviour
 
         GameObject cardRepresentation = Instantiate(numberCard, parent.transform, false);
         cardRepresentation.transform.localPosition = new Vector3(3f + (ply.NumberCards.Count - 1), 0f, 0f);
+
+        // Changing the numbers on the card visual,,,.
+        GameObject valueLabel = cardRepresentation.transform.Find("Canvas/ValueLabel").gameObject;
+        GameObject damageLabel = cardRepresentation.transform.Find("Canvas/DamageLabel").gameObject;
+        GameObject healthLabel = cardRepresentation.transform.Find("Canvas/HealthLabel").gameObject;
+
+        TMP_Text valueText = valueLabel.GetComponent<TMP_Text>();
+        TMP_Text damageText = damageLabel.GetComponent<TMP_Text>();
+        TMP_Text healthText = healthLabel.GetComponent<TMP_Text>();
+
+        valueText.text = card.Value.ToString();
+        damageText.text = card.Damage.ToString();
+        healthText.text = card.Health.ToString();
+
+        // Setting camera position
 
         Player otherPlayer;
 
