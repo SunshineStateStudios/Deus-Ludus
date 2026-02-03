@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using System.Collections.Generic;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
     private GameObject drawButton;
     private GameObject notificationUIText;
     private GameObject progressText;
+    private GameObject healthPanel;
+    private List<AbilityCard> abilityCardList;
 
     void Start()
     {
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
         drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
         notificationUIText = GameObject.Find("Canvas/Notification/Label");
         progressText = GameObject.Find("Canvas/ProgressText");
+        healthPanel = GameObject.Find("Canvas/HealthPanel");
 
         ply1 = new Player();
         ply2 = new Player();
@@ -50,16 +54,41 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ShowUIButtons());
     }
 
+    void RebuildAbilityCardPool()
+    {
+        abilityCardList = new List<AbilityCard>();
+        abilityCardList.Add(new TestA());
+
+        // Scramble the list!
+        int n = abilityCardList.Count;
+        for (int i = n - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i+1);
+            AbilityCard card = abilityCardList[i];
+            abilityCardList[i] = abilityCardList[j];
+            abilityCardList[j] = card;
+        }
+    }
+
+    void GivePlayerAbilityCard(Player ply)
+    {
+        AbilityCard chosenCard = abilityCardList[0];
+        ply.AbilityCards.Add(chosenCard);
+        abilityCardList.Remove(chosenCard);
+    }
+
     IEnumerator ShowUIButtons()
     {
         RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
         RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
         RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
         RectTransform textRect = progressText.GetComponent<RectTransform>();
+        RectTransform healthPanelRect = healthPanel.GetComponent<RectTransform>();
 
         inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
         stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
         drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
+        healthPanelRect.anchoredPosition = new Vector2(-171f, -187.3714f);
 
         yield return new WaitForSeconds(3.5f);
 
@@ -67,12 +96,17 @@ public class GameManager : MonoBehaviour
         stayButtonRect.DOAnchorPos(new Vector2(52f, 158f), 0.75f).SetEase(Ease.OutSine);
         drawButtonRect.DOAnchorPos(new Vector2(52f, 57f), 0.75f).SetEase(Ease.OutSine);
         textRect.DOAnchorPos(new Vector2(0f, -57f), 0.75f).SetEase(Ease.OutSine);
+        healthPanelRect.DOAnchorPos(new Vector2(30f, -187.3714f), 0.75f).SetEase(Ease.OutSine);
     }
 
     IEnumerator StartNewRound()
     {
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
+
+        RebuildAbilityCardPool();
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply2);
 
         for (int i = 0; i < 2; i++)
         {
