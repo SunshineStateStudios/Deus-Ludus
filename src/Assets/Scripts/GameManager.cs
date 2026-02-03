@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -327,6 +328,14 @@ public class GameManager : MonoBehaviour
         valueText.text = card.Value.ToString();
         damageText.text = card.Damage.ToString();
         healthText.text = card.Health.ToString();
+
+        if (ply == ply2){
+            if (ply2.NumberCards.Count == 1){
+                valueText.text = "?";
+                damageText.text = "?";
+                healthText.text = "?";
+            }
+        }
 
         // Setting camera position
 

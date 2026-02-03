@@ -2716,7 +2716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextFade
   hoverText: {fileID: 1827488594}
-  image: {fileID: 1681528122}
+  image: {fileID: 1340062022}
   fadeDuration: 0.2
 --- !u!114 &1385026057
 MonoBehaviour:
