@@ -16,12 +16,14 @@ public class GameManager : MonoBehaviour
     public GameObject playerNumberCards;
     public GameObject enemyNumberCards;
     public GameObject Camera;
+    public AudioClip attackGodCubeClip;
     public int BlackjackThreshold = 21;
 
     // Attributes for the drawn/stayed overlay
     public GameObject notificationUI;
 
     private AudioSource decidedSound;
+    private AudioSource attackGodCubeSound;
     private Vector3 oldCameraPos;
     // Misc
     private GameObject inventoryButton;
@@ -36,7 +38,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         oldCameraPos = Camera.transform.position;
-        decidedSound = GetComponent<AudioSource>();
+
+        AudioSource[] sources = GetComponents<AudioSource>();
+        decidedSound = sources[0];
+        attackGodCubeSound = sources[1];
 
         inventoryButton = GameObject.Find("Canvas/InventoryButton");
         inventoryPanel = GameObject.Find("Canvas/InventoryPanel");
@@ -70,11 +75,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void GivePlayerAbilityCard(Player ply)
+    AbilityCard GivePlayerAbilityCard(Player ply)
     {
-        AbilityCard chosenCard = abilityCardList[0];
-        ply.AbilityCards.Add(chosenCard);
-        abilityCardList.Remove(chosenCard);
+        if (abilityCardList.Count > 0) {
+            AbilityCard chosenCard = abilityCardList[0];
+            ply.AbilityCards.Add(chosenCard);
+            abilityCardList.Remove(chosenCard);
+
+            return chosenCard;
+        }
+
+        return null;
     }
 
     IEnumerator ShowUIButtons()
@@ -153,7 +164,7 @@ public class GameManager : MonoBehaviour
         drawButton.SetActive(false);
         inventoryPanel.SetActive(false);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         if (!didStay)
         {
@@ -166,7 +177,7 @@ public class GameManager : MonoBehaviour
         progressTxtObj.text = "It's the opponent's turn!";
         phase = GamePhase.AITurn;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         bool draw = false;
 
@@ -218,7 +229,7 @@ public class GameManager : MonoBehaviour
             notificationTxt.text = "STAYED";
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         if (draw) { DrawNumberCard(ply2); yield return new WaitForSeconds(0.5f); }
 
@@ -233,6 +244,21 @@ public class GameManager : MonoBehaviour
             drawButton.SetActive(true);
             inventoryPanel.SetActive(true);
             progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal.ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        }
+    }
+
+    void MakeGodCubesPlayAnimtion(string animationName, Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            Transform childTransform = child.Find("GodCube(Clone)");
+            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
+            childTransform.transform.rotation = Quaternion.identity;
+
+            GameObject cube = cubeTransform.gameObject;
+            Animator cubeAnimator = cube.GetComponent<Animator>();
+
+            cubeAnimator.Play(animationName, 0, 0);
         }
     }
 
@@ -264,33 +290,23 @@ public class GameManager : MonoBehaviour
 
         // Playing combat animations
 
-        foreach (Transform child in physicalAttackerCards.transform)
+        MakeGodCubesPlayAnimtion("Attack", physicalAttackerCards.transform);
+
+        if (attacker == ply2)
         {
-            Transform childTransform = child.Find("GodCube(Clone)");
-            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
-            childTransform.transform.rotation = Quaternion.identity;
-
-            GameObject cube = cubeTransform.gameObject;
-            Animator cubeAnimator = cube.GetComponent<Animator>();
-
-            cubeAnimator.Play("Attack", 0, 0);
+            foreach (Transform child in physicalAttackerCards.transform)
+            {
+                Transform childTransform = child.Find("GodCube(Clone)");
+                childTransform.Rotate(0f,180f,0f);
+            }
         }
 
+        attackGodCubeSound.PlayOneShot(attackGodCubeClip, 1f);
         yield return new WaitForSeconds(0.7f);
 
-        foreach (Transform child in physicalDefenderCards.transform)
-        {
-            Transform childTransform = child.Find("GodCube(Clone)");
-            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
-            childTransform.transform.rotation = Quaternion.identity;
+        MakeGodCubesPlayAnimtion("Defend", physicalDefenderCards.transform);
 
-            GameObject cube = cubeTransform.gameObject;
-            Animator cubeAnimator = cube.GetComponent<Animator>();
-
-            cubeAnimator.Play("Defend", 0, 0);
-        }
-
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
     }
 
     IEnumerator CombatSection()
@@ -303,8 +319,11 @@ public class GameManager : MonoBehaviour
         TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
 
         Player whoWon = DetermineBlackjackWinner();
+        Player whoLost = ply1;
 
-        yield return new WaitForSeconds(1.5f);
+        if (whoWon == ply1) whoLost = ply2;
+
+        yield return new WaitForSeconds(1f);
 
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
@@ -324,7 +343,9 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(Fight(whoWon));
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
+
+        StartCoroutine(Fight(whoLost));
 
         /*Cleanup();
         StartCoroutine(StartNewRound());
