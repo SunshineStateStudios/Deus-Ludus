@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using System.Collections.Generic;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
@@ -15,12 +16,14 @@ public class GameManager : MonoBehaviour
     public GameObject playerNumberCards;
     public GameObject enemyNumberCards;
     public GameObject Camera;
+    public AudioClip attackGodCubeClip;
     public int BlackjackThreshold = 21;
 
     // Attributes for the drawn/stayed overlay
     public GameObject notificationUI;
 
     private AudioSource decidedSound;
+    private AudioSource attackGodCubeSound;
     private Vector3 oldCameraPos;
     // Misc
     private GameObject inventoryButton;
@@ -29,11 +32,16 @@ public class GameManager : MonoBehaviour
     private GameObject drawButton;
     private GameObject notificationUIText;
     private GameObject progressText;
+    private GameObject healthPanel;
+    private List<AbilityCard> abilityCardList;
 
     void Start()
     {
         oldCameraPos = Camera.transform.position;
-        decidedSound = GetComponent<AudioSource>();
+
+        AudioSource[] sources = GetComponents<AudioSource>();
+        decidedSound = sources[0];
+        attackGodCubeSound = sources[1];
 
         inventoryButton = GameObject.Find("Canvas/InventoryButton");
         inventoryPanel = GameObject.Find("Canvas/InventoryPanel");
@@ -41,6 +49,7 @@ public class GameManager : MonoBehaviour
         drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
         notificationUIText = GameObject.Find("Canvas/Notification/Label");
         progressText = GameObject.Find("Canvas/ProgressText");
+        healthPanel = GameObject.Find("Canvas/HealthPanel");
 
         ply1 = new Player();
         ply2 = new Player();
@@ -50,16 +59,47 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ShowUIButtons());
     }
 
+    void RebuildAbilityCardPool()
+    {
+        abilityCardList = new List<AbilityCard>();
+        abilityCardList.Add(new TestA());
+
+        // Scramble the list!
+        int n = abilityCardList.Count;
+        for (int i = n - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i+1);
+            AbilityCard card = abilityCardList[i];
+            abilityCardList[i] = abilityCardList[j];
+            abilityCardList[j] = card;
+        }
+    }
+
+    AbilityCard GivePlayerAbilityCard(Player ply)
+    {
+        if (abilityCardList.Count > 0) {
+            AbilityCard chosenCard = abilityCardList[0];
+            ply.AbilityCards.Add(chosenCard);
+            abilityCardList.Remove(chosenCard);
+
+            return chosenCard;
+        }
+
+        return null;
+    }
+
     IEnumerator ShowUIButtons()
     {
         RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
         RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
         RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
         RectTransform textRect = progressText.GetComponent<RectTransform>();
+        RectTransform healthPanelRect = healthPanel.GetComponent<RectTransform>();
 
         inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
         stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
         drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
+        healthPanelRect.anchoredPosition = new Vector2(-171f, -187.3714f);
 
         yield return new WaitForSeconds(3.5f);
 
@@ -67,12 +107,17 @@ public class GameManager : MonoBehaviour
         stayButtonRect.DOAnchorPos(new Vector2(52f, 158f), 0.75f).SetEase(Ease.OutSine);
         drawButtonRect.DOAnchorPos(new Vector2(52f, 57f), 0.75f).SetEase(Ease.OutSine);
         textRect.DOAnchorPos(new Vector2(0f, -57f), 0.75f).SetEase(Ease.OutSine);
+        healthPanelRect.DOAnchorPos(new Vector2(30f, -187.3714f), 0.75f).SetEase(Ease.OutSine);
     }
 
     IEnumerator StartNewRound()
     {
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
+
+        RebuildAbilityCardPool();
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply2);
 
         for (int i = 0; i < 2; i++)
         {
@@ -119,7 +164,7 @@ public class GameManager : MonoBehaviour
         drawButton.SetActive(false);
         inventoryPanel.SetActive(false);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         if (!didStay)
         {
@@ -132,7 +177,7 @@ public class GameManager : MonoBehaviour
         progressTxtObj.text = "It's the opponent's turn!";
         phase = GamePhase.AITurn;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         bool draw = false;
 
@@ -184,7 +229,7 @@ public class GameManager : MonoBehaviour
             notificationTxt.text = "STAYED";
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         if (draw) { DrawNumberCard(ply2); yield return new WaitForSeconds(0.5f); }
 
@@ -199,6 +244,21 @@ public class GameManager : MonoBehaviour
             drawButton.SetActive(true);
             inventoryPanel.SetActive(true);
             progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal.ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        }
+    }
+
+    void MakeGodCubesPlayAnimtion(string animationName, Transform transform)
+    {
+        foreach (Transform child in transform)
+        {
+            Transform childTransform = child.Find("GodCube(Clone)");
+            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
+            childTransform.transform.rotation = Quaternion.identity;
+
+            GameObject cube = cubeTransform.gameObject;
+            Animator cubeAnimator = cube.GetComponent<Animator>();
+
+            cubeAnimator.Play(animationName, 0, 0);
         }
     }
 
@@ -230,33 +290,23 @@ public class GameManager : MonoBehaviour
 
         // Playing combat animations
 
-        foreach (Transform child in physicalAttackerCards.transform)
+        MakeGodCubesPlayAnimtion("Attack", physicalAttackerCards.transform);
+
+        if (attacker == ply2)
         {
-            Transform childTransform = child.Find("GodCube(Clone)");
-            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
-            childTransform.transform.rotation = Quaternion.identity;
-
-            GameObject cube = cubeTransform.gameObject;
-            Animator cubeAnimator = cube.GetComponent<Animator>();
-
-            cubeAnimator.Play("Attack", 0, 0);
+            foreach (Transform child in physicalAttackerCards.transform)
+            {
+                Transform childTransform = child.Find("GodCube(Clone)");
+                childTransform.Rotate(0f,180f,0f);
+            }
         }
 
+        attackGodCubeSound.PlayOneShot(attackGodCubeClip, 1f);
         yield return new WaitForSeconds(0.7f);
 
-        foreach (Transform child in physicalDefenderCards.transform)
-        {
-            Transform childTransform = child.Find("GodCube(Clone)");
-            Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
-            childTransform.transform.rotation = Quaternion.identity;
+        MakeGodCubesPlayAnimtion("Defend", physicalDefenderCards.transform);
 
-            GameObject cube = cubeTransform.gameObject;
-            Animator cubeAnimator = cube.GetComponent<Animator>();
-
-            cubeAnimator.Play("Defend", 0, 0);
-        }
-
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
     }
 
     IEnumerator CombatSection()
@@ -269,8 +319,11 @@ public class GameManager : MonoBehaviour
         TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
 
         Player whoWon = DetermineBlackjackWinner();
+        Player whoLost = ply1;
 
-        yield return new WaitForSeconds(1.5f);
+        if (whoWon == ply1) whoLost = ply2;
+
+        yield return new WaitForSeconds(1f);
 
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
@@ -290,7 +343,9 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(Fight(whoWon));
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
+
+        StartCoroutine(Fight(whoLost));
 
         /*Cleanup();
         StartCoroutine(StartNewRound());
