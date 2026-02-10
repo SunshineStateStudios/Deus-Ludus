@@ -62,7 +62,14 @@ public class GameManager : MonoBehaviour
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        abilityCardList.Add(new TestA());
+        abilityCardList.Add(new Test1());
+        abilityCardList.Add(new Test2());
+        abilityCardList.Add(new Test3());
+        abilityCardList.Add(new Test4());
+        abilityCardList.Add(new Test5());
+        abilityCardList.Add(new Test6());
+        abilityCardList.Add(new Test7());
+        abilityCardList.Add(new Test8());
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -78,7 +85,7 @@ public class GameManager : MonoBehaviour
     AbilityCard GivePlayerAbilityCard(Player ply)
     {
         if (abilityCardList.Count > 0) {
-            AbilityCard chosenCard = abilityCardList[0];
+            AbilityCard chosenCard = abilityCardList.ElementAt(0);
             ply.AbilityCards.Add(chosenCard);
             abilityCardList.Remove(chosenCard);
 
