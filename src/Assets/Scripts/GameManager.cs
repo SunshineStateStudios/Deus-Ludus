@@ -111,8 +111,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3.5f);
 
         inventoryButtonRect.DOAnchorPos(new Vector2(-60f, 57f), 0.75f).SetEase(Ease.OutSine);
-        stayButtonRect.DOAnchorPos(new Vector2(52f, 158f), 0.75f).SetEase(Ease.OutSine);
-        drawButtonRect.DOAnchorPos(new Vector2(52f, 57f), 0.75f).SetEase(Ease.OutSine);
+        stayButtonRect.DOAnchorPos(new Vector2(127f, 245f), 0.75f).SetEase(Ease.OutSine);
+        drawButtonRect.DOAnchorPos(new Vector2(127f, 111f), 0.75f).SetEase(Ease.OutSine);
         textRect.DOAnchorPos(new Vector2(0f, -57f), 0.75f).SetEase(Ease.OutSine);
         healthPanelRect.DOAnchorPos(new Vector2(30f, -187.3714f), 0.75f).SetEase(Ease.OutSine);
     }
