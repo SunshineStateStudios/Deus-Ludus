@@ -8,8 +8,23 @@ public class Player
 
     public int Life = 20;
 
-    public int BlackjackTotal => NumberCards.Sum(c => c.Value);
+    public int BlackjackTotal(bool ignoreFirstCard = true)
+    {
+        int total = 0;
+        int startingIndex = 0;
+
+        if (ignoreFirstCard) startingIndex = 1;
+
+        for (int i = startingIndex; i < NumberCards.Count; i++)
+        {
+            total += NumberCards[i].Value;
+        }
+
+        return total;
+    }
     public int TotalDamage => NumberCards.Sum(c => c.Damage);
     public int TotalHealth => NumberCards.Sum(c => c.Health);
-    public bool IsBust => BlackjackTotal > 21;
+    public bool IsBust() {
+        return BlackjackTotal(false) < 21;
+    }
 }
