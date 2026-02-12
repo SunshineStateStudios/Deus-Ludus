@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public GameObject numberCard;
     public GameObject playerNumberCards;
     public GameObject enemyNumberCards;
-    public GameObject Camera;
     public AudioClip attackGodCubeClip;
     public int BlackjackThreshold = 21;
 
@@ -24,7 +23,6 @@ public class GameManager : MonoBehaviour
 
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
-    private Vector3 oldCameraPos;
     // Misc
     private GameObject inventoryButton;
     private GameObject inventoryPanel;
@@ -37,8 +35,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        oldCameraPos = Camera.transform.position;
-
         AudioSource[] sources = GetComponents<AudioSource>();
         decidedSound = sources[0];
         attackGodCubeSound = sources[1];
@@ -280,40 +276,44 @@ public class GameManager : MonoBehaviour
         {
             physicalAttackerCards = enemyNumberCards;
             physicalDefenderCards = playerNumberCards;
+            defender = ply1;
         }
 
-        int attackerTotalAttackPoints = 0;
-        int defenderTotalDefendPoints = 0;
+        int laneCount = Mathf.Min(
+            attacker.NumberCards.Count,
+            defender.NumberCards.Count
+        );
 
-        foreach (NumberCard card in attacker.NumberCards)
+        for (int i = 0; i < laneCount; i++)
         {
-            attackerTotalAttackPoints += card.Damage;
+            Transform attackerCard = physicalAttackerCards.transform.GetChild(i);
+            Transform defenderCard = physicalDefenderCards.transform.GetChild(i);
+
+            Transform attackerCube = attackerCard.Find("GodCube(Clone)");
+            Transform defenderCube = defenderCard.Find("GodCube(Clone)");
+
+            if (attackerCube == null || defenderCube == null)
+                continue;
+
+            Animator attackerAnimator = attackerCube.Find("Cube").GetComponent<Animator>();
+            Animator defenderAnimator = defenderCube.Find("Cube").GetComponent<Animator>();
+
+            // Face correct direction
+            if (attacker == ply2)
+                attackerCube.rotation = Quaternion.Euler(0f, 180f, 0f);
+            else
+                attackerCube.rotation = Quaternion.identity;
+
+            attackerAnimator.Play("Attack", 0, 0);
+
+            attackGodCubeSound.PlayOneShot(attackGodCubeClip, 1f);
+
+            yield return new WaitForSeconds(0.6f);
+
+            defenderAnimator.Play("Defend", 0, 0);
+
+            yield return new WaitForSeconds(0.6f);
         }
-
-        foreach (NumberCard card in defender.NumberCards)
-        {
-            defenderTotalDefendPoints += card.Health;
-        }
-
-        // Playing combat animations
-
-        MakeGodCubesPlayAnimtion("Attack", physicalAttackerCards.transform);
-
-        if (attacker == ply2)
-        {
-            foreach (Transform child in physicalAttackerCards.transform)
-            {
-                Transform childTransform = child.Find("GodCube(Clone)");
-                childTransform.Rotate(0f,180f,0f);
-            }
-        }
-
-        attackGodCubeSound.PlayOneShot(attackGodCubeClip, 1f);
-        yield return new WaitForSeconds(0.7f);
-
-        MakeGodCubesPlayAnimtion("Defend", physicalDefenderCards.transform);
-
-        yield return new WaitForSeconds(1f);
     }
 
     IEnumerator CombatSection()
@@ -363,66 +363,72 @@ public class GameManager : MonoBehaviour
         inventoryPanel.SetActive(true);*/
     }
 
+    void RepositionCards(Transform parent)
+    {
+        int cardCount = parent.childCount;
+
+        float normalSpacing = 1.2f;
+        float compressedSpacing = 0.9f;
+        float spacing = cardCount > 3 ? compressedSpacing : normalSpacing;
+
+        float totalWidth = (cardCount - 1) * spacing;
+        float startX = -totalWidth / 2f;
+
+        for (int i = 0; i < cardCount; i++)
+        {
+            Transform card = parent.GetChild(i);
+
+            Vector3 targetPos = new Vector3(
+                startX + (i * spacing),
+                0f,
+                0f
+            );
+
+            card.DOMove(targetPos, 0.35f)
+                .SetEase(Ease.OutQuad);
+        }
+    }
+
     void DrawNumberCard(Player ply)
     {
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
 
-        GameObject parent = playerNumberCards;
+        GameObject parent = (ply == ply2)
+            ? enemyNumberCards
+            : playerNumberCards;
 
-        if (ply == ply2)
-        {
-            parent = enemyNumberCards;
-        }
+        GameObject cardRepresentation =
+            Instantiate(numberCard, parent.transform);
 
-        GameObject cardRepresentation = Instantiate(numberCard, parent.transform, false);
-        cardRepresentation.transform.localPosition = new Vector3(3f + (ply.NumberCards.Count - 1), 0f, 0f);
+        // ----- Update card UI -----
 
-        // Changing the numbers on the card visual,,,.
-        GameObject valueLabel = cardRepresentation.transform.Find("Canvas/ValueLabel").gameObject;
-        GameObject damageLabel = cardRepresentation.transform.Find("Canvas/DamageLabel").gameObject;
-        GameObject healthLabel = cardRepresentation.transform.Find("Canvas/HealthLabel").gameObject;
+        TMP_Text valueText =
+            cardRepresentation.transform.Find("Canvas/ValueLabel")
+            .GetComponent<TMP_Text>();
 
-        TMP_Text valueText = valueLabel.GetComponent<TMP_Text>();
-        TMP_Text damageText = damageLabel.GetComponent<TMP_Text>();
-        TMP_Text healthText = healthLabel.GetComponent<TMP_Text>();
+        TMP_Text damageText =
+            cardRepresentation.transform.Find("Canvas/DamageLabel")
+            .GetComponent<TMP_Text>();
+
+        TMP_Text healthText =
+            cardRepresentation.transform.Find("Canvas/HealthLabel")
+            .GetComponent<TMP_Text>();
 
         valueText.text = card.Value.ToString();
         damageText.text = card.Damage.ToString();
         healthText.text = card.Health.ToString();
 
-        if (ply == ply2){
-            if (ply2.NumberCards.Count == 1){
-                valueText.text = "?";
-                damageText.text = "?";
-                healthText.text = "?";
-            }
+        // Hide enemy first card
+        if (ply == ply2 && ply2.NumberCards.Count == 1)
+        {
+            valueText.text = "?";
+            damageText.text = "?";
+            healthText.text = "?";
         }
 
-        // Setting camera position
-
-        Player otherPlayer;
-
-        if (ply == ply1)
-        {
-            otherPlayer = ply2;
-        } else
-        {
-            otherPlayer = ply1;
-        }
-
-        int amountOfCards = ply.NumberCards.Count;
-        if (amountOfCards < otherPlayer.NumberCards.Count)
-        {
-            amountOfCards = otherPlayer.NumberCards.Count;
-        }
-
-        Vector3 newPos = oldCameraPos;
-        if (amountOfCards > 3)
-        {
-            newPos = oldCameraPos + new Vector3(1f * (amountOfCards-3), 0f, 0f);
-        }
-        Camera.transform.DOMove(newPos, 1f);
+        // ----- Layout -----
+        RepositionCards(parent.transform);
     }
 
     public void DrawNumberCard(int ply)
