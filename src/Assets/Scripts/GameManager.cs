@@ -408,7 +408,6 @@ public class GameManager : MonoBehaviour
             cardRepresentation.transform.Find("Canvas/ValueLabel")
             .GetComponent<TMP_Text>();
 
-<<<<<<< HEAD
         TMP_Text damageText =
             cardRepresentation.transform.Find("Canvas/DamageLabel")
             .GetComponent<TMP_Text>();
@@ -416,27 +415,16 @@ public class GameManager : MonoBehaviour
         TMP_Text healthText =
             cardRepresentation.transform.Find("Canvas/HealthLabel")
             .GetComponent<TMP_Text>();
-=======
-        GameObject youDefense = GameObject.Find("Canvas/YouDefense").gameObject;
-        GameObject youAttack = GameObject.Find("Canvas/YouAttack").gameObject;
-        GameObject oppDefense = GameObject.Find("Canvas/OppDefense").gameObject;
-        GameObject oppAttack = GameObject.Find("Canvas/OppAttack").gameObject;
 
-        TMP_Text valueText = valueLabel.GetComponent<TMP_Text>();
-        TMP_Text damageText = damageLabel.GetComponent<TMP_Text>();
-        TMP_Text healthText = healthLabel.GetComponent<TMP_Text>();
->>>>>>> b453a6197f03e0828a79d6286b63660570042ee1
-
-        TMP_Text youDefenseText = youDefense.GetComponent<TMP_Text>();
-        TMP_Text youAttackText = youAttack.GetComponent<TMP_Text>();
-        TMP_Text oppDefenseText = oppDefense.GetComponent<TMP_Text>();
-        TMP_Text oppAttackText = oppAttack.GetComponent<TMP_Text>();
+        TMP_Text youDefenseText = GameObject.Find("Canvas/YouDefense").GetComponent<TMP_Text>();
+        TMP_Text youAttackText = GameObject.Find("Canvas/YouAttack").GetComponent<TMP_Text>();
+        TMP_Text oppDefenseText = GameObject.Find("Canvas/OppDefense").GetComponent<TMP_Text>();
+        TMP_Text oppAttackText = GameObject.Find("Canvas/OppAttack").GetComponent<TMP_Text>();
 
         valueText.text = card.Value.ToString();
         damageText.text = card.Damage.ToString();
         healthText.text = card.Health.ToString();
 
-<<<<<<< HEAD
         // Hide enemy first card
         if (ply == ply2 && ply2.NumberCards.Count == 1)
         {
@@ -447,53 +435,6 @@ public class GameManager : MonoBehaviour
 
         // ----- Layout -----
         RepositionCards(parent.transform);
-=======
-        if (ply == ply2){
-            if (ply2.NumberCards.Count == 1){
-                valueText.text = "?";
-                damageText.text = "?";
-                healthText.text = "?";        
-            }
-        }
-
-
-        // Setting camera position
-
-        Player otherPlayer;
-
-        if (ply == ply1)
-        {
-            otherPlayer = ply2;
-        } else
-        {
-            otherPlayer = ply1;
-        }
-
-        int amountOfCards = ply.NumberCards.Count;
-        if (amountOfCards < otherPlayer.NumberCards.Count)
-        {
-            amountOfCards = otherPlayer.NumberCards.Count;
-        }
-
-        Vector3 newPos = oldCameraPos;
-        if (amountOfCards > 3)
-        {
-            newPos = oldCameraPos + new Vector3(1f * (amountOfCards-3), 0f, 0f);
-        }
-        Camera.transform.DOMove(newPos, 1f);
->>>>>>> b453a6197f03e0828a79d6286b63660570042ee1
-    }
-
-    public void DrawNumberCard(int ply)
-    {
-        Player plyToUse = ply2;
-
-        if (ply == 1)
-        {
-            plyToUse = ply1;
-        }
-
-        DrawNumberCard(plyToUse);
     }
 
     void DestroyAllSpawnedCardObjects()
