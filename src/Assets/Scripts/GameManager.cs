@@ -138,14 +138,14 @@ public class GameManager : MonoBehaviour
         phase = GamePhase.PlayerTurn;
 
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal().ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
     }
 
     public IEnumerator EndRound(bool didStay)
     {
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
 
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal().ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
 
         progressText.SetActive(false);
         TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour
 
         if (!ply2.IsBust())
         {
-            int BlackjackTotal = ply2.BlackjackTotal();
+            int BlackjackTotal = ply2.BlackjackTotal(false);
             int difference = BlackjackThreshold - BlackjackTotal;
 
             if (difference > 0)
@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
             stayButton.SetActive(true);
             drawButton.SetActive(true);
             inventoryPanel.SetActive(true);
-            progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal().ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+            progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
         }
     }
 
@@ -270,6 +270,25 @@ public class GameManager : MonoBehaviour
     {
         GameObject physicalAttackerCards = playerNumberCards;
         GameObject physicalDefenderCards = enemyNumberCards;
+
+        GameObject hiddenCard = enemyNumberCards.transform.Find("0").gameObject;
+        NumberCard enemyFirstCard = ply2.NumberCards[0];
+
+        TMP_Text valueText =
+            hiddenCard.transform.Find("Card/Canvas/ValueLabel")
+            .GetComponent<TMP_Text>();
+
+        TMP_Text damageText =
+            hiddenCard.transform.Find("Card/Canvas/DamageLabel")
+            .GetComponent<TMP_Text>();
+
+        TMP_Text healthText =
+            hiddenCard.transform.Find("Card/Canvas/HealthLabel")
+            .GetComponent<TMP_Text>();
+
+        valueText.text = enemyFirstCard.Value.ToString();
+        damageText.text = enemyFirstCard.Damage.ToString();
+        healthText.text = enemyFirstCard.Health.ToString();
 
         Player defender = ply2;
 
@@ -328,6 +347,9 @@ public class GameManager : MonoBehaviour
 
         Player whoWon = DetermineBlackjackWinner();
         Player whoLost = ply1;
+
+        ////////reveal opp card
+        
 
         if (whoWon == ply1) whoLost = ply2;
 
@@ -405,6 +427,7 @@ public class GameManager : MonoBehaviour
 
         GameObject cardRepresentation =
             Instantiate(numberCard, parent.transform);
+        cardRepresentation.name = (ply.NumberCards.Count-1).ToString();
 
         // ----- Update card UI -----
 
@@ -458,10 +481,10 @@ public class GameManager : MonoBehaviour
     {
         if (ply1.IsBust() && ply2.IsBust())
         {
-            if (ply1.BlackjackTotal() == ply2.BlackjackTotal())
+            if (ply1.BlackjackTotal(false) == ply2.BlackjackTotal(false))
             {
                 return null;
-            } else if (ply1.BlackjackTotal() < ply2.BlackjackTotal())
+            } else if (ply1.BlackjackTotal(false) < ply2.BlackjackTotal(false))
             {
                 return ply1;
             } else
@@ -473,8 +496,8 @@ public class GameManager : MonoBehaviour
         if (ply1.IsBust()) return ply2;
         if (ply2.IsBust()) return ply1;
 
-        int p1Diff = 21 - ply1.BlackjackTotal();
-        int p2Diff = 21 - ply2.BlackjackTotal();
+        int p1Diff = 21 - ply1.BlackjackTotal(false);
+        int p2Diff = 21 - ply2.BlackjackTotal(false);
 
         if (p1Diff < p2Diff) return ply1;
         if (p2Diff < p1Diff) return ply2;
