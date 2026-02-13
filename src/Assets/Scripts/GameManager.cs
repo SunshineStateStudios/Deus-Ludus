@@ -375,11 +375,15 @@ public class GameManager : MonoBehaviour
         float totalWidth = (cardCount - 1) * spacing;
         float startX = -totalWidth / 2f;
 
+        Vector3 startingPos = new Vector3(-2.27f, 0.033f, -16.04f);
+
+        if (parent == enemyNumberCards.transform) startingPos = new Vector3(-2.27f, 0.033f, -14.5f);
+
         for (int i = 0; i < cardCount; i++)
         {
             Transform card = parent.GetChild(i);
 
-            Vector3 targetPos = new Vector3(
+            Vector3 targetPos = startingPos + new Vector3(
                 startX + (i * spacing),
                 0f,
                 0f
@@ -405,15 +409,15 @@ public class GameManager : MonoBehaviour
         // ----- Update card UI -----
 
         TMP_Text valueText =
-            cardRepresentation.transform.Find("Canvas/ValueLabel")
+            cardRepresentation.transform.Find("Card/Canvas/ValueLabel")
             .GetComponent<TMP_Text>();
 
         TMP_Text damageText =
-            cardRepresentation.transform.Find("Canvas/DamageLabel")
+            cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
             .GetComponent<TMP_Text>();
 
         TMP_Text healthText =
-            cardRepresentation.transform.Find("Canvas/HealthLabel")
+            cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
             .GetComponent<TMP_Text>();
 
         TMP_Text youDefenseText = GameObject.Find("Canvas/YouDefense").GetComponent<TMP_Text>();
