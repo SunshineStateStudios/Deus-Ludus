@@ -31,6 +31,11 @@ public class GameManager : MonoBehaviour
     private GameObject notificationUIText;
     private GameObject progressText;
     private GameObject healthPanel;
+    
+    private GameObject YouDefense;
+    private GameObject YouAttack;
+    private GameObject OppDefense;
+    private GameObject OppAttack;
 
     private List<AbilityCard> abilityCardList;
 
@@ -47,14 +52,29 @@ public class GameManager : MonoBehaviour
         notificationUIText = GameObject.Find("Canvas/Notification/Label");
         progressText = GameObject.Find("Canvas/ProgressText");
         healthPanel = GameObject.Find("Canvas/HealthPanel");
+        YouDefense = GameObject.Find("Canvas/YouDefense");
+        YouAttack = GameObject.Find("Canvas/YouAttack");
+        OppDefense = GameObject.Find("Canvas/OppDefense");
+        OppAttack = GameObject.Find("Canvas/OppAttack");
 
         ply1 = new Player();
         ply2 = new Player();
         deck = new Deck();
 
+        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
+        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
+        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
+        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
+        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
+        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
+        OppDefenseTxt.text = ply2.TotalHealth().ToString();
+        OppAttackTxt.text = ply2.TotalDamage().ToString();
+
+
         StartCoroutine(StartNewRound());
         StartCoroutine(ShowUIButtons());
     }
+    
 
     void RebuildAbilityCardPool()
     {
@@ -144,6 +164,12 @@ public class GameManager : MonoBehaviour
     public IEnumerator EndRound(bool didStay)
     {
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
+        //
+        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
+        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
+        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
+        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
+        //
 
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
 
@@ -176,6 +202,11 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
+
+        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
+        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
+        OppDefenseTxt.text = ply2.TotalHealth().ToString();
+        OppAttackTxt.text = ply2.TotalDamage().ToString();
 
         progressText.SetActive(true);
         progressTxtObj.text = "It's the opponent's turn!";
@@ -443,11 +474,6 @@ public class GameManager : MonoBehaviour
             cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
             .GetComponent<TMP_Text>();
 
-        TMP_Text youDefenseText = GameObject.Find("Canvas/YouDefense").GetComponent<TMP_Text>();
-        TMP_Text youAttackText = GameObject.Find("Canvas/YouAttack").GetComponent<TMP_Text>();
-        TMP_Text oppDefenseText = GameObject.Find("Canvas/OppDefense").GetComponent<TMP_Text>();
-        TMP_Text oppAttackText = GameObject.Find("Canvas/OppAttack").GetComponent<TMP_Text>();
-
         valueText.text = card.Value.ToString();
         damageText.text = card.Damage.ToString();
         healthText.text = card.Health.ToString();
@@ -507,8 +533,8 @@ public class GameManager : MonoBehaviour
 
     void ResolveCombat(Player attacker, Player defender, float counterMultiplier = 1f)
     {
-        int attackPower = attacker.TotalDamage;
-        int defencePower = defender.TotalHealth;
+        int attackPower = attacker.TotalDamage(false);
+        int defencePower = defender.TotalHealth(false);
 
         if (attackPower > defencePower) defender.Life -= 1;
     }

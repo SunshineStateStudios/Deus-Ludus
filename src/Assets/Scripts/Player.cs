@@ -22,8 +22,35 @@ public class Player
 
         return total;
     }
-    public int TotalDamage => NumberCards.Sum(c => c.Damage);
-    public int TotalHealth => NumberCards.Sum(c => c.Health);
+
+    public int TotalDamage(bool ignoreFirstCard = true)
+    {
+        int total = 0;
+        int startingIndex = 0;
+
+        if (ignoreFirstCard) startingIndex = 1;
+
+        for (int i = startingIndex; i < NumberCards.Count; i++) {
+            total += NumberCards[i].Damage;
+        }
+
+        return total;
+    }
+    
+    public int TotalHealth(bool ignoreFirstCard = true)
+    {
+        int total = 0;
+        int startingIndex = 0;
+
+        if (ignoreFirstCard) startingIndex = 1;
+
+        for (int i = startingIndex; i < NumberCards.Count; i++) {
+            total += NumberCards[i].Health;
+        }
+
+        return total;
+    }
+
     public bool IsBust() {
         return BlackjackTotal(false) < 21;
     }
