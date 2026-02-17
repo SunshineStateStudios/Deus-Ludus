@@ -61,16 +61,6 @@ public class GameManager : MonoBehaviour
         ply2 = new Player();
         deck = new Deck();
 
-        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
-        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
-        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
-        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
-        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = ply2.TotalHealth().ToString();
-        OppAttackTxt.text = ply2.TotalDamage().ToString();
-
-
         StartCoroutine(StartNewRound());
         StartCoroutine(ShowUIButtons());
     }
@@ -160,16 +150,10 @@ public class GameManager : MonoBehaviour
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
     }
-
+        
     public IEnumerator EndRound(bool didStay)
     {
-        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-        //
-        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
-        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
-        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
-        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        //
+        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>(); 
 
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
 
@@ -202,11 +186,6 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-
-        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
-        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = ply2.TotalHealth().ToString();
-        OppAttackTxt.text = ply2.TotalDamage().ToString();
 
         progressText.SetActive(true);
         progressTxtObj.text = "It's the opponent's turn!";
@@ -385,6 +364,10 @@ public class GameManager : MonoBehaviour
         if (whoWon == ply1) whoLost = ply2;
 
         yield return new WaitForSeconds(1f);
+        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
+        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
+        OppDefenseTxt.text = ply2.TotalHealth(false).ToString();
+        OppAttackTxt.text = ply2.TotalDamage(false).ToString();
 
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
@@ -452,6 +435,15 @@ public class GameManager : MonoBehaviour
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
 
+        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
+        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
+        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
+        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
+        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
+        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
+        OppDefenseTxt.text = ply2.TotalHealth().ToString();
+        OppAttackTxt.text = ply2.TotalDamage().ToString();
+
         GameObject parent = (ply == ply2)
             ? enemyNumberCards
             : playerNumberCards;
@@ -505,6 +497,15 @@ public class GameManager : MonoBehaviour
 
     Player DetermineBlackjackWinner()
     {
+        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
+        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
+        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
+        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
+        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
+        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
+        OppDefenseTxt.text = ply2.TotalHealth().ToString();
+        OppAttackTxt.text = ply2.TotalDamage().ToString();
+
         if (ply1.IsBust() && ply2.IsBust())
         {
             if (ply1.BlackjackTotal(false) == ply2.BlackjackTotal(false))
