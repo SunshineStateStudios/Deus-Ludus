@@ -1,5 +1,8 @@
 public class Test5 : AbilityCard
 {
+    public override string name => "Test5";
+    public override int triesDecayTime => 5;
+    
     public override void Apply(Player owner, Player opponent)
     {
         

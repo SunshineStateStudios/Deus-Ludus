@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject playerNumberCards;
     public GameObject enemyNumberCards;
     public AudioClip attackGodCubeClip;
+    public GameObject inventoryPanelScroll;
+    public GameObject abilityCardUIPrefab;
     public int BlackjackThreshold = 21;
 
     // Attributes for the drawn/stayed overlay
@@ -122,6 +124,8 @@ public class GameManager : MonoBehaviour
         RebuildAbilityCardPool();
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply2);
+
+        RebuildInventoryPanel();
 
         for (int i = 0; i < 2; i++)
         {
@@ -245,7 +249,7 @@ public class GameManager : MonoBehaviour
             phase = GamePhase.PlayerTurn;
             inventoryButton.SetActive(true);
             stayButton.SetActive(true);
-            drawButton.SetActive(true);
+            if (ply1.BlackjackTotal(false) < 21) drawButton.SetActive(true);
             inventoryPanel.SetActive(true);
             progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
         }
@@ -349,7 +353,6 @@ public class GameManager : MonoBehaviour
         Player whoLost = ply1;
 
         ////////reveal opp card
-        
 
         if (whoWon == ply1) whoLost = ply2;
 
@@ -462,6 +465,41 @@ public class GameManager : MonoBehaviour
 
         // ----- Layout -----
         RepositionCards(parent.transform);
+    }
+
+    void RebuildInventoryPanel()
+    {
+        foreach (Transform child in inventoryPanelScroll.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < ply1.AbilityCards.Count; i++)
+        {   
+            AbilityCard card = ply1.AbilityCards[i];
+            if (card.Drawn) continue;
+
+            GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, inventoryPanelScroll.transform);
+            AbilityCardUIScript cardRepresentationScript = cardRepresentation.GetComponent<AbilityCardUIScript>();
+            TMP_Text cardRepresentationLabel = cardRepresentation.transform.Find("NameLabel").gameObject.GetComponent<TMP_Text>();
+
+            cardRepresentationScript.index = i;
+            cardRepresentationLabel.text = card.name;
+        }
+    }
+
+    public void DrawAbilityCard(Player ply, int index)
+    {
+        ply.AbilityCards[index].Drawn = true;
+        RebuildInventoryPanel();
+    }
+
+    public void DrawAbilityCard(int ply, int index)
+    {
+        Player player = ply1;
+        if (ply == 2) player = ply2;
+
+        DrawAbilityCard(player, index);
     }
 
     void DestroyAllSpawnedCardObjects()
