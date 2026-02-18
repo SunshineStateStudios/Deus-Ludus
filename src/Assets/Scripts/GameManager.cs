@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     private GameObject YouAttack;
     private GameObject OppDefense;
     private GameObject OppAttack;
+
 
     private List<AbilityCard> abilityCardList;
 
@@ -113,7 +115,7 @@ public class GameManager : MonoBehaviour
         inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
         stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
         drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
-        healthPanelRect.anchoredPosition = new Vector2(-171f, -187.3714f);
+        healthPanelRect.anchoredPosition = new Vector2(-161f, -187.3714f);
 
         yield return new WaitForSeconds(3.5f);
 
@@ -261,7 +263,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void MakeGodCubesPlayAnimtion(string animationName, Transform transform)
+    void MakeGodCubesPlayAnimation(string animationName, Transform transform)
     {
         foreach (Transform child in transform)
         {
@@ -278,6 +280,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Fight(Player attacker)
     {
+
         GameObject physicalAttackerCards = playerNumberCards;
         GameObject physicalDefenderCards = enemyNumberCards;
 
@@ -359,7 +362,6 @@ public class GameManager : MonoBehaviour
         Player whoLost = ply1;
 
         ////////reveal opp card
-        
 
         if (whoWon == ply1) whoLost = ply2;
 
@@ -368,6 +370,10 @@ public class GameManager : MonoBehaviour
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
         OppDefenseTxt.text = ply2.TotalHealth(false).ToString();
         OppAttackTxt.text = ply2.TotalDamage(false).ToString();
+        int YouDef = ply1.TotalHealth();
+        int YouAtk = ply1.TotalDamage();
+        int OppDef = ply2.TotalHealth();
+        int OppAtk = ply2.TotalDamage();
 
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
@@ -377,10 +383,12 @@ public class GameManager : MonoBehaviour
         {
             notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
             notificationTxt.text = "YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>";
+            ply2.Life += OppDef - YouAtk; // formular for Ryzer Hp if you
         } else
         {
             notificationTxt.color = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
             notificationTxt.text = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
+            ply1.Life += YouDef - OppAtk; // formular for Ryzer Hp if you
         }
 
         yield return new WaitForSeconds(2.3f);
