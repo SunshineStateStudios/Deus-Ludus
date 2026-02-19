@@ -6,7 +6,7 @@ public class Player
     public List<NumberCard> NumberCards = new();
     public List<AbilityCard> AbilityCards = new();
 
-    public int Life = 20;
+    public int Life = 50;
 
     public int BlackjackTotal(bool ignoreFirstCard = true)
     {

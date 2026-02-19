@@ -4,7 +4,6 @@ using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,6 +37,9 @@ public class GameManager : MonoBehaviour
     private GameObject OppDefense;
     private GameObject OppAttack;
 
+    private GameObject TempYouHp;
+    private GameObject TempOppHp;
+
 
     private List<AbilityCard> abilityCardList;
 
@@ -58,6 +60,8 @@ public class GameManager : MonoBehaviour
         YouAttack = GameObject.Find("Canvas/YouAttack");
         OppDefense = GameObject.Find("Canvas/OppDefense");
         OppAttack = GameObject.Find("Canvas/OppAttack");
+        TempYouHp = GameObject.Find("Canvas/TempYouHP");
+        TempOppHp = GameObject.Find("Canvas/TempOppHP");
 
         ply1 = new Player();
         ply2 = new Player();
@@ -370,10 +374,12 @@ public class GameManager : MonoBehaviour
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
         OppDefenseTxt.text = ply2.TotalHealth(false).ToString();
         OppAttackTxt.text = ply2.TotalDamage(false).ToString();
-        int YouDef = ply1.TotalHealth();
-        int YouAtk = ply1.TotalDamage();
-        int OppDef = ply2.TotalHealth();
-        int OppAtk = ply2.TotalDamage();
+        int YouDef = ply1.TotalHealth(false);
+        int YouAtk = ply1.TotalDamage(false);
+        int OppDef = ply2.TotalHealth(false);
+        int OppAtk = ply2.TotalDamage(false);
+        TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
+        TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
 
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
@@ -383,12 +389,30 @@ public class GameManager : MonoBehaviour
         {
             notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
             notificationTxt.text = "YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>";
-            ply2.Life += OppDef - YouAtk; // formular for Ryzer Hp if you
+            if (OppDef - YouAtk >= 0)
+            {
+                
+            } else
+            {
+                ply2.Life += OppDef - YouAtk; // formular for Ryzer Hp if you win
+                ply1.Life -= OppDef - YouAtk; // formular for Your Hp if you win
+            }
+            YouHpTxt.text = ply1.Life.ToString();
+            OppHpTxt.text = ply2.Life.ToString();
         } else
         {
             notificationTxt.color = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
             notificationTxt.text = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
-            ply1.Life += YouDef - OppAtk; // formular for Ryzer Hp if you
+            if (YouDef - OppAtk >= 0)
+            {
+                
+            } else
+            {
+                ply1.Life += YouDef - OppAtk; // formular for Your Hp if you lose
+                ply2.Life -= YouDef - OppAtk; // formular for Ryzer Hp if you lose
+            } 
+            YouHpTxt.text = ply1.Life.ToString();
+            OppHpTxt.text = ply2.Life.ToString();
         }
 
         yield return new WaitForSeconds(2.3f);
@@ -511,8 +535,8 @@ public class GameManager : MonoBehaviour
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
         YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = ply2.TotalHealth().ToString();
-        OppAttackTxt.text = ply2.TotalDamage().ToString();
+        OppDefenseTxt.text = ply2.TotalHealth(false).ToString();
+        OppAttackTxt.text = ply2.TotalDamage(false).ToString();
 
         if (ply1.IsBust() && ply2.IsBust())
         {
