@@ -95,6 +95,7 @@ public class GameManager : MonoBehaviour
             return chosenCard;
         }
 
+        ply.AbilityCards.Add(new Test1());
         return null;
     }
 
@@ -110,6 +111,21 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply2);
 
@@ -374,7 +390,7 @@ public class GameManager : MonoBehaviour
         inventoryPanel.SetActive(true);*/
     }
 
-    void RepositionCards(Transform parent)
+    void RepositionCards(Transform parent, bool isAbilityCard = false)
     {
         int cardCount = parent.childCount;
 
@@ -398,6 +414,8 @@ public class GameManager : MonoBehaviour
                 0f,
                 0f
             );
+
+            if (isAbilityCard) targetPos += new Vector3(-0.8f,0.2f,-9f); // TODO: fix this fucking bullshit
 
             card.DOMove(targetPos, 0.35f)
                 .SetEase(Ease.OutQuad);
@@ -485,7 +503,10 @@ public class GameManager : MonoBehaviour
 
         GameObject cardRepresentation = Instantiate(abilityCard, parent);
         cardRepresentation.name = index.ToString();
-        RepositionCards(parent);
+        TMP_Text cardText = cardRepresentation.transform.Find("Card/Canvas/NameLabel").GetComponent<TMP_Text>();
+        cardText.text = ply.AbilityCards[index].name;
+
+        RepositionCards(parent, true);
     }
 
     public void DrawAbilityCard(int ply, int index)
