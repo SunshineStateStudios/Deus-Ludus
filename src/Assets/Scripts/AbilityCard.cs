@@ -1,6 +1,7 @@
 public abstract class AbilityCard : Card
 {
     public virtual string name { get; }
+    public virtual string description { get; }
     public virtual int triesDecayTime { get; }
     
     public abstract void Apply(Player owner, Player opponent);

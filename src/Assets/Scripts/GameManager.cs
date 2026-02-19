@@ -13,8 +13,12 @@ public class GameManager : MonoBehaviour
     public GamePhase phase;
 
     public GameObject numberCard;
+    public GameObject abilityCard;
+    public GameObject playerAbilityCards;
+    public GameObject enemyAbilityCards;
     public GameObject playerNumberCards;
     public GameObject enemyNumberCards;
+    public GameObject canvasObject;
     public AudioClip attackGodCubeClip;
     public GameObject inventoryPanelScroll;
     public GameObject abilityCardUIPrefab;
@@ -32,7 +36,7 @@ public class GameManager : MonoBehaviour
     private GameObject drawButton;
     private GameObject notificationUIText;
     private GameObject progressText;
-    private GameObject healthPanel;
+    private Animator canvasAnimator;
 
     private List<AbilityCard> abilityCardList;
 
@@ -48,7 +52,7 @@ public class GameManager : MonoBehaviour
         drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
         notificationUIText = GameObject.Find("Canvas/Notification/Label");
         progressText = GameObject.Find("Canvas/ProgressText");
-        healthPanel = GameObject.Find("Canvas/HealthPanel");
+        canvasAnimator = canvasObject.GetComponent<Animator>();
 
         ply1 = new Player();
         ply2 = new Player();
@@ -96,24 +100,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ShowUIButtons()
     {
-        RectTransform inventoryButtonRect = inventoryButton.GetComponent<RectTransform>();
-        RectTransform stayButtonRect = stayButton.GetComponent<RectTransform>();
-        RectTransform drawButtonRect = drawButton.GetComponent<RectTransform>();
-        RectTransform textRect = progressText.GetComponent<RectTransform>();
-        RectTransform healthPanelRect = healthPanel.GetComponent<RectTransform>();
-
-        inventoryButtonRect.anchoredPosition = new Vector2(888f, 57f);
-        stayButtonRect.anchoredPosition = new Vector2(-888f, 158f);
-        drawButtonRect.anchoredPosition = new Vector2(-888f, 57f);
-        healthPanelRect.anchoredPosition = new Vector2(-171f, -187.3714f);
-
         yield return new WaitForSeconds(3.5f);
-
-        inventoryButtonRect.DOAnchorPos(new Vector2(-60f, 57f), 0.75f).SetEase(Ease.OutSine);
-        stayButtonRect.DOAnchorPos(new Vector2(127f, 245f), 0.75f).SetEase(Ease.OutSine);
-        drawButtonRect.DOAnchorPos(new Vector2(127f, 111f), 0.75f).SetEase(Ease.OutSine);
-        textRect.DOAnchorPos(new Vector2(0f, -57f), 0.75f).SetEase(Ease.OutSine);
-        healthPanelRect.DOAnchorPos(new Vector2(30f, -187.3714f), 0.75f).SetEase(Ease.OutSine);
+        canvasAnimator.Play("In", 0, 0);
     }
 
     IEnumerator StartNewRound()
@@ -167,10 +155,7 @@ public class GameManager : MonoBehaviour
         notificationUIAnimator.Play("Notification_Popup", 0, 0);
         notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
 
-        inventoryButton.SetActive(false);
-        stayButton.SetActive(false);
-        drawButton.SetActive(false);
-        inventoryPanel.SetActive(false);
+        canvasAnimator.Play("Out", 0, 0);
 
         yield return new WaitForSeconds(1f);
 
@@ -451,16 +436,17 @@ public class GameManager : MonoBehaviour
         TMP_Text oppDefenseText = GameObject.Find("Canvas/OppDefense").GetComponent<TMP_Text>();
         TMP_Text oppAttackText = GameObject.Find("Canvas/OppAttack").GetComponent<TMP_Text>();
 
-        valueText.text = card.Value.ToString();
-        damageText.text = card.Damage.ToString();
-        healthText.text = card.Health.ToString();
-
         // Hide enemy first card
         if (ply == ply2 && ply2.NumberCards.Count == 1)
         {
             valueText.text = "?";
             damageText.text = "?";
             healthText.text = "?";
+        } else
+        {
+            valueText.text = card.Value.ToString();
+            damageText.text = card.Damage.ToString();
+            healthText.text = card.Health.ToString();
         }
 
         // ----- Layout -----
@@ -492,6 +478,14 @@ public class GameManager : MonoBehaviour
     {
         ply.AbilityCards[index].Drawn = true;
         RebuildInventoryPanel();
+
+        // Summon ability card visually
+        Transform parent = playerAbilityCards.transform;
+        if (ply == ply2) parent = enemyAbilityCards.transform;
+
+        GameObject cardRepresentation = Instantiate(abilityCard, parent);
+        cardRepresentation.name = index.ToString();
+        RepositionCards(parent);
     }
 
     public void DrawAbilityCard(int ply, int index)
