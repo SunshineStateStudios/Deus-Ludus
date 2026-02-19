@@ -132,6 +132,11 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartNewRound()
     {
+        TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
+        TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
+        YouHpTxt.text = ply1.Life.ToString();
+        OppHpTxt.text = ply2.Life.ToString();
+        
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
 
