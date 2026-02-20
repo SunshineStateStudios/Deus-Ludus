@@ -62,11 +62,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ShowUIButtons());
     }
 
+    public void UpdateProgressText()
+    {
+        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+    }
+
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        abilityCardList.Add(new Test1());
-        abilityCardList.Add(new Test2());
+        abilityCardList.Add(new AbilityDeath());
+        abilityCardList.Add(new Temperance());
         abilityCardList.Add(new Test3());
         abilityCardList.Add(new Test4());
         abilityCardList.Add(new Test5());
@@ -95,7 +101,7 @@ public class GameManager : MonoBehaviour
             return chosenCard;
         }
 
-        ply.AbilityCards.Add(new Test1());
+        ply.AbilityCards.Add(new AbilityDeath());
         return null;
     }
 
@@ -495,6 +501,11 @@ public class GameManager : MonoBehaviour
     public void DrawAbilityCard(Player ply, int index)
     {
         ply.AbilityCards[index].Drawn = true;
+
+        Player oppPly = ply2;
+        if (ply == ply2) oppPly = ply1;
+
+        ply.AbilityCards[index].Apply(this, ply, oppPly);
         RebuildInventoryPanel();
 
         // Summon ability card visually
