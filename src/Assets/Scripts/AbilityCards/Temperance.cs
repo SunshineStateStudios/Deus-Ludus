@@ -1,0 +1,18 @@
+public class Temperance : AbilityCard
+{
+    public override string name => "Temperance";
+    public override string description => "Reduces the threshold by 4 points.";
+    public override int triesDecayTime => 1;
+    
+    public override void Apply(GameManager gm, Player owner, Player opponent)
+    {
+        gm.BlackjackThreshold -= 4;
+        if (gm.BlackjackThreshold < 9) gm.BlackjackThreshold = 9;
+        gm.UpdateProgressText();
+    }
+
+    public override void Remove(GameManager gm, Player owner, Player opponent)
+    {
+        gm.BlackjackThreshold += 4;
+    }
+}
