@@ -221,7 +221,7 @@ public class GameManager : MonoBehaviour
 
         bool draw = false;
 
-        if (ply2.BlackjackTotal(false) < 21)
+        if (ply2.BlackjackTotal(false) < BlackjackThreshold)
         {
             int BlackjackTotal = ply2.BlackjackTotal(false);
             int difference = BlackjackThreshold - BlackjackTotal;
@@ -278,7 +278,7 @@ public class GameManager : MonoBehaviour
         } else
         {
             phase = GamePhase.PlayerTurn;
-            if (ply1.BlackjackTotal(false) < 21) drawButton.SetActive(true);
+            if (ply1.BlackjackTotal(false) < BlackjackThreshold) drawButton.SetActive(true);
             progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
         }
 
@@ -406,7 +406,7 @@ public class GameManager : MonoBehaviour
 
         if (whoWon == ply1)
         {
-            ShowNotification("YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>", new Color(0, 49f/255f, 188f/255f, 1f));
+            ShowNotification("YOU WON\n<color=#FFFFFF>Since you're closest to the Threshold.</color>", new Color(0, 49f/255f, 188f/255f, 1f));
             if (OppDef - YouAtk >= 0)
             {
                 
@@ -425,7 +425,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(Fight(whoLost));
         } else
         {
-            ShowNotification("ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>",new Color(241f/255f, 246f/255f, 86f/255f, 1f));
+            ShowNotification("ENEMY WON\n<color=#FFFFFF>Since they're closest to the Threshold.</color>",new Color(241f/255f, 246f/255f, 86f/255f, 1f));
         }
 
         yield return new WaitForSeconds(2f);
@@ -478,8 +478,8 @@ public class GameManager : MonoBehaviour
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
         YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = ply2.TotalHealth().ToString();
-        OppAttackTxt.text = ply2.TotalDamage().ToString();
+        OppDefenseTxt.text = ply2.TotalHealth().ToString() + "?";
+        OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";
 
         GameObject parent = (ply == ply2)
             ? enemyNumberCards
@@ -502,11 +502,6 @@ public class GameManager : MonoBehaviour
         TMP_Text healthText =
             cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
             .GetComponent<TMP_Text>();
-
-        TMP_Text youDefenseText = GameObject.Find("Canvas/YouDefense").GetComponent<TMP_Text>();
-        TMP_Text youAttackText = GameObject.Find("Canvas/YouAttack").GetComponent<TMP_Text>();
-        TMP_Text oppDefenseText = GameObject.Find("Canvas/OppDefense").GetComponent<TMP_Text>();
-        TMP_Text oppAttackText = GameObject.Find("Canvas/OppAttack").GetComponent<TMP_Text>();
 
         // Hide enemy first card
         if (ply == ply2 && ply2.NumberCards.Count == 1)
