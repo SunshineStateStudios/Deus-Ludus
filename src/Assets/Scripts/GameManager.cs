@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     private GameObject notificationUIText;
     private GameObject progressText;
     private Animator canvasAnimator;
+    private CanvasManager canvasManager;
 
     private List<AbilityCard> abilityCardList;
 
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         notificationUIText = GameObject.Find("Canvas/Notification/Label");
         progressText = GameObject.Find("Canvas/ProgressText");
         canvasAnimator = canvasObject.GetComponent<Animator>();
+        canvasManager = canvasObject.GetComponent<CanvasManager>();
 
         ply1 = new Player();
         ply2 = new Player();
@@ -155,6 +157,16 @@ public class GameManager : MonoBehaviour
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
     }
 
+    void ShowNotification(string text, Color colour)
+    {
+        TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
+        notificationTxt.text = text;
+        decidedSound.Play();
+        Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
+        notificationUIAnimator.Play("Notification_Popup", 0, 0);
+        notificationTxt.color = colour;
+    }
+
     public IEnumerator EndRound(bool didStay)
     {
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
@@ -162,22 +174,16 @@ public class GameManager : MonoBehaviour
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
 
         progressText.SetActive(false);
-        TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
         
+        string notificationText = "DRAWN";
         if (didStay)
         {
-            notificationTxt.text = "STAYED";
-        } else
-        {
-            notificationTxt.text = "DRAWN";
+            notificationText = "STAYED";
         }
 
-        decidedSound.Play();
-        Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
-        notificationUIAnimator.Play("Notification_Popup", 0, 0);
-        notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
-
+        ShowNotification(notificationText, new Color(0, 49f/255f, 188f/255f, 1f));
         canvasAnimator.Play("Out", 0, 0);
+        canvasManager.SetFunctionality(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -196,53 +202,52 @@ public class GameManager : MonoBehaviour
 
         bool draw = false;
 
-        if (!ply2.IsBust())
+        if (ply2.BlackjackTotal(false) < 21)
         {
             int BlackjackTotal = ply2.BlackjackTotal(false);
             int difference = BlackjackThreshold - BlackjackTotal;
 
             if (difference > 0)
             {
-                switch (difference)
+                if (difference > 5)
                 {
-                    case 5:
-                        draw = Random.Range(1, 20) == 1;
-                        break;
+                    draw = true;
+                } else
+                {
+                    switch (difference)
+                    {
+                        case 5:
+                            draw = Random.Range(1, 5) == 1;
+                            break;
 
-                    case 4:
-                        draw = Random.Range(1, 40) == 1;
-                        break;
+                        case 4:
+                            draw = Random.Range(1, 15) == 1;
+                            break;
 
-                    case 3:
-                        draw = Random.Range(1, 60) == 1;
-                        break;
+                        case 3:
+                            draw = Random.Range(1, 30) == 1;
+                            break;
 
-                    case 2:
-                        draw = Random.Range(1, 80) == 1;
-                        break;
+                        case 2:
+                            draw = Random.Range(1, 60) == 1;
+                            break;
 
-                    case 1:
-                        draw = false;
-                        break;
-
-                    default:
-                        draw = true;
-                        break;
+                        default:
+                            draw = true;
+                            break;
+                    }
                 }
             }
         }
 
-        decidedSound.Play();
-        notificationTxt.color = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
-        notificationUIAnimator.Play("Notification_Popup", 0, 0);
+        notificationText = "STAYED";
 
         if (draw)
         {
-            notificationTxt.text = "DRAWN";
-        } else
-        {
-            notificationTxt.text = "STAYED";
+            notificationText = "DRAWN";
         }
+
+        ShowNotification(notificationText, new Color(241f/255f, 246f/255f, 86f/255f, 1f));
 
         yield return new WaitForSeconds(1f);
 
@@ -254,12 +259,12 @@ public class GameManager : MonoBehaviour
         } else
         {
             phase = GamePhase.PlayerTurn;
-            inventoryButton.SetActive(true);
-            stayButton.SetActive(true);
             if (ply1.BlackjackTotal(false) < 21) drawButton.SetActive(true);
-            inventoryPanel.SetActive(true);
             progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
         }
+
+        canvasAnimator.Play("In", 0, 0);
+        canvasManager.SetFunctionality(true);
     }
 
     void MakeGodCubesPlayAnimtion(string animationName, Transform transform)
@@ -368,32 +373,37 @@ public class GameManager : MonoBehaviour
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
         notificationUIAnimator.Play("Notification_Popup", 0, 0);
+
+        string notifcationText = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
+        Color notificationColour = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
         
         if (whoWon == ply1)
         {
-            notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
-            notificationTxt.text = "YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>";
-        } else
+            notificationColour = new Color(0, 49f/255f, 188f/255f, 1f);
+            notifcationText = "YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>";
+        } else if (whoWon == null)
         {
-            notificationTxt.color = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
-            notificationTxt.text = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
+            notificationColour = new Color(1f, 1f, 1f, 1f);
+            notifcationText = "DRAW\n<color=#FFFFFF>No definitive winner was chosen.</color>";
         }
 
-        yield return new WaitForSeconds(2.3f);
+        ShowNotification(notifcationText, notificationColour);
 
-        StartCoroutine(Fight(whoWon));
+        if (whoWon != null) {
+            yield return new WaitForSeconds(2.3f);
 
-        yield return new WaitForSeconds(2.5f);
+            StartCoroutine(Fight(whoWon));
 
-        StartCoroutine(Fight(whoLost));
+            yield return new WaitForSeconds(2.5f);
 
-        /*Cleanup();
+            StartCoroutine(Fight(whoLost));
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        Cleanup();
         StartCoroutine(StartNewRound());
         StartCoroutine(ShowUIButtons());
-        inventoryButton.SetActive(true);
-        stayButton.SetActive(true);
-        drawButton.SetActive(true);
-        inventoryPanel.SetActive(true);*/
     }
 
     void RepositionCards(Transform parent, bool isAbilityCard = false)
@@ -468,9 +478,17 @@ public class GameManager : MonoBehaviour
             healthText.text = "?";
         } else
         {
-            valueText.text = card.Value.ToString();
-            damageText.text = card.Damage.ToString();
-            healthText.text = card.Health.ToString();
+            if (card.Value == 12)
+            {
+                valueText.text = "A";
+                damageText.text = "1/11";
+                healthText.text = "11/1";
+            } else
+            {
+                valueText.text = card.Value.ToString();
+                damageText.text = card.Damage.ToString();
+                healthText.text = card.Health.ToString();
+            }
         }
 
         // ----- Layout -----
@@ -543,28 +561,31 @@ public class GameManager : MonoBehaviour
 
     Player DetermineBlackjackWinner()
     {
-        if (ply1.IsBust() && ply2.IsBust())
+        int ply1Total = ply1.BlackjackTotal(false);
+        int ply2Total = ply2.BlackjackTotal(false);
+
+        bool ply1Bust = ply1Total > BlackjackThreshold;
+        bool ply2Bust = ply2Total > BlackjackThreshold;
+
+        if (ply1Bust && ply2Bust)
         {
-            if (ply1.BlackjackTotal(false) == ply2.BlackjackTotal(false))
-            {
-                return null;
-            } else if (ply1.BlackjackTotal(false) < ply2.BlackjackTotal(false))
+            if (ply1Total < ply2Total)
             {
                 return ply1;
-            } else
+            } else if (ply2Total < ply1Total)
             {
                 return ply2;
+            } else
+            {
+                return null;
             }
         }
 
-        if (ply1.IsBust()) return ply2;
-        if (ply2.IsBust()) return ply1;
+        if (ply1Bust) return ply2;
+        if (ply2Bust) return ply1;
 
-        int p1Diff = 21 - ply1.BlackjackTotal(false);
-        int p2Diff = 21 - ply2.BlackjackTotal(false);
-
-        if (p1Diff < p2Diff) return ply1;
-        if (p2Diff < p1Diff) return ply2;
+        if (ply1Total > ply2Total) return ply1;
+        if (ply2Total > ply1Total) return ply2;
 
         return null;
     }

@@ -20,11 +20,19 @@ public class Player
             total += NumberCards[i].Value;
         }
 
+        for (int i = startingIndex; i < NumberCards.Count; i++)
+        {
+            if (total <= 21) continue;
+            NumberCard card = NumberCards[i];
+            if (card.Value != 12) continue;
+            total -= 10;
+        }
+
         return total;
     }
     public int TotalDamage => NumberCards.Sum(c => c.Damage);
     public int TotalHealth => NumberCards.Sum(c => c.Health);
-    public bool IsBust() {
-        return BlackjackTotal(false) < 21;
+    public bool IsBust(int threshold) {
+        return BlackjackTotal(false) < threshold;
     }
 }
