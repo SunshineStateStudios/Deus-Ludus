@@ -36,6 +36,13 @@ public class GameManager : MonoBehaviour
     private GameObject drawButton;
     private GameObject notificationUIText;
     private GameObject progressText;
+    private GameObject YouDefense;
+    private GameObject YouAttack;
+    private GameObject OppDefense;
+    private GameObject OppAttack;
+    private GameObject TempYouHp;
+    private GameObject TempOppHp;
+
     private Animator canvasAnimator;
     private CanvasManager canvasManager;
 
@@ -55,6 +62,12 @@ public class GameManager : MonoBehaviour
         progressText = GameObject.Find("Canvas/ProgressText");
         canvasAnimator = canvasObject.GetComponent<Animator>();
         canvasManager = canvasObject.GetComponent<CanvasManager>();
+        YouDefense = GameObject.Find("Canvas/YouDefense");
+        YouAttack = GameObject.Find("Canvas/YouAttack");
+        OppDefense = GameObject.Find("Canvas/OppDefense");
+        OppAttack = GameObject.Find("Canvas/OppAttack");
+        TempYouHp = GameObject.Find("Canvas/TempYouHP");
+        TempOppHp = GameObject.Find("Canvas/TempOppHP");
 
         ply1 = new Player();
         ply2 = new Player();
@@ -391,13 +404,9 @@ public class GameManager : MonoBehaviour
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
         notificationUIAnimator.Play("Notification_Popup", 0, 0);
 
-        string notifcationText = "ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>";
-        Color notificationColour = new Color(241f/255f, 246f/255f, 86f/255f, 1f);
-        
         if (whoWon == ply1)
         {
-            notificationTxt.color = new Color(0, 49f/255f, 188f/255f, 1f);
-            notificationTxt.text = "YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>";
+            ShowNotification("YOU WON\n<color=#FFFFFF>Since you're closest to 21.</color>", new Color(0, 49f/255f, 188f/255f, 1f));
             if (OppDef - YouAtk >= 0)
             {
                 
@@ -414,6 +423,10 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(2.5f);
 
             StartCoroutine(Fight(whoLost));
+        } else
+        {
+            ShowNotification("ENEMY WON\n<color=#FFFFFF>Since they're closest to 21.</color>",new Color(241f/255f, 246f/255f, 86f/255f, 1f));
+        }
 
         yield return new WaitForSeconds(2f);
 
