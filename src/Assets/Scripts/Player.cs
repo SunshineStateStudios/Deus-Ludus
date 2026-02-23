@@ -20,6 +20,14 @@ public class Player
             total += NumberCards[i].Value;
         }
 
+        for (int i = startingIndex; i < NumberCards.Count; i++)
+        {
+            if (total <= 21) continue;
+            NumberCard card = NumberCards[i];
+            if (card.Value != 12) continue;
+            total -= 10;
+        }
+
         return total;
     }
 

@@ -1,13 +1,24 @@
+/*
+
+Suit numbers to actual suits:
+1: water
+2: earth
+3: fire
+4: wind
+
+*/
+
 public class NumberCard : Card
 {
     public int Value;
+    public int Suit;
     public int Damage;
     public int Health;
-    public AbilityCard attachedCard = null;
 
-    public NumberCard(int val)
+    public NumberCard(int val, int suit)
     {
         Value = val;
+        Suit = suit;
 
         switch(Value)
         {
@@ -54,6 +65,10 @@ public class NumberCard : Card
             case 11:
                 Damage = 11;
                 Health = 1;
+                break;
+            default:
+                Damage = 0;
+                Health = 0;
                 break;
         }
     }
