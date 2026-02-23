@@ -231,10 +231,6 @@ public class GameManager : MonoBehaviour
                         draw = Random.Range(1, 80) == 1;
                         break;
 
-                    case 1:
-                        draw = false;
-                        break;
-
                     default:
                         draw = true;
                         break;
