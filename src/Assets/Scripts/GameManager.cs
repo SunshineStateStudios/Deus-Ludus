@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
@@ -82,6 +83,28 @@ public class GameManager : MonoBehaviour
     {
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+    }
+
+    public void UpdateDrawNumberCardText()
+    {
+        GameObject rawimg = drawButton.transform.Find("RawImage").gameObject;
+        TextFade rawimgScript = drawButton.GetComponent<TextFade>();
+        RawImage rawimgComponent = rawimg.GetComponent<RawImage>();
+            
+        rawimgScript.Contents = "Draw a number card and end your turn.";
+        rawimgComponent.color = new Color(1f,1f,1f,1f);
+        canvasManager.SetCanDrawNumberCard(false);
+
+        if (ply1.NumberCards.Count > 5)
+        {
+            rawimgScript.Contents = "You have more than 6 number cards drawn! You cannot draw anymore.";
+            canvasManager.SetCanDrawNumberCard(true);
+            rawimgComponent.color = new Color(120f/255f,0,0,1f);
+        } else if (ply1.BlackjackTotal(false) > BlackjackThreshold)
+        {
+            rawimgScript.Contents = "Busted (went over " + BlackjackThreshold.ToString() + ")! Your cards' combative capibilities will be severely tarnished.";
+            rawimgComponent.color = new Color(200/255f,0,0,1f);
+        }
     }
 
     void RebuildAbilityCardPool()
@@ -174,6 +197,11 @@ public class GameManager : MonoBehaviour
 
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
         progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+
+        if (ply1.BlackjackTotal(false) >= BlackjackThreshold)
+        {
+            drawButton.SetActive(false);
+        }
     }
 
     void ShowNotification(string text, Color colour)
@@ -278,7 +306,9 @@ public class GameManager : MonoBehaviour
         } else
         {
             phase = GamePhase.PlayerTurn;
-            if (ply1.BlackjackTotal(false) < BlackjackThreshold) drawButton.SetActive(true);
+
+            UpdateDrawNumberCardText();
+
             progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
         }
 
@@ -460,10 +490,24 @@ public class GameManager : MonoBehaviour
                 0f
             );
 
-            if (isAbilityCard) targetPos += new Vector3(-0.8f,0.2f,-9f); // TODO: fix this fucking bullshit
+            Ease ease = Ease.InOutBack;
+            float timeToTween = 1.15f;
 
-            card.DOMove(targetPos, 0.35f)
-                .SetEase(Ease.OutQuad);
+            if (isAbilityCard)
+            {
+                ease = Ease.OutBack;
+                timeToTween = 0.75f;
+
+                if (parent == enemyAbilityCards)
+                {
+                    // TODO: add another fucking offset for the enemy specifically
+                    return;
+                }
+                targetPos += new Vector3(-0.8f,0.2f,-9f);
+            }
+
+            card.DOMove(targetPos, timeToTween)
+                .SetEase(ease);
         }
     }
 

@@ -9,6 +9,7 @@ public class Temperance : AbilityCard
         gm.BlackjackThreshold -= 4;
         if (gm.BlackjackThreshold < 9) gm.BlackjackThreshold = 9;
         gm.UpdateProgressText();
+        gm.UpdateDrawNumberCardText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

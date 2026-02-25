@@ -9,6 +9,7 @@ public class CanvasManager : MonoBehaviour
     private GameManager gameManagerScript;
     private Animator inventoryAnimator;
     private bool buttonsFunction = true;
+    private bool cantDrawNumberCard = false;
 
     void Start()
     {
@@ -19,6 +20,11 @@ public class CanvasManager : MonoBehaviour
     public void SetFunctionality(bool func)
     {
         buttonsFunction = func;
+    }
+
+    public void SetCanDrawNumberCard(bool func)
+    {
+        cantDrawNumberCard = func;
     }
 
     public void CallbackStay()
@@ -32,6 +38,7 @@ public class CanvasManager : MonoBehaviour
     {
         if (!panelHidden) return;
         if (!buttonsFunction) return;
+        if (cantDrawNumberCard) return;
         StartCoroutine(gameManagerScript.EndRound(false));
     }
 

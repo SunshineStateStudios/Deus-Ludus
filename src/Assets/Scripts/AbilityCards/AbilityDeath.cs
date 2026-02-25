@@ -9,6 +9,7 @@ public class AbilityDeath : AbilityCard
         gm.BlackjackThreshold += 3;
         if (gm.BlackjackThreshold > 30) gm.BlackjackThreshold = 30;
         gm.UpdateProgressText();
+        gm.UpdateDrawNumberCardText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
