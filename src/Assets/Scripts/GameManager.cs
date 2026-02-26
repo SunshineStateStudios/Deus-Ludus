@@ -111,13 +111,8 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
         abilityCardList.Add(new AbilityDeath());
-        abilityCardList.Add(new Temperance());
-        abilityCardList.Add(new Test3());
-        abilityCardList.Add(new Test4());
-        abilityCardList.Add(new Test5());
-        abilityCardList.Add(new Test6());
-        abilityCardList.Add(new Test7());
-        abilityCardList.Add(new Test8());
+        abilityCardList.Add(new AbilityTemperance());
+        abilityCardList.Add(new AbilityHierophant());
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -161,21 +156,6 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply2);
 
@@ -465,7 +445,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ShowUIButtons());
     }
 
-    void RepositionCards(Transform parent, bool isAbilityCard = false)
+    public void RepositionCards(Transform parent, bool isAbilityCard = false)
     {
         int cardCount = parent.childCount;
 

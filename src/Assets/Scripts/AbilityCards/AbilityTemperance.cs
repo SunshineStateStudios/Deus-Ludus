@@ -1,4 +1,4 @@
-public class Temperance : AbilityCard
+public class AbilityTemperance : AbilityCard
 {
     public override string name => "Temperance";
     public override string description => "Reduces the threshold by 4 points.";

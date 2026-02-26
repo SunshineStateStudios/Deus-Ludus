@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class AbilityHierophant : AbilityCard
+{
+    public override string name => "Hierophant";
+    public override string description => "Discard the number card you hold with the highest attack.";
+    public override int triesDecayTime => 1;
+
+    public override void Apply(GameManager gm, Player owner, Player opponent)
+    {
+        int chosenCardIndex = 0;
+
+        for (int i = 1; i < owner.NumberCards.Count; i++)
+        {
+            NumberCard card = owner.NumberCards[i];
+
+            if (card.Damage > owner.NumberCards[chosenCardIndex].Damage)
+            {
+                chosenCardIndex = i;
+            }
+        }
+
+        owner.NumberCards.RemoveAt(chosenCardIndex);
+
+        DestroyObj physicalCard = gm.playerNumberCards.transform.Find(chosenCardIndex.ToString()).gameObject.GetComponent<DestroyObj>();
+        physicalCard.Begone();
+
+        gm.RepositionCards(gm.playerNumberCards.transform, false);
+    }
+
+    public override void Remove(GameManager gm, Player owner, Player opponent)
+    {
+        
+    }
+}
