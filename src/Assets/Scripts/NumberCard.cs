@@ -1,10 +1,10 @@
 /*
 
 Suit numbers to actual suits:
-1: water
-2: earth
-3: fire
-4: wind
+1: roman
+2: norse
+3: egyptian
+4: greek
 
 */
 
@@ -18,7 +18,8 @@ public class NumberCard : Card
     public NumberCard(int val, int suit)
     {
         Value = val;
-        Suit = suit;
+        //Suit = suit;
+        Suit = 4;
 
         switch(Value)
         {

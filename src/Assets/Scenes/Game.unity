@@ -617,6 +617,12 @@ MonoBehaviour:
   abilityCardUIPrefab: {fileID: 6689831372372458094, guid: 8642bc743aaf614a180db0f6c16c7db6, type: 3}
   BlackjackThreshold: 21
   notificationUI: {fileID: 1309819002}
+  YouDefense: {fileID: 0}
+  YouAttack: {fileID: 0}
+  OppDefense: {fileID: 0}
+  OppAttack: {fileID: 0}
+  TempYouHp: {fileID: 0}
+  TempOppHp: {fileID: 0}
 --- !u!82 &241583329
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4796,7 +4802,7 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0

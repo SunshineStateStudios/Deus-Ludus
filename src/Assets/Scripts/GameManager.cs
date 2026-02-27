@@ -27,6 +27,12 @@ public class GameManager : MonoBehaviour
 
     // Attributes for the drawn/stayed overlay
     public GameObject notificationUI;
+    public GameObject YouDefense;
+    public GameObject YouAttack;
+    public GameObject OppDefense;
+    public GameObject OppAttack;
+    public GameObject TempYouHp;
+    public GameObject TempOppHp;
 
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
@@ -37,12 +43,6 @@ public class GameManager : MonoBehaviour
     private GameObject drawButton;
     private GameObject notificationUIText;
     private GameObject progressText;
-    private GameObject YouDefense;
-    private GameObject YouAttack;
-    private GameObject OppDefense;
-    private GameObject OppAttack;
-    private GameObject TempYouHp;
-    private GameObject TempOppHp;
 
     private Animator canvasAnimator;
     private CanvasManager canvasManager;
@@ -113,6 +113,11 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityHierophant());
+        abilityCardList.Add(new AbilityEmperor());
+        abilityCardList.Add(new AbilityEmpress());
+        abilityCardList.Add(new AbilityMoon());
+        abilityCardList.Add(new AbilityStar());
+        abilityCardList.Add(new AbilitySun());
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -156,8 +161,9 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply2);
+        //GivePlayerAbilityCard(ply1);
+        for (int i = 0; i < 8; i++) GivePlayerAbilityCard(ply1);
+        //GivePlayerAbilityCard(ply2);
 
         RebuildInventoryPanel();
 
@@ -491,11 +497,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void DrawNumberCard(Player ply)
+    public GameObject InstantiateNumberCard(Transform parent)
     {
-        NumberCard card = deck.Draw();
-        ply.NumberCards.Add(card);
+        return Instantiate(numberCard, parent);
+    }
 
+    public void UpdateAttackDefendText()
+    {
         TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
         TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
         TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
@@ -504,13 +512,20 @@ public class GameManager : MonoBehaviour
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
         OppDefenseTxt.text = ply2.TotalHealth().ToString() + "?";
         OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";
+    }
+
+    void DrawNumberCard(Player ply)
+    {
+        NumberCard card = deck.Draw();
+        ply.NumberCards.Add(card);
+
+        UpdateAttackDefendText();
 
         GameObject parent = (ply == ply2)
             ? enemyNumberCards
             : playerNumberCards;
 
-        GameObject cardRepresentation =
-            Instantiate(numberCard, parent.transform);
+        GameObject cardRepresentation = InstantiateNumberCard(parent.transform);
         cardRepresentation.name = (ply.NumberCards.Count-1).ToString();
 
         // ----- Update card UI -----
