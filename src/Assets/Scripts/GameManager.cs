@@ -118,6 +118,8 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityMoon());
         abilityCardList.Add(new AbilityStar());
         abilityCardList.Add(new AbilitySun());
+        abilityCardList.Add(new AbilityWorld());
+        abilityCardList.Add(new AbilityJudgement());
 
         // Scramble the list!
         int n = abilityCardList.Count;

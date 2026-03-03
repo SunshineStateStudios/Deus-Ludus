@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
 
-public class AbilitySun : AbilityCard
+public class AbilityWorld : AbilityCard
 {
-    public override string name => "Sun";
-    public override string description => "Doubles the attack of all Egyptian number cards you've drawn.";
+    public override string name => "World";
+    public override string description => "Set the attack of the opponent's Greek elementals to 1";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -12,21 +12,21 @@ public class AbilitySun : AbilityCard
         for (int i = 0; i < opponent.NumberCards.Count; i++)
         {
             NumberCard card = opponent.NumberCards[i];
-            if (card.Suit != 3) continue;
-            card.Damage = card.Damage * 2;
+            if (card.Suit != 4) continue;
+            card.Damage = 1;
 
-            GameObject parent = gm.playerNumberCards;
-            if (owner == gm.ply2) parent = gm.enemyNumberCards;
+            GameObject parent = gm.enemyNumberCards;
+            if (owner == gm.ply2) parent = gm.playerNumberCards;
 
             Transform cardRepresentation = parent.transform.Find(i.ToString());
         
             if (parent == gm.enemyNumberCards && i == 0) continue;
 
-            TMP_Text damageText =
-                cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
-                    .GetComponent<TMP_Text>();
+            TMP_Text attackText =
+                cardRepresentation.transform.Find("Card/Canvas/AttackLabel")
+                .GetComponent<TMP_Text>();
 
-            damageText.text = card.Damage.ToString();
+            attackText.text = card.Damage.ToString();
         }
 
         gm.UpdateAttackDefendText();
@@ -34,7 +34,7 @@ public class AbilitySun : AbilityCard
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
     {
-        gm.BlackjackThreshold -= 3;
+
     }
 
     public override bool AIShouldDraw(GameManager gm, Player owner)

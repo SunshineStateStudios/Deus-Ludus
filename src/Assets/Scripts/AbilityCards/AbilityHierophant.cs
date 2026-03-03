@@ -35,6 +35,6 @@ public class AbilityHierophant : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        
+        return true;
     }
 }

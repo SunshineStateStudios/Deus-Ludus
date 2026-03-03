@@ -57,6 +57,6 @@ public class AbilityEmpress : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        
+        return true;
     }
 }
