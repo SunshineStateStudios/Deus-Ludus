@@ -54,4 +54,9 @@ public class AbilityEmpress : AbilityCard
     {
         gm.BlackjackThreshold -= 3;
     }
+
+    public override bool AIShouldDraw(GameManager gm, Player owner)
+    {
+        
+    }
 }

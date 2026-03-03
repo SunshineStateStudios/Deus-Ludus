@@ -6,6 +6,7 @@ public abstract class AbilityCard : Card
     
     public abstract void Apply(GameManager gm, Player owner, Player opponent);
     public abstract void Remove(GameManager gm, Player owner, Player opponent);
+    public abstract bool AIShouldDraw(GameManager gm, Player owner);
     public bool Drawn = false;
     public int triesPassed = 0;
 }

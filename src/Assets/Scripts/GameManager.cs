@@ -454,7 +454,6 @@ public class GameManager : MonoBehaviour
     public void RepositionCards(Transform parent, bool isAbilityCard = false)
     {
         int cardCount = parent.childCount;
-
         float normalSpacing = 1.2f;
         float compressedSpacing = 0.9f;
         float spacing = cardCount > 3 ? compressedSpacing : normalSpacing;
@@ -468,7 +467,8 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < cardCount; i++)
         {
-            Transform card = parent.GetChild(i);
+            Transform card = parent.Find(i.ToString());
+            if (!card) continue;
 
             Vector3 targetPos = startingPos + new Vector3(
                 startX + (i * spacing),
@@ -512,6 +512,38 @@ public class GameManager : MonoBehaviour
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
         OppDefenseTxt.text = ply2.TotalHealth().ToString() + "?";
         OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";
+    }
+
+    public void RemoveNumberCard(Player ply, int index)
+    {
+        GameObject cardsObject = playerNumberCards;
+        if (ply == ply2) cardsObject = enemyNumberCards;
+
+        Transform cardToRemove = cardsObject.transform.Find(index.ToString());
+        if (cardToRemove != null)
+        {
+            Destroy(cardToRemove.gameObject);
+        }
+
+        for (int i = index + 1; i < ply.NumberCards.Count; i++)
+        {
+            Transform card = cardsObject.transform.Find(i.ToString());
+            if (card != null)
+            {
+                card.gameObject.name = (i - 1).ToString();
+            }
+        }
+
+        ply.NumberCards.RemoveAt(index);
+        RepositionCards(cardsObject.transform, false);
+    }
+
+    public void RemoveNumberCard(int ply, int index)
+    {
+        Player chosenPly = ply1;
+
+        if (ply == 2) chosenPly = ply2;
+        RemoveNumberCard(chosenPly, index);
     }
 
     void DrawNumberCard(Player ply)

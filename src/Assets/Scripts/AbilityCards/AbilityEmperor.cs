@@ -54,4 +54,9 @@ public class AbilityEmperor : AbilityCard
     {
         
     }
+
+    public override bool AIShouldDraw(GameManager gm, Player owner)
+    {
+        
+    }
 }

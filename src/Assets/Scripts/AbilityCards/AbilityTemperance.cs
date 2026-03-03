@@ -16,4 +16,9 @@ public class AbilityTemperance : AbilityCard
     {
         gm.BlackjackThreshold += 4;
     }
+
+    public override bool AIShouldDraw(GameManager gm, Player owner)
+    {
+        
+    }
 }

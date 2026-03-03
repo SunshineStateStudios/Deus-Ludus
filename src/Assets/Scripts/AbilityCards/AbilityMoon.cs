@@ -36,4 +36,9 @@ public class AbilityMoon : AbilityCard
     {
         gm.BlackjackThreshold -= 3;
     }
+
+    public override bool AIShouldDraw(GameManager gm, Player owner)
+    {
+        
+    }
 }

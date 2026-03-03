@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AbilityHierophant : AbilityCard
@@ -8,6 +9,7 @@ public class AbilityHierophant : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        if (owner.NumberCards.Count <= 1) return;
         int chosenCardIndex = 0;
 
         for (int i = 1; i < owner.NumberCards.Count; i++)
@@ -20,15 +22,18 @@ public class AbilityHierophant : AbilityCard
             }
         }
 
-        owner.NumberCards.RemoveAt(chosenCardIndex);
+        int chosenPly = 1;
+        if (owner == gm.ply2) chosenPly = 2;
 
-        DestroyObj physicalCard = gm.playerNumberCards.transform.Find(chosenCardIndex.ToString()).gameObject.GetComponent<DestroyObj>();
-        physicalCard.Begone();
-
-        gm.RepositionCards(gm.playerNumberCards.transform, false);
+        gm.RemoveNumberCard(chosenPly, chosenCardIndex);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
+    {
+        
+    }
+
+    public override bool AIShouldDraw(GameManager gm, Player owner)
     {
         
     }
