@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     public void UpdateProgressText()
     {
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold,false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
     }
 
     public void UpdateDrawNumberCardText()
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
             rawimgScript.Contents = "You have more than 6 number cards drawn! You cannot draw anymore.";
             canvasManager.SetCanDrawNumberCard(true);
             rawimgComponent.color = new Color(120f/255f,0,0,1f);
-        } else if (ply1.BlackjackTotal(false) > BlackjackThreshold)
+        } else if (ply1.BlackjackTotal(BlackjackThreshold,false) > BlackjackThreshold)
         {
             rawimgScript.Contents = "Busted (went over " + BlackjackThreshold.ToString() + ")! Your cards' combative capibilities will be severely tarnished.";
             rawimgComponent.color = new Color(200/255f,0,0,1f);
@@ -184,9 +184,9 @@ public class GameManager : MonoBehaviour
         phase = GamePhase.PlayerTurn;
 
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold,false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
 
-        if (ply1.BlackjackTotal(false) >= BlackjackThreshold)
+        if (ply1.BlackjackTotal(BlackjackThreshold,false) >= BlackjackThreshold)
         {
             drawButton.SetActive(false);
         }
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
     {
         TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>(); 
 
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold,false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
 
         progressText.SetActive(false);
         
@@ -237,9 +237,9 @@ public class GameManager : MonoBehaviour
 
         bool draw = false;
 
-        if (ply2.BlackjackTotal(false) < BlackjackThreshold)
+        if (ply2.BlackjackTotal(BlackjackThreshold,false) < BlackjackThreshold)
         {
-            int BlackjackTotal = ply2.BlackjackTotal(false);
+            int BlackjackTotal = ply2.BlackjackTotal(BlackjackThreshold,false);
             int difference = BlackjackThreshold - BlackjackTotal;
 
             if (difference > 0)
@@ -297,7 +297,7 @@ public class GameManager : MonoBehaviour
 
             UpdateDrawNumberCardText();
 
-            progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+            progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold,false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
         }
 
         canvasAnimator.Play("In", 0, 0);
@@ -667,8 +667,8 @@ public class GameManager : MonoBehaviour
 
     Player DetermineBlackjackWinner()
     {
-        int ply1Total = ply1.BlackjackTotal(false);
-        int ply2Total = ply2.BlackjackTotal(false);
+        int ply1Total = ply1.BlackjackTotal(BlackjackThreshold,false);
+        int ply2Total = ply2.BlackjackTotal(BlackjackThreshold,false);
 
         bool ply1Bust = ply1Total > BlackjackThreshold;
         bool ply2Bust = ply2Total > BlackjackThreshold;
