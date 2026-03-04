@@ -3,7 +3,7 @@ using TMPro;
 
 public class AbilityJudgement : AbilityCard
 {
-    public override string name => "Sun";
+    public override string name => "Judgement"; //must be edited later to give the player a choice
     public override string description => "Randomly alter the suit of a Number Card you hold";
     public override int triesDecayTime => 1;
 

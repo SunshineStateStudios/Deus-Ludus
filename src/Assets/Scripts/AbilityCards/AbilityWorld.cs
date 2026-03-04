@@ -22,11 +22,11 @@ public class AbilityWorld : AbilityCard
         
             if (parent == gm.enemyNumberCards && i == 0) continue;
 
-            TMP_Text attackText =
-                cardRepresentation.transform.Find("Card/Canvas/AttackLabel")
+            TMP_Text damageText =
+                cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
                 .GetComponent<TMP_Text>();
 
-            attackText.text = card.Damage.ToString();
+            damageText.text = card.Damage.ToString();
         }
 
         gm.UpdateAttackDefendText();
@@ -34,7 +34,7 @@ public class AbilityWorld : AbilityCard
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
     {
-
+        gm.BlackjackThreshold -= 3;
     }
 
     public override bool AIShouldDraw(GameManager gm, Player owner)

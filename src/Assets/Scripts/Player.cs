@@ -30,12 +30,11 @@ public class Player
             for (int i = startingIndex; i < NumberCards.Count; i++)
             {
                 if (NumberCards[i].Value == 12)
-                {
                     total -= 10;
                 }
             }
         }
-
+        
         return total;
     }
 
