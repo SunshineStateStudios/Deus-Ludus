@@ -8,7 +8,7 @@ public class Player
 
     public int Life = 50;
 
-    public int BlackjackTotal(bool ignoreFirstCard = true)
+    public int BlackjackTotal(int currentThreshold, bool ignoreFirstCard = true)
     {
         int total = 0;
         int startingIndex = 0;
@@ -17,15 +17,23 @@ public class Player
 
         for (int i = startingIndex; i < NumberCards.Count; i++)
         {
+            if (NumberCards[i].Value == 12)
+            {
+                total += 11;
+                continue;
+            }
             total += NumberCards[i].Value;
         }
 
-        for (int i = startingIndex; i < NumberCards.Count; i++)
+        if (total > currentThreshold)
         {
-            if (total <= 21) continue;
-            NumberCard card = NumberCards[i];
-            if (card.Value != 12) continue;
-            total -= 10;
+            for (int i = startingIndex; i < NumberCards.Count; i++)
+            {
+                if (NumberCards[i].Value == 12)
+                {
+                    total -= 10;
+                }
+            }
         }
 
         return total;
@@ -59,7 +67,7 @@ public class Player
         return total;
     }
 
-    public bool IsBust() {
-        return BlackjackTotal(false) < 21;
+    public bool IsBust(int threshold) {
+        return BlackjackTotal(threshold, false) < threshold;
     }
 }

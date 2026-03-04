@@ -3439,7 +3439,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1990688318}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999964
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5354,7 +5354,7 @@ Transform:
   m_GameObject: {fileID: 2139004665}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.325, y: -17.61, z: -3.0554}
+  m_LocalPosition: {x: 8.325, y: -16.41, z: 10.6}
   m_LocalScale: {x: 6.1789026, y: 1, z: 7.8577676}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5429,7 +5429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b1dd3fe3ee2746bb0ff7897b8c32a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarsTweeningScript
-  endingPos: {x: -14.4, y: -17.61, z: -3.0554}
+  endingPos: {x: 8.325, y: -16.41, z: -14.9}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
