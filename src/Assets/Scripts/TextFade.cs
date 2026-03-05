@@ -19,7 +19,6 @@ public class TextFade : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("kadsgsles");
         infoTextTxt.text = Contents;
         infoTextAnimator.Play("InfoText_In", 0, 0);
     }

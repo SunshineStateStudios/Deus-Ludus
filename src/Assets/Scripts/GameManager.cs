@@ -164,9 +164,8 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
-        //GivePlayerAbilityCard(ply1);
-        for (int i = 0; i < 8; i++) GivePlayerAbilityCard(ply1);
-        //GivePlayerAbilityCard(ply2);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply2);
 
         RebuildInventoryPanel();
 
@@ -190,7 +189,14 @@ public class GameManager : MonoBehaviour
         if (ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
         {
             drawButton.SetActive(false);
+        } else
+        {
+            GameObject rawimg = drawButton.transform.Find("RawImage").gameObject;
+            RawImage rawimgComponent = rawimg.GetComponent<RawImage>();
+            rawimgComponent.color = new Color(1f,1f,1f,1f);
         }
+
+        canvasManager.SetFunctionality(true);
     }
 
     void ShowNotification(string text, Color colour)
@@ -447,6 +453,59 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(2f);
+
+        // remove expired ability cards
+        // ply
+        for (int i = 0; i < ply1.AbilityCards.Count; i++)
+        {
+            AbilityCard card = ply1.AbilityCards[i];
+            if (!card.Drawn) continue;
+            card.triesPassed += 1;
+
+            if (card.triesPassed >= card.triesDecayTime)
+            {
+                card.Remove(this, ply1, ply2);
+                ply1.AbilityCards.RemoveAt(i);
+
+                Destroy(playerAbilityCards.transform.Find(i.ToString()).gameObject);
+
+                for (int x = i + 1; x < ply1.AbilityCards.Count; x++)
+                {
+                    Transform physicalCard = playerAbilityCards.transform.Find(x.ToString());
+                    if (physicalCard != null)
+                    {
+                        physicalCard.gameObject.name = (x - 1).ToString();
+                    }
+                }
+            }
+        }
+        // opponent
+        for (int i = 0; i < ply2.AbilityCards.Count; i++)
+        {
+            AbilityCard card = ply2.AbilityCards[i];
+            if (!card.Drawn) continue;
+            card.triesPassed += 1;
+
+            if (card.triesPassed >= card.triesDecayTime)
+            {
+                card.Remove(this, ply2, ply1);
+                ply2.AbilityCards.RemoveAt(i);
+
+                Destroy(playerAbilityCards.transform.Find(i.ToString()).gameObject);
+
+                for (int x = i + 1; x < ply2.AbilityCards.Count; x++)
+                {
+                    Transform physicalCard = playerAbilityCards.transform.Find(x.ToString());
+                    if (physicalCard != null)
+                    {
+                        physicalCard.gameObject.name = (x - 1).ToString();
+                    }
+                }
+            }
+        }
+
+        RepositionCards(playerAbilityCards.transform, true);
+        RepositionCards(enemyAbilityCards.transform, true);
 
         Cleanup();
         BlackjackThreshold = 21;
@@ -724,10 +783,7 @@ public class GameManager : MonoBehaviour
     void Cleanup()
     {
         ply1.NumberCards.Clear();
-        ply1.AbilityCards.Clear();
-
         ply2.NumberCards.Clear();
-        ply2.AbilityCards.Clear();
 
         DestroyAllSpawnedCardObjects();
     }
