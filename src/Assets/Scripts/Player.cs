@@ -7,7 +7,7 @@ public class Player
     public List<AbilityCard> AbilityCards = new();
 
     public int Life = 50;
-
+    
     public int BlackjackTotal(int currentThreshold, bool ignoreFirstCard = true)
     {
         int total = 0;
@@ -29,7 +29,7 @@ public class Player
         {
             for (int i = startingIndex; i < NumberCards.Count; i++)
             {
-                if (NumberCards[i].Value == 12)
+                if (NumberCards[i].Value == 12) {
                     total -= 10;
                 }
             }
