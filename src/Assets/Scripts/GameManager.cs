@@ -244,6 +244,14 @@ public class GameManager : MonoBehaviour
 
         bool draw = false;
 
+        for (int i = ply2.AbilityCards.Count-1; i >= 0; i--)
+        {
+            AbilityCard card = ply2.AbilityCards[i];
+            if (card.Drawn) continue;
+            if (!card.AIShouldDraw(this, ply2, ply1)) continue;
+            DrawAbilityCard(ply2, i);
+        }
+
         if (ply2.BlackjackTotal(BlackjackThreshold, false) < BlackjackThreshold && ply2.NumberCards.Count < 6)
         {
             int BlackjackTotal = ply2.BlackjackTotal(BlackjackThreshold, false);
