@@ -496,10 +496,9 @@ public class GameManager : MonoBehaviour
 
             if (card.triesPassed >= card.triesDecayTime)
             {
+                Destroy(playerAbilityCards.transform.Find(i.ToString()).gameObject);
                 card.Remove(this, ply2, ply1);
                 ply2.AbilityCards.RemoveAt(i);
-
-                Destroy(playerAbilityCards.transform.Find(i.ToString()).gameObject);
 
                 for (int x = i + 1; x < ply2.AbilityCards.Count; x++)
                 {
@@ -554,12 +553,12 @@ public class GameManager : MonoBehaviour
                 ease = Ease.OutBack;
                 timeToTween = 0.75f;
 
-                if (parent == enemyAbilityCards)
+                if (parent == enemyAbilityCards.transform)
                 {
-                    // TODO: add another fucking offset for the enemy specifically
-                    return;
+                    targetPos += new Vector3(-0.8f,0.2f,-5.5f);
+                } else {
+                    targetPos += new Vector3(-0.8f,0.2f,-9f);
                 }
-                targetPos += new Vector3(-0.8f,0.2f,-9f);
             }
 
             card.DOMove(targetPos, timeToTween)
