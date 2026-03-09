@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
         {
             AbilityCard card = ply2.AbilityCards[i];
             if (card.Drawn) continue;
-            if (!card.AIShouldDraw(this, ply2, ply1)) continue;
+            if (!card.AIShouldDraw(this, ply2)) continue;
             DrawAbilityCard(ply2, i);
         }
 
