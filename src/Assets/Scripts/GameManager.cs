@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject OppAttack;
     public GameObject TempYouHp;
     public GameObject TempOppHp;
+    public GameObject cardPrompt;
 
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviour
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        abilityCardList.Add(new AbilityDeath());
+        /*abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityHierophant());
         abilityCardList.Add(new AbilityEmperor());
@@ -120,7 +121,11 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilitySun());
         abilityCardList.Add(new AbilityWorld());
         abilityCardList.Add(new AbilityJudgement());
-        abilityCardList.Add(new AbilityDevil());
+        abilityCardList.Add(new AbilityDevil());*/
+        for (int i = 0; i < 9; i++)
+        {
+            abilityCardList.Add(new AbilityJudgement());
+        }
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -563,6 +568,73 @@ public class GameManager : MonoBehaviour
 
             card.DOMove(targetPos, timeToTween)
                 .SetEase(ease);
+        }
+    }
+
+    public void AnswerNumberCardPrompt(Player owner, int index, PromptAbilityCard card)
+    {
+        if (owner.NumberCards[index] == null) return;
+
+        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
+        foreach (Transform child in ScrollViewContentsObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        canvasAnimator.Play("In", 0, 0);
+        canvasManager.SetFunctionality(true);
+        cardPrompt.SetActive(false);
+
+        Player opponent = ply2;
+        if (owner == ply2) opponent = ply1;
+
+        card.PromptChosen(this, owner, opponent, index);
+    }
+
+
+    public void AnswerNumberCardPrompt(int owner, int index, PromptAbilityCard card)
+    {
+        Player ply = ply1;
+        if (owner == 2) ply = ply2;
+
+        AnswerNumberCardPrompt(ply, index, card);
+    }
+
+    public void PromptForNumberCard(Player owner, string title, string reason, PromptAbilityCard card)
+    {
+        canvasAnimator.Play("Out", 0, 0);
+        canvasManager.SetFunctionality(false);
+        cardPrompt.SetActive(true);
+
+        Animator inventoryAnimator = GameObject.Find("Canvas/InventoryContainer/Inventory").GetComponent<Animator>();
+        inventoryAnimator.Play("In", 0, 0);
+
+        GameObject TitleLabelObj = cardPrompt.transform.Find("TitleLabel").gameObject;
+        GameObject ReasonLabelObj = cardPrompt.transform.Find("ReasonLabel").gameObject;
+        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
+
+        TMP_Text TitleLabel = TitleLabelObj.GetComponent<TMP_Text>();
+        TMP_Text ReasonLabel = ReasonLabelObj.GetComponent<TMP_Text>();
+
+        TitleLabel.text = title;
+        ReasonLabel.text = reason;
+
+        int plyIndex = 1;
+        if (owner == ply2) plyIndex = 2;
+
+        for (int i = 0; i < owner.NumberCards.Count; i++)
+        {
+            NumberCard nmbCard = owner.NumberCards[i];
+            GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, ScrollViewContentsObj.transform);
+            Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
+            cardRepresentation.AddComponent<CardPromptScript>();
+
+            CardPromptScript cardPrompt = cardRepresentation.GetComponent<CardPromptScript>();
+            cardPrompt.cardIndex = i;
+            cardPrompt.plyNumber = plyIndex;
+            cardPrompt.card = card;
+
+            cardRepresentation.transform.Find("NameLabel").GetComponent<TMP_Text>().text = nmbCard.Value.ToString();
         }
     }
 
