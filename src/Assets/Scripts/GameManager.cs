@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityDevil());*/
         for (int i = 0; i < 9; i++)
         {
-            abilityCardList.Add(new AbilityStrength());
+            abilityCardList.Add(new AbilityJudgement());
         }
 
         // Scramble the list!
