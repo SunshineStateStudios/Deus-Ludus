@@ -111,21 +111,17 @@ public class GameManager : MonoBehaviour
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        /*abilityCardList.Add(new AbilityDeath());
+        abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityHierophant());
         abilityCardList.Add(new AbilityEmperor());
         abilityCardList.Add(new AbilityEmpress());
-        abilityCardList.Add(new AbilityMoon());`
+        abilityCardList.Add(new AbilityMoon());
         abilityCardList.Add(new AbilityStar());
         abilityCardList.Add(new AbilitySun());
         abilityCardList.Add(new AbilityWorld());
         abilityCardList.Add(new AbilityJudgement());
-        abilityCardList.Add(new AbilityDevil());*/
-        for (int i = 0; i < 9; i++)
-        {
-            abilityCardList.Add(new AbilityJudgement());
-        }
+        abilityCardList.Add(new AbilityDevil());
 
         // Scramble the list!
         int n = abilityCardList.Count;
