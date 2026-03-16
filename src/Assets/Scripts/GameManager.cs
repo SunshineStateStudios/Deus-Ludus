@@ -111,12 +111,12 @@ public class GameManager : MonoBehaviour
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        /*abilityCardList.Add(new AbilityDeath());
+        abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityHierophant());
         abilityCardList.Add(new AbilityEmperor());
         abilityCardList.Add(new AbilityEmpress());
-        abilityCardList.Add(new AbilityMoon());`
+        abilityCardList.Add(new AbilityMoon());
         abilityCardList.Add(new AbilityStar());
         abilityCardList.Add(new AbilitySun());
         abilityCardList.Add(new AbilityWorld());
