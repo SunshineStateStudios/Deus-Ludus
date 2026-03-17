@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AbilityHermit : AbilityCard
@@ -8,6 +9,7 @@ public class AbilityHermit : AbilityCard
     public override int triesDecayTime => 1;
     int chosenCardIndex = 0;
     int chosenPly = 1; //default player is you
+    NumberCard card;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
@@ -16,11 +18,14 @@ public class AbilityHermit : AbilityCard
 
         for (int i = owner.NumberCards.Count-1; i >= 0; i--)
         {
-            NumberCard card = owner.NumberCards[i];
+            card = owner.NumberCards[i];
             chosenCardIndex = i;
             gm.RemoveNumberCard(chosenPly, chosenCardIndex);
         }
+
+        gm.DrawTwice(chosenPly);
         gm.UpdateAttackDefendText();
+        gm.UpdateProgressText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

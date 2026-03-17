@@ -721,6 +721,28 @@ public class GameManager : MonoBehaviour
         RemoveNumberCard(chosenPly, index);
     }
 
+    public void DrawTwice(int ply)
+    {
+        Player chosenPly = ply1;
+        if (ply == 2) chosenPly = ply2;
+        StartCoroutine(DrawTwice(chosenPly));
+    }
+
+    public IEnumerator DrawTwice(Player ply)
+    {
+        DrawNumberCard(ply);
+        yield return new WaitForSeconds(0.5f);
+        DrawNumberCard(ply);
+    }
+
+    public void DrawNumberCard(int ply)
+    {
+        Player chosenPly = ply1;
+        if (ply == 2) chosenPly = ply2;
+
+        DrawNumberCard(chosenPly);
+    }
+
     void DrawNumberCard(Player ply)
     {
         NumberCard card = deck.Draw();
@@ -794,6 +816,7 @@ public class GameManager : MonoBehaviour
             cardRepresentationLabel.text = card.name;
         }
     }
+
 
     public void DrawAbilityCard(Player ply, int index)
     {
