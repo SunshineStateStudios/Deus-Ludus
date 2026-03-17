@@ -34,11 +34,13 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (descriptionPanel == null) return;
         descriptionPanel.SetActive(false);
     }
 
     public void OnDestroy()
     {
+        if (descriptionPanel == null) return;
         descriptionPanel.SetActive(false);
     }
 
