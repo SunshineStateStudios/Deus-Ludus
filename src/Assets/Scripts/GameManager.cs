@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     private Animator canvasAnimator;
     private CanvasManager canvasManager;
-
+    private bool inventoryPanelHidden = false;
     private List<AbilityCard> abilityCardList;
 
     void Start()
@@ -605,6 +605,11 @@ public class GameManager : MonoBehaviour
         canvasManager.SetFunctionality(true);
         cardPrompt.SetActive(false);
 
+        if (inventoryPanelHidden) {
+            canvasManager.ResolvePanel();
+            inventoryPanelHidden = false;
+        }
+
         Player opponent = ply2;
         if (owner == ply2) opponent = ply1;
 
@@ -622,6 +627,9 @@ public class GameManager : MonoBehaviour
 
     public void PromptForNumberCard(Player owner, string title, string reason, PromptAbilityCard card)
     {
+        if (!canvasManager.GetPanelHidden()) inventoryPanelHidden = true;
+        canvasManager.ResolvePanel();
+
         canvasAnimator.Play("Out", 0, 0);
         canvasManager.SetFunctionality(false);
         cardPrompt.SetActive(true);
@@ -654,7 +662,13 @@ public class GameManager : MonoBehaviour
             cardPrompt.plyNumber = plyIndex;
             cardPrompt.card = card;
 
-            cardRepresentation.transform.Find("NameLabel").GetComponent<TMP_Text>().text = nmbCard.Value.ToString();
+            TMP_Text cardText = cardRepresentation.transform.Find("NameLabel").GetComponent<TMP_Text>();
+
+            if (nmbCard.Value == 12) {
+                cardText.text = "A";
+            } else {
+                cardText.text = nmbCard.Value.ToString();
+            }
         }
     }
 

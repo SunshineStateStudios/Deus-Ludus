@@ -52,4 +52,8 @@ public class CanvasManager : MonoBehaviour
 
         inventoryAnimator.Play(animToPlay, 0, 0);
     }
+
+    public bool GetPanelHidden() {
+        return panelHidden;
+    }
 }
