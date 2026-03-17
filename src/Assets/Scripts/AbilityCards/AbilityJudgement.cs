@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityJudgement : PromptAbilityCard
 {
     public override string name => "Judgement"; //must be edited later to give the player a choice
-    public override string description => "Alter the suit of a Number Card you choose.";
+    public override string description => "Randomly alter the suit of a Number Card you choose.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
