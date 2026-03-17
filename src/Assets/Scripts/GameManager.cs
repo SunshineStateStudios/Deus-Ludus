@@ -103,6 +103,9 @@ public class GameManager : MonoBehaviour
             rawimgComponent.color = new Color(120f/255f,0,0,1f);
         } else if (ply1.BlackjackTotal(BlackjackThreshold, false) > BlackjackThreshold)
         {
+            //int yourDefense = ply1.TotalHealth();
+            //TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
+            //YouDefenseTxt.text = "ply1.TotalHealth(false).ToString()";
             rawimgScript.Contents = "Busted (went over " + BlackjackThreshold.ToString() + ")! Your cards' combative capibilities will be severely tarnished.";
             rawimgComponent.color = new Color(200/255f,0,0,1f);
         }
@@ -111,7 +114,17 @@ public class GameManager : MonoBehaviour
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        
+        //abilityCardList.Add(new AbilityDeath());
+        //abilityCardList.Add(new AbilityTemperance());
+        //abilityCardList.Add(new AbilityHierophant());
+        //abilityCardList.Add(new AbilityEmperor());
+        //abilityCardList.Add(new AbilityEmpress());
+        //abilityCardList.Add(new AbilityMoon());
+        //abilityCardList.Add(new AbilityStar());
+        //abilityCardList.Add(new AbilitySun());
+        //abilityCardList.Add(new AbilityWorld());
+        //abilityCardList.Add(new AbilityJudgement());
+        //abilityCardList.Add(new AbilityDevil());
         for (int i = 0; i < 9; i++)
         {
             abilityCardList.Add(new AbilityDeath());

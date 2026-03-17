@@ -26,6 +26,7 @@ public class AbilityHierophant : AbilityCard
         if (owner == gm.ply2) chosenPly = 2;
 
         gm.RemoveNumberCard(chosenPly, chosenCardIndex);
+        gm.UpdateAttackDefendText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

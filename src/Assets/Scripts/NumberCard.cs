@@ -1,7 +1,7 @@
 /*
 
 Suit numbers to actual suits:
-1: roman
+1: mayan
 2: norse
 3: egyptian
 4: greek
