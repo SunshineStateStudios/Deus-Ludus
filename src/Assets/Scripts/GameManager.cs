@@ -114,31 +114,23 @@ public class GameManager : MonoBehaviour
     void RebuildAbilityCardPool()
     {
         abilityCardList = new List<AbilityCard>();
-        //abilityCardList.Add(new AbilityDeath());
-        //abilityCardList.Add(new AbilityTemperance());
-        //abilityCardList.Add(new AbilityHierophant());
-        //abilityCardList.Add(new AbilityEmperor());
-        //abilityCardList.Add(new AbilityEmpress());
-        //abilityCardList.Add(new AbilityMoon());
-        //abilityCardList.Add(new AbilityStar());
-        //abilityCardList.Add(new AbilitySun());
-        //abilityCardList.Add(new AbilityWorld());
-        //abilityCardList.Add(new AbilityJudgement());
-        //abilityCardList.Add(new AbilityDevil());
-        for (int i = 0; i < 9; i++)
-        {
-            abilityCardList.Add(new AbilityDeath());
-            abilityCardList.Add(new AbilityTemperance());
-            abilityCardList.Add(new AbilityHierophant());
-            abilityCardList.Add(new AbilityEmperor());
-            abilityCardList.Add(new AbilityEmpress());
-            abilityCardList.Add(new AbilityMoon());
-            abilityCardList.Add(new AbilityStar());
-            abilityCardList.Add(new AbilitySun());
-            abilityCardList.Add(new AbilityWorld());
-            abilityCardList.Add(new AbilityJudgement());
-            abilityCardList.Add(new AbilityDevil());
-        }
+
+        abilityCardList.Add(new AbilityDeath());
+        abilityCardList.Add(new AbilityDevil());
+        abilityCardList.Add(new AbilityEmperor());
+        abilityCardList.Add(new AbilityEmpress());
+        abilityCardList.Add(new AbilityHierophant());
+        abilityCardList.Add(new AbilityJudgement());
+        abilityCardList.Add(new AbilityJustice());
+        abilityCardList.Add(new AbilityLovers());
+        abilityCardList.Add(new AbilityMoon());
+        abilityCardList.Add(new AbilityStar());
+        abilityCardList.Add(new AbilityStrength());
+        abilityCardList.Add(new AbilitySun());
+        abilityCardList.Add(new AbilityTemperance());
+        abilityCardList.Add(new AbilityWheelOfFortune());
+        abilityCardList.Add(new AbilityWorld());
+        abilityCardList.Add(new AbilityTower());
 
         // Scramble the list!
         int n = abilityCardList.Count;
