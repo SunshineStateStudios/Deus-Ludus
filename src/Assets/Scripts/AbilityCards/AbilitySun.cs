@@ -4,7 +4,7 @@ using TMPro;
 public class AbilitySun : AbilityCard
 {
     public override string name => "Sun";
-    public override string description => "Doubles the attack of all Egyptian number cards you've drawn.";
+    public override string description => "Doubles the attack of all Roman number cards you've drawn.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -12,7 +12,7 @@ public class AbilitySun : AbilityCard
         for (int i = 0; i < opponent.NumberCards.Count; i++)
         {
             NumberCard card = opponent.NumberCards[i];
-            if (card.Suit != 3) continue;
+            if (card.Suit != 1) continue;
             card.Damage = card.Damage * 2;
 
             GameObject parent = gm.playerNumberCards;

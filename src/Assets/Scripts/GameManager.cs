@@ -448,11 +448,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        OppDefenseTxt.text = ply2.TotalHealth(false).ToString();
+        OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold, false).ToString();
         OppAttackTxt.text = ply2.TotalDamage(false).ToString();
-        int YouDef = ply1.TotalHealth(false);
+        int YouDef = ply1.TotalHealth(BlackjackThreshold, false);
         int YouAtk = ply1.TotalDamage(false);
-        int OppDef = ply2.TotalHealth(false);
+        int OppDef = ply2.TotalHealth(BlackjackThreshold, false);
         int OppAtk = ply2.TotalDamage(false);
         TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
         TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
@@ -683,9 +683,9 @@ public class GameManager : MonoBehaviour
         TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
         TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        YouDefenseTxt.text = ply1.TotalHealth(false).ToString();
+        YouDefenseTxt.text = ply1.TotalHealth(BlackjackThreshold, false).ToString();
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = ply2.TotalHealth().ToString() + "?";
+        OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold).ToString() + "?";
         OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";
     }
 
@@ -790,6 +790,10 @@ public class GameManager : MonoBehaviour
                 damageText.text = card.Damage.ToString();
                 healthText.text = card.Health.ToString();
             }
+        }
+        if (ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
+        {
+            drawButton.SetActive(false);
         }
 
         // ----- Layout -----
@@ -905,7 +909,7 @@ public class GameManager : MonoBehaviour
     void ResolveCombat(Player attacker, Player defender, float counterMultiplier = 1f)
     {
         int attackPower = attacker.TotalDamage(false);
-        int defencePower = defender.TotalHealth(false);
+        int defencePower = defender.TotalHealth(BlackjackThreshold, false);
 
         if (attackPower > defencePower) defender.Life -= 1;
     }

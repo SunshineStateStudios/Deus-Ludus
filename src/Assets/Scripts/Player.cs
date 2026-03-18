@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 
 public class Player
 {
@@ -52,15 +55,20 @@ public class Player
         return total;
     }
     
-    public int TotalHealth(bool ignoreFirstCard = true)
+    public int TotalHealth(int currentThreshold, bool ignoreFirstCard = true)
     {
         int total = 0;
         int startingIndex = 0;
+        int Blackjacktotal = BlackjackTotal(currentThreshold, false);
 
         if (ignoreFirstCard) startingIndex = 1;
 
         for (int i = startingIndex; i < NumberCards.Count; i++) {
             total += NumberCards[i].Health;
+        }
+        if (Blackjacktotal > currentThreshold)
+        {
+            total /= 2;
         }
 
         return total;
