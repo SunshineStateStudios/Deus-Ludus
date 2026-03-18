@@ -7,17 +7,12 @@ public class AbilityLovers : AbilityCard
     public override string description => "You and the opponent draw a random ability card (will not work for player with one or less ability cards).";
     public override int triesDecayTime => 1;
 
-    private int GetRandomAbilityCard(Player ply) {
-        return Random.Range(0, ply.AbilityCards.Count);
-    }
-
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        int abilityChosenOwner = GetRandomAbilityCard(owner);
-        int abilityChosenOpponent = GetRandomAbilityCard(opponent);
-
-        gm.DrawAbilityCard(owner, abilityChosenOwner);
-        gm.DrawAbilityCard(opponent, abilityChosenOpponent);
+        gm.GivePlayerAbilityCard(owner);
+        gm.GivePlayerAbilityCard(owner);
+        gm.GivePlayerAbilityCard(opponent);
+        gm.GivePlayerAbilityCard(opponent);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

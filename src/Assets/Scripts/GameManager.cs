@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    AbilityCard GivePlayerAbilityCard(Player ply)
+    public AbilityCard GivePlayerAbilityCard(Player ply)
     {
         if (abilityCardList.Count > 0) {
             AbilityCard chosenCard = abilityCardList.ElementAt(0);
@@ -153,7 +153,6 @@ public class GameManager : MonoBehaviour
             return chosenCard;
         }
 
-        ply.AbilityCards.Add(new AbilityDeath());
         return null;
     }
 
@@ -174,17 +173,6 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
