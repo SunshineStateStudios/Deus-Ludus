@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityChariot());
         abilityCardList.Add(new AbilityHighPriestess());
         abilityCardList.Add(new AbilityMagician());
+        abilityCardList.Add(new AbilityHermit());
 
         // Scramble the list!
         int n = abilityCardList.Count;
