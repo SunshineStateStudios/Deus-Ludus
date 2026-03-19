@@ -1,4 +1,4 @@
-// literally only made this because AbilityHierophant cant use the Destroy() function... :/
+// literally only made this because AbilityHierophant AND CHARIOT YAYYY cant use the Destroy() function... :/
 
 using UnityEngine;
 

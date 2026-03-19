@@ -131,6 +131,9 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityWheelOfFortune());
         abilityCardList.Add(new AbilityWorld());
         abilityCardList.Add(new AbilityTower());
+        abilityCardList.Add(new AbilityChariot());
+        abilityCardList.Add(new AbilityHighPriestess());
+        abilityCardList.Add(new AbilityMagician());
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -177,6 +180,14 @@ public class GameManager : MonoBehaviour
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+
+        GivePlayerAbilityCard(ply2);
+        GivePlayerAbilityCard(ply2);
+        GivePlayerAbilityCard(ply2);
         GivePlayerAbilityCard(ply2);
 
         RebuildInventoryPanel();
