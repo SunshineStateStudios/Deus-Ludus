@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityHighPriestess());
         abilityCardList.Add(new AbilityMagician());
         abilityCardList.Add(new AbilityHermit());
+        abilityCardList.Add(new AbilityHangedMan());
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -177,6 +178,11 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
+        GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
