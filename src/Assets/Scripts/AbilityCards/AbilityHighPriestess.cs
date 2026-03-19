@@ -1,40 +1,45 @@
 using UnityEngine;
 using TMPro;
 
-public class AbilityHighPriestess : AbilityCard
+public class AbilityHighPriestess : PromptAbilityCard
 {
     public override string name => "High Priestess";
-    public override string description => "Sacrifice an ability you hold to reveal the opponent’s hidden card";
+    public override string description => "Sacrifice an ability you hold to reveal the opponent's hidden card.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        for (int i = 0; i < opponent.NumberCards.Count; i++)
-        {
-            NumberCard card = opponent.NumberCards[i];
-            if (card.Suit != 4) continue;
-            card.Damage = 1;
+        gm.PromptForNumberCard(owner, "Choose a Number Card!", "The High Priestess card calls for it...", this);
+    }
 
-            GameObject parent = gm.enemyNumberCards;
-            if (owner == gm.ply2) parent = gm.playerNumberCards;
+    public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)
+    {
+        gm.RemoveNumberCard(owner, indexChosen);
 
-            Transform cardRepresentation = parent.transform.Find(i.ToString());
-        
-            if (parent == gm.enemyNumberCards && i == 0) continue;
+        NumberCard firstCard = opponent.NumberCards[0];
+        Transform parent = gm.enemyNumberCards.transform;
+        if (opponent == gm.ply1) parent = gm.playerNumberCards.transform;
 
-            TMP_Text damageText =
-                cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
-                .GetComponent<TMP_Text>();
+        GameObject firstCardRepresentation = parent.Find("0").gameObject;
 
-            damageText.text = card.Damage.ToString();
-        }
+        TMP_Text healthText =
+            firstCardRepresentation.transform.Find("Card/Canvas/HealthLabel")
+            .GetComponent<TMP_Text>();
+        TMP_Text damageText =
+            firstCardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+            .GetComponent<TMP_Text>();
+        TMP_Text valueText =
+            firstCardRepresentation.transform.Find("Card/Canvas/ValueLabel")
+            .GetComponent<TMP_Text>();
 
-        gm.UpdateAttackDefendText();
+        healthText.text = firstCard.Health.ToString();
+        damageText.text = firstCard.Damage.ToString();
+        valueText.text = firstCard.Value.ToString();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
     {
-        gm.BlackjackThreshold -= 3;
+
     }
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
