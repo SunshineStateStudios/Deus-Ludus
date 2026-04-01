@@ -190,9 +190,6 @@ public class GameManager : MonoBehaviour
         GivePlayerAbilityCard(ply1);
 
         GivePlayerAbilityCard(ply2);
-        GivePlayerAbilityCard(ply2);
-        GivePlayerAbilityCard(ply2);
-        GivePlayerAbilityCard(ply2);
 
         RebuildInventoryPanel();
 
