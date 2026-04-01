@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class AbilityHighPriestess : PromptAbilityCard
+public class AbilityHighPriestess : PromptAbilityCardAlt
 {
     public override string name => "High Priestess";
     public override string description => "Sacrifice an ability you hold to reveal the opponent's hidden card.";
@@ -9,32 +9,48 @@ public class AbilityHighPriestess : PromptAbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        gm.PromptForNumberCard(owner, "Choose a Number Card!", "The High Priestess card calls for it...", this);
+        gm.PromptForAbilityCard(owner, "Choose an Ability Card!", "The High Priestess card calls for it...", this);
     }
 
     public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)
     {
-        gm.RemoveNumberCard(owner, indexChosen);
+        gm.RemoveAbilityCard(owner, indexChosen);
 
-        NumberCard firstCard = opponent.NumberCards[0];
-        Transform parent = gm.enemyNumberCards.transform;
-        if (opponent == gm.ply1) parent = gm.playerNumberCards.transform;
+        if (opponent == gm.ply1) return;
 
-        GameObject firstCardRepresentation = parent.Find("0").gameObject;
+        GameObject hiddenCard = gm.enemyNumberCards.transform.Find("0").gameObject;
+        NumberCard enemyFirstCard = opponent.NumberCards[0];
+
+        TMP_Text valueText =
+        hiddenCard.transform.Find("Card/Canvas/ValueLabel")
+        .GetComponent<TMP_Text>();
+
+        TMP_Text damageText =
+        hiddenCard.transform.Find("Card/Canvas/DamageLabel")
+        .GetComponent<TMP_Text>();
 
         TMP_Text healthText =
-            firstCardRepresentation.transform.Find("Card/Canvas/HealthLabel")
-            .GetComponent<TMP_Text>();
-        TMP_Text damageText =
-            firstCardRepresentation.transform.Find("Card/Canvas/DamageLabel")
-            .GetComponent<TMP_Text>();
-        TMP_Text valueText =
-            firstCardRepresentation.transform.Find("Card/Canvas/ValueLabel")
-            .GetComponent<TMP_Text>();
+        hiddenCard.transform.Find("Card/Canvas/HealthLabel")
+        .GetComponent<TMP_Text>();
 
-        healthText.text = firstCard.Health.ToString();
-        damageText.text = firstCard.Damage.ToString();
-        valueText.text = firstCard.Value.ToString();
+        valueText.text = enemyFirstCard.Value.ToString();
+        damageText.text = enemyFirstCard.Damage.ToString();
+        healthText.text = enemyFirstCard.Health.ToString();
+    }
+
+    public override int AICardDecision(Player player) {
+        int chosenIndex = 0;
+
+        for (int i = 1; i < player.NumberCards.Count; i++) {
+            NumberCard oldCard = player.NumberCards[chosenIndex];
+            NumberCard currentCard = player.NumberCards[i];
+
+            if (currentCard.Damage < oldCard.Damage || currentCard.Health < oldCard.Health) {
+                chosenIndex = i;
+            }
+        }
+
+        return chosenIndex;
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

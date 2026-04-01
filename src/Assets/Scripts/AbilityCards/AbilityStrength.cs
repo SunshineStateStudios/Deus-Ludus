@@ -17,6 +17,22 @@ public class AbilityStrength : PromptAbilityCard
         owner.NumberCards[indexChosen].Damage *= 2;
     }
 
+    public override int AICardDecision(Player player) {
+        int chosenIndex = 0;
+
+        for (int i = 1; i < player.NumberCards.Count; i++) {
+            NumberCard oldCard = player.NumberCards[chosenIndex];
+            NumberCard currentCard = player.NumberCards[i];
+
+            if (currentCard.Damage > oldCard.Damage) {
+                chosenIndex = i;
+            }
+        }
+
+        return chosenIndex;
+    }
+
+
     public override void Remove(GameManager gm, Player owner, Player opponent)
     {
 

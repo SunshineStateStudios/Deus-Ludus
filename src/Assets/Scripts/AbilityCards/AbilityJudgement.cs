@@ -17,6 +17,10 @@ public class AbilityJudgement : PromptAbilityCard
         Debug.Log(indexChosen);
     }
 
+    public override int AICardDecision(Player player) {
+        return Random.Range(0, player.NumberCards.Count);
+    }
+
     public override void Remove(GameManager gm, Player owner, Player opponent)
     {
 

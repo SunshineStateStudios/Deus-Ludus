@@ -100,14 +100,11 @@ public class GameManager : MonoBehaviour
         {
             rawimgScript.Contents = "You have more than 6 number cards drawn! You cannot draw anymore.";
             canvasManager.SetCanDrawNumberCard(true);
-            rawimgComponent.color = new Color(120f/255f,0,0,1f);
+            rawimgComponent.color = new Color(1,0,0,1f);
         } else if (ply1.BlackjackTotal(BlackjackThreshold, false) > BlackjackThreshold)
         {
-            //int yourDefense = ply1.TotalHealth();
-            //TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
-            //YouDefenseTxt.text = "ply1.TotalHealth(false).ToString()";
             rawimgScript.Contents = "Busted (went over " + BlackjackThreshold.ToString() + ")! Your cards' combative capibilities will be severely tarnished.";
-            rawimgComponent.color = new Color(200/255f,0,0,1f);
+            rawimgComponent.color = new Color(120f/255f,0,0,1f);
         }
     }
 
@@ -226,6 +223,7 @@ public class GameManager : MonoBehaviour
             rawimgComponent.color = new Color(1f,1f,1f,1f);
         }
 
+        UpdateDrawNumberCardText();
         canvasManager.SetFunctionality(true);
     }
 
@@ -279,6 +277,7 @@ public class GameManager : MonoBehaviour
             AbilityCard card = ply2.AbilityCards[i];
             if (card.Drawn) continue;
             if (!card.AIShouldDraw(this, ply2)) continue;
+            yield return new WaitForSeconds(0.3f);
             DrawAbilityCard(ply2, i);
         }
 
@@ -343,8 +342,7 @@ public class GameManager : MonoBehaviour
             canvasManager.SetFunctionality(true);
 
             UpdateDrawNumberCardText();
-
-            progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold, false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+            UpdateProgressText();
         }
     }
 
@@ -630,8 +628,92 @@ public class GameManager : MonoBehaviour
         AnswerNumberCardPrompt(ply, index, card);
     }
 
+    public void AnswerAbilityCardPrompt(Player ply, int index, PromptAbilityCardAlt card) {
+        if (ply.AbilityCards[index] == null) return;
+
+        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
+        foreach (Transform child in ScrollViewContentsObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        canvasAnimator.Play("In", 0, 0);
+        canvasManager.SetFunctionality(true);
+        cardPrompt.SetActive(false);
+
+        if (inventoryPanelHidden) {
+            canvasManager.ResolvePanel();
+            inventoryPanelHidden = false;
+        }
+
+        Player opponent = ply2;
+        if (ply == ply2) opponent = ply1;
+
+        card.PromptChosen(this, ply, opponent, index);
+    }
+
+    public void AnswerAbilityCardPrompt(int ply, int index, PromptAbilityCardAlt card) {
+        Player plyChosen = ply1;
+        if (ply == 2) plyChosen = ply2;
+
+        AnswerAbilityCardPrompt(plyChosen, index, card);
+    }
+
+    public void PromptForAbilityCard(Player owner, string title, string reason, PromptAbilityCardAlt card) {
+        if (owner == ply2) {
+            AnswerAbilityCardPrompt(ply2, card.AICardDecision(owner), card);
+            return;
+        }
+
+        if (!canvasManager.GetPanelHidden()) inventoryPanelHidden = true;
+        canvasManager.ResolvePanel();
+
+        canvasAnimator.Play("Out", 0, 0);
+        canvasManager.SetFunctionality(false);
+        cardPrompt.SetActive(true);
+
+        Animator inventoryAnimator = GameObject.Find("Canvas/InventoryContainer/Inventory").GetComponent<Animator>();
+        inventoryAnimator.Play("In", 0, 0);
+
+        GameObject TitleLabelObj = cardPrompt.transform.Find("TitleLabel").gameObject;
+        GameObject ReasonLabelObj = cardPrompt.transform.Find("ReasonLabel").gameObject;
+        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
+
+        TMP_Text TitleLabel = TitleLabelObj.GetComponent<TMP_Text>();
+        TMP_Text ReasonLabel = ReasonLabelObj.GetComponent<TMP_Text>();
+
+        TitleLabel.text = title;
+        ReasonLabel.text = reason;
+
+        int plyIndex = 1;
+        if (owner == ply2) plyIndex = 2;
+
+        for (int i = 0; i < owner.AbilityCards.Count; i++)
+        {
+            AbilityCard abilityCard = owner.AbilityCards[i];
+            if (abilityCard == card) continue;
+
+            GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, ScrollViewContentsObj.transform);
+            Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
+            cardRepresentation.AddComponent<AbilityCardPromptScript>();
+
+            AbilityCardPromptScript cardPromptScript = cardRepresentation.GetComponent<AbilityCardPromptScript>();
+            cardPromptScript.cardIndex = i;
+            cardPromptScript.plyNumber = plyIndex;
+            cardPromptScript.card = card;
+
+            TMP_Text cardText = cardRepresentation.transform.Find("NameLabel").GetComponent<TMP_Text>();
+            cardText.text = abilityCard.name;
+        }
+    }
+
     public void PromptForNumberCard(Player owner, string title, string reason, PromptAbilityCard card)
     {
+        if (owner == ply2) {
+            AnswerNumberCardPrompt(2, card.AICardDecision(owner), card);
+            return;
+        }
+
         if (!canvasManager.GetPanelHidden()) inventoryPanelHidden = true;
         canvasManager.ResolvePanel();
 
@@ -692,6 +774,11 @@ public class GameManager : MonoBehaviour
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
         OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold).ToString() + "?";
         OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";
+    }
+
+    public void RemoveAbilityCard(Player ply, int index) {
+        ply.AbilityCards.RemoveAt(index);
+        RebuildInventoryPanel();
     }
 
     public void RemoveNumberCard(Player ply, int index)
