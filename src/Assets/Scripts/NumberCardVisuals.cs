@@ -10,7 +10,6 @@ public class NumberCardVisuals : MonoBehaviour
     public GameObject healthLabel;
     public GameObject GodCubePrefab;
     public ParticleSystem particles;
-    private WhiteFlash whiteOverlayScript;
     private AudioSource sound;
     private bool canShowVisuals = false;
 
@@ -18,7 +17,6 @@ public class NumberCardVisuals : MonoBehaviour
     {
         yield return new WaitForSeconds(.3f);
         sound.Play();
-        whiteOverlayScript = GameObject.Find("Canvas/WhiteOverlay").GetComponent<WhiteFlash>(); // need to do delay :(
     }
 
     void Start()
@@ -44,7 +42,6 @@ public class NumberCardVisuals : MonoBehaviour
     public void DoTheParticle()
     {
         particles.Emit(60);
-        whiteOverlayScript.Flash(new Color(1f,1f,1f,0.5f));
         canvas.SetActive(true);
 
         GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);

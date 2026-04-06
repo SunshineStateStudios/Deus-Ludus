@@ -726,7 +726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CanvasManager
   inventoryObj: {fileID: 1175367172}
   gameManager: {fileID: 241583326}
-  AbilityCardUIPrefab: {fileID: 0}
+  AbilityCardUIPrefab: {fileID: 3965350674083555770, guid: 91ff90078c876748e9d8fb0864571fae, type: 3}
 --- !u!114 &187481884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1211,15 +1211,7 @@ MonoBehaviour:
   canvasObject: {fileID: 919715665}
   attackGodCubeClip: {fileID: 8300000, guid: fc4bfbc86814f524587fb5a959497ebb, type: 3}
   inventoryPanelScroll: {fileID: 1391677764}
-  abilityCardUIPrefab: {fileID: 6689831372372458094, guid: 8642bc743aaf614a180db0f6c16c7db6, type: 3}
   BlackjackThreshold: 21
-  notificationUI: {fileID: 1309819002}
-  YouDefense: {fileID: 0}
-  YouAttack: {fileID: 0}
-  OppDefense: {fileID: 0}
-  OppAttack: {fileID: 0}
-  TempYouHp: {fileID: 0}
-  TempOppHp: {fileID: 0}
   cardPrompt: {fileID: 1324638856}
 --- !u!82 &241583329
 AudioSource:

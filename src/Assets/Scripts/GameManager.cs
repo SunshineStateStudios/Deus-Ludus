@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     public GameObject canvasObject;
     public AudioClip attackGodCubeClip;
     public GameObject inventoryPanelScroll;
-    public GameObject abilityCardUIPrefab;
     public int BlackjackThreshold = 21;
 
     // Attributes for the drawn/stayed overlay
@@ -31,13 +30,6 @@ public class GameManager : MonoBehaviour
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
     // Misc
-    private GameObject inventoryButton;
-    private GameObject inventoryPanel;
-    private GameObject stayButton;
-    private GameObject drawButton;
-    private GameObject notificationUIText;
-    private GameObject progressText;
-
     //private Animator canvasAnimator;
     //private CanvasManager canvasManager;
     private bool inventoryPanelHidden = false;
@@ -48,13 +40,7 @@ public class GameManager : MonoBehaviour
         AudioSource[] sources = GetComponents<AudioSource>();
         decidedSound = sources[0];
         attackGodCubeSound = sources[1];
-
-        inventoryButton = GameObject.Find("Canvas/InventoryButton");
-        inventoryPanel = GameObject.Find("Canvas/InventoryPanel");
-        stayButton = GameObject.Find("Canvas/StayButton");
-        drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
-        notificationUIText = GameObject.Find("Canvas/Notification/Label");
-        progressText = GameObject.Find("Canvas/ProgressText");
+        
         //canvasAnimator = canvasObject.GetComponent<Animator>();
         //canvasManager = canvasObject.GetComponent<CanvasManager>();
 
@@ -69,30 +55,12 @@ public class GameManager : MonoBehaviour
 
     public void UpdateProgressText()
     {
-        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold, false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
+        
     }
 
     public void UpdateDrawNumberCardText()
     {
-        GameObject rawimg = drawButton.transform.Find("RawImage").gameObject;
-        TextFade rawimgScript = drawButton.GetComponent<TextFade>();
-        RawImage rawimgComponent = rawimg.GetComponent<RawImage>();
-            
-        rawimgScript.Contents = "Draw a number card and end your turn.";
-        rawimgComponent.color = new Color(1f,1f,1f,1f);
-        //canvasManager.SetCanDrawNumberCard(false);
-
-        if (ply1.NumberCards.Count > 5)
-        {
-            rawimgScript.Contents = "You have more than 6 number cards drawn! You cannot draw anymore.";
-            //canvasManager.SetCanDrawNumberCard(true);
-            rawimgComponent.color = new Color(1,0,0,1f);
-        } else if (ply1.BlackjackTotal(BlackjackThreshold, false) > BlackjackThreshold)
-        {
-            rawimgScript.Contents = "Busted (went over " + BlackjackThreshold.ToString() + ")! Your cards' combative capibilities will be severely tarnished.";
-            rawimgComponent.color = new Color(120f/255f,0,0,1f);
-        }
+        
     }
 
     void RebuildAbilityCardPool()
@@ -134,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public AbilityCard GivePlayerAbilityCard(Player ply)
     {
-        if (abilityCardList.Count > 0) {
+        if (abilityCardList.Count > 0 && abilityCardList.Count < 7) {
             AbilityCard chosenCard = abilityCardList.ElementAt(0);
             ply.AbilityCards.Add(chosenCard);
             abilityCardList.Remove(chosenCard);
@@ -194,19 +162,6 @@ public class GameManager : MonoBehaviour
 
         phase = GamePhase.PlayerTurn;
 
-        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold, false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
-
-        if (ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
-        {
-            drawButton.SetActive(false);
-        } else
-        {
-            GameObject rawimg = drawButton.transform.Find("RawImage").gameObject;
-            RawImage rawimgComponent = rawimg.GetComponent<RawImage>();
-            rawimgComponent.color = new Color(1f,1f,1f,1f);
-        }
-
         UpdateDrawNumberCardText();
         //canvasManager.SetFunctionality(true);
     }
@@ -223,12 +178,6 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator EndRound(bool didStay)
     {
-        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>(); 
-
-        progressTxtObj.text = "card total: <b><color=#8391F1><b>" + ply1.BlackjackTotal(BlackjackThreshold, false).ToString() + "</color>\nthreshold: <b><color=#8391F1><b>" + BlackjackThreshold.ToString() + "</color></b>";
-
-        progressText.SetActive(false);
-        
         string notificationText = "DRAWN";
         if (didStay)
         {
@@ -247,9 +196,6 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-
-        progressText.SetActive(true);
-        progressTxtObj.text = "It's the opponent's turn!";
         phase = GamePhase.AITurn;
 
         yield return new WaitForSeconds(1f);
@@ -671,24 +617,6 @@ public class GameManager : MonoBehaviour
 
         int plyIndex = 1;
         if (owner == ply2) plyIndex = 2;
-
-        for (int i = 0; i < owner.AbilityCards.Count; i++)
-        {
-            AbilityCard abilityCard = owner.AbilityCards[i];
-            if (abilityCard == card) continue;
-
-            GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, ScrollViewContentsObj.transform);
-            Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
-            cardRepresentation.AddComponent<AbilityCardPromptScript>();
-
-            AbilityCardPromptScript cardPromptScript = cardRepresentation.GetComponent<AbilityCardPromptScript>();
-            cardPromptScript.cardIndex = i;
-            cardPromptScript.plyNumber = plyIndex;
-            cardPromptScript.card = card;
-
-            TMP_Text cardText = cardRepresentation.transform.Find("NameLabel").GetComponent<TMP_Text>();
-            cardText.text = abilityCard.name;
-        }
     }
 
     public void PromptForNumberCard(Player owner, string title, string reason, PromptAbilityCard card)
@@ -721,7 +649,7 @@ public class GameManager : MonoBehaviour
         int plyIndex = 1;
         if (owner == ply2) plyIndex = 2;
 
-        for (int i = 0; i < owner.NumberCards.Count; i++)
+        /*for (int i = 0; i < owner.NumberCards.Count; i++)
         {
             NumberCard nmbCard = owner.NumberCards[i];
             GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, ScrollViewContentsObj.transform);
@@ -740,7 +668,7 @@ public class GameManager : MonoBehaviour
             } else {
                 cardText.text = nmbCard.Value.ToString();
             }
-        }
+        }*/
     }
 
     public GameObject InstantiateNumberCard(Transform parent)
@@ -867,10 +795,11 @@ public class GameManager : MonoBehaviour
                 healthText.text = card.Health.ToString();
             }
         }
-        if (ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
+        
+        /*if (ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
         {
             drawButton.SetActive(false);
-        }
+        }*/
 
         // ----- Layout -----
         RepositionCards(parent.transform);
@@ -883,7 +812,7 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < ply1.AbilityCards.Count; i++)
+        /*for (int i = 0; i < ply1.AbilityCards.Count; i++)
         {   
             AbilityCard card = ply1.AbilityCards[i];
             if (card.Drawn) continue;
@@ -894,7 +823,7 @@ public class GameManager : MonoBehaviour
 
             cardRepresentationScript.index = i;
             cardRepresentationLabel.text = card.name;
-        }
+        }*/
     }
 
 
