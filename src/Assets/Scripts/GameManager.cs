@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     public AbilityCard GivePlayerAbilityCard(Player ply)
     {
-        if (abilityCardList.Count > 0 && abilityCardList.Count < 7) {
+        if (abilityCardList.Count > 0 && ply.AbilityCards.Count < 7) {
             AbilityCard chosenCard = abilityCardList.ElementAt(0);
             ply.AbilityCards.Add(chosenCard);
             abilityCardList.Remove(chosenCard);
@@ -815,12 +815,12 @@ public class GameManager : MonoBehaviour
 
     void RebuildInventoryPanel()
     {
-        foreach (Transform child in inventoryPanelScroll.transform)
+        /*foreach (Transform child in inventoryPanelScroll.transform)
         {
             Destroy(child.gameObject);
         }
 
-        /*for (int i = 0; i < ply1.AbilityCards.Count; i++)
+        for (int i = 0; i < ply1.AbilityCards.Count; i++)
         {   
             AbilityCard card = ply1.AbilityCards[i];
             if (card.Drawn) continue;
