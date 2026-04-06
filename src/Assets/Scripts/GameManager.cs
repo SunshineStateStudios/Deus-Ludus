@@ -26,13 +26,6 @@ public class GameManager : MonoBehaviour
     public int BlackjackThreshold = 21;
 
     // Attributes for the drawn/stayed overlay
-    public GameObject notificationUI;
-    public GameObject YouDefense;
-    public GameObject YouAttack;
-    public GameObject OppDefense;
-    public GameObject OppAttack;
-    public GameObject TempYouHp;
-    public GameObject TempOppHp;
     public GameObject cardPrompt;
 
     private AudioSource decidedSound;
@@ -45,8 +38,8 @@ public class GameManager : MonoBehaviour
     private GameObject notificationUIText;
     private GameObject progressText;
 
-    private Animator canvasAnimator;
-    private CanvasManager canvasManager;
+    //private Animator canvasAnimator;
+    //private CanvasManager canvasManager;
     private bool inventoryPanelHidden = false;
     private List<AbilityCard> abilityCardList;
 
@@ -62,14 +55,8 @@ public class GameManager : MonoBehaviour
         drawButton = GameObject.Find("Canvas/DrawNumberCardButton");
         notificationUIText = GameObject.Find("Canvas/Notification/Label");
         progressText = GameObject.Find("Canvas/ProgressText");
-        canvasAnimator = canvasObject.GetComponent<Animator>();
-        canvasManager = canvasObject.GetComponent<CanvasManager>();
-        YouDefense = GameObject.Find("Canvas/YouDefense");
-        YouAttack = GameObject.Find("Canvas/YouAttack");
-        OppDefense = GameObject.Find("Canvas/OppDefense");
-        OppAttack = GameObject.Find("Canvas/OppAttack");
-        TempYouHp = GameObject.Find("Canvas/TempYouHP");
-        TempOppHp = GameObject.Find("Canvas/TempOppHP");
+        //canvasAnimator = canvasObject.GetComponent<Animator>();
+        //canvasManager = canvasObject.GetComponent<CanvasManager>();
 
         ply1 = new Player();
         ply2 = new Player();
@@ -94,12 +81,12 @@ public class GameManager : MonoBehaviour
             
         rawimgScript.Contents = "Draw a number card and end your turn.";
         rawimgComponent.color = new Color(1f,1f,1f,1f);
-        canvasManager.SetCanDrawNumberCard(false);
+        //canvasManager.SetCanDrawNumberCard(false);
 
         if (ply1.NumberCards.Count > 5)
         {
             rawimgScript.Contents = "You have more than 6 number cards drawn! You cannot draw anymore.";
-            canvasManager.SetCanDrawNumberCard(true);
+            //canvasManager.SetCanDrawNumberCard(true);
             rawimgComponent.color = new Color(1,0,0,1f);
         } else if (ply1.BlackjackTotal(BlackjackThreshold, false) > BlackjackThreshold)
         {
@@ -161,15 +148,15 @@ public class GameManager : MonoBehaviour
     IEnumerator ShowUIButtons()
     {
         yield return new WaitForSeconds(3.5f);
-        canvasAnimator.Play("In", 0, 0);
+        //canvasAnimator.Play("In", 0, 0);
     }
 
     IEnumerator StartNewRound()
     {
-        TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
-        TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
-        YouHpTxt.text = ply1.Life.ToString();
-        OppHpTxt.text = ply2.Life.ToString();
+        //TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
+        //TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
+        //YouHpTxt.text = ply1.Life.ToString();
+        //OppHpTxt.text = ply2.Life.ToString();
         
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
@@ -221,17 +208,17 @@ public class GameManager : MonoBehaviour
         }
 
         UpdateDrawNumberCardText();
-        canvasManager.SetFunctionality(true);
+        //canvasManager.SetFunctionality(true);
     }
 
     void ShowNotification(string text, Color colour)
     {
-        TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
+        /*TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
         notificationTxt.text = text;
         decidedSound.Play();
         Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
         notificationUIAnimator.Play("Notification_Popup", 0, 0);
-        notificationTxt.color = colour;
+        notificationTxt.color = colour;*/
     }
 
     public IEnumerator EndRound(bool didStay)
@@ -249,8 +236,8 @@ public class GameManager : MonoBehaviour
         }
 
         ShowNotification(notificationText, new Color(0, 49f/255f, 188f/255f, 1f));
-        canvasAnimator.Play("Out", 0, 0);
-        canvasManager.SetFunctionality(false);
+        //canvasAnimator.Play("Out", 0, 0);
+        //canvasManager.SetFunctionality(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -335,8 +322,8 @@ public class GameManager : MonoBehaviour
         } else
         {
             phase = GamePhase.PlayerTurn;
-            canvasAnimator.Play("In", 0, 0);
-            canvasManager.SetFunctionality(true);
+            //canvasAnimator.Play("In", 0, 0);
+            //canvasManager.SetFunctionality(true);
 
             UpdateDrawNumberCardText();
             UpdateProgressText();
@@ -433,10 +420,10 @@ public class GameManager : MonoBehaviour
     {
         phase = GamePhase.Combat;
 
-        TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
+        //TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
 
-        progressTxtObj.text = "They're gonna fight!";
-        TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
+        //progressTxtObj.text = "They're gonna fight!";
+        //TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
 
         Player whoWon = DetermineBlackjackWinner();
         Player whoLost = ply1;
@@ -446,20 +433,20 @@ public class GameManager : MonoBehaviour
         if (whoWon == ply1) whoLost = ply2;
 
         yield return new WaitForSeconds(1f);
-        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
-        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold, false).ToString();
-        OppAttackTxt.text = ply2.TotalDamage(false).ToString();
+        //TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
+        //TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
+        //OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold, false).ToString();
+        //OppAttackTxt.text = ply2.TotalDamage(false).ToString();
         int YouDef = ply1.TotalHealth(BlackjackThreshold, false);
         int YouAtk = ply1.TotalDamage(false);
         int OppDef = ply2.TotalHealth(BlackjackThreshold, false);
         int OppAtk = ply2.TotalDamage(false);
-        TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
-        TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
+        //TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
+        //TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
 
         decidedSound.Play();
-        Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
-        notificationUIAnimator.Play("Notification_Popup", 0, 0);
+        //Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
+        //notificationUIAnimator.Play("Notification_Popup", 0, 0);
 
         if (whoWon == ply1)
         {
@@ -472,8 +459,8 @@ public class GameManager : MonoBehaviour
                 ply2.Life += OppDef - YouAtk; // formular for Ryzer Hp if you win
                 ply1.Life -= OppDef - YouAtk; // formular for Your Hp if you win
             }
-            YouHpTxt.text = ply1.Life.ToString();
-            OppHpTxt.text = ply2.Life.ToString();
+            //YouHpTxt.text = ply1.Life.ToString();
+            //OppHpTxt.text = ply2.Life.ToString();
 
             StartCoroutine(Fight(whoWon));
 
@@ -601,12 +588,12 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        canvasAnimator.Play("In", 0, 0);
-        canvasManager.SetFunctionality(true);
+        //canvasAnimator.Play("In", 0, 0);
+        //canvasmanager.SetFunctionality(true);
         cardPrompt.SetActive(false);
 
         if (inventoryPanelHidden) {
-            canvasManager.ResolvePanel();
+            //canvasmanager.ResolvePanel();
             inventoryPanelHidden = false;
         }
 
@@ -634,12 +621,12 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        canvasAnimator.Play("In", 0, 0);
-        canvasManager.SetFunctionality(true);
+        //canvasAnimator.Play("In", 0, 0);
+        //canvasmanager.SetFunctionality(true);
         cardPrompt.SetActive(false);
 
         if (inventoryPanelHidden) {
-            canvasManager.ResolvePanel();
+            //canvasmanager.ResolvePanel();
             inventoryPanelHidden = false;
         }
 
@@ -662,11 +649,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (!canvasManager.GetPanelHidden()) inventoryPanelHidden = true;
-        canvasManager.ResolvePanel();
+        //if (!canvasmanager.GetPanelHidden()) inventoryPanelHidden = true;
+        //canvasmanager.ResolvePanel();
 
-        canvasAnimator.Play("Out", 0, 0);
-        canvasManager.SetFunctionality(false);
+        //canvasAnimator.Play("Out", 0, 0);
+        //canvasmanager.SetFunctionality(false);
         cardPrompt.SetActive(true);
 
         Animator inventoryAnimator = GameObject.Find("Canvas/InventoryContainer/Inventory").GetComponent<Animator>();
@@ -711,11 +698,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (!canvasManager.GetPanelHidden()) inventoryPanelHidden = true;
-        canvasManager.ResolvePanel();
+        //if (!canvasmanager.GetPanelHidden()) inventoryPanelHidden = true;
+        //canvasmanager.ResolvePanel();
 
-        canvasAnimator.Play("Out", 0, 0);
-        canvasManager.SetFunctionality(false);
+        //canvasAnimator.Play("Out", 0, 0);
+        //canvasmanager.SetFunctionality(false);
         cardPrompt.SetActive(true);
 
         Animator inventoryAnimator = GameObject.Find("Canvas/InventoryContainer/Inventory").GetComponent<Animator>();
@@ -763,14 +750,14 @@ public class GameManager : MonoBehaviour
 
     public void UpdateAttackDefendText()
     {
-        TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
+        /*TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
         TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
         TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
         TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
         YouDefenseTxt.text = ply1.TotalHealth(BlackjackThreshold, false).ToString();
         YouAttackTxt.text = ply1.TotalDamage(false).ToString();
         OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold).ToString() + "?";
-        OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";
+        OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";*/
     }
 
     public void RemoveAbilityCard(Player ply, int index) {
