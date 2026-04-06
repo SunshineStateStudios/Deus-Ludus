@@ -5,18 +5,22 @@ using TMPro;
 public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public int index;
-    private GameManager gameManager;
-    private GameObject descriptionPanel;
+    public GameManager gameManager;
+    public string desc;
+
     private GameObject nameText;
     private GameObject contentsText;
+    //private GameObject descriptionPanel;
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        descriptionPanel = GameObject.Find("Canvas/InventoryContainer/Inventory/InventoryPanel/DescriptionPanel");
+        //descriptionPanel = GameObject.Find("Canvas/InventoryContainer/Inventory/InventoryPanel/DescriptionPanel");
 
-        nameText = descriptionPanel.transform.Find("NameText").gameObject;
-        contentsText = descriptionPanel.transform.Find("ContentsText").gameObject;
+        TMP_Text nameTextComponent = transform.Find("NameLabel").GetComponent<TMP_Text>();
+        nameTextComponent.text = gameManager.ply1.AbilityCards[index].name;
+
+        //nameText = descriptionPanel.transform.Find("NameText").gameObject;
+        //contentsText = descriptionPanel.transform.Find("ContentsText").gameObject;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -29,19 +33,19 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
         nameTextComponent.text = card.name;
         contentsTextComponent.text = card.description;
-        descriptionPanel.SetActive(true);
+        //descriptionPanel.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (descriptionPanel == null) return;
-        descriptionPanel.SetActive(false);
+        /*if (descriptionPanel == null) return;
+        descriptionPanel.SetActive(false);*/
     }
 
     public void OnDestroy()
     {
-        if (descriptionPanel == null) return;
-        descriptionPanel.SetActive(false);
+        /*if (descriptionPanel == null) return;
+        descriptionPanel.SetActive(false);*/
     }
 
     public void Draw()
