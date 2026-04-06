@@ -34,11 +34,16 @@ public class GameManager : MonoBehaviour
     //private CanvasManager canvasManager;
     private bool inventoryPanelHidden = false;
     private List<AbilityCard> abilityCardList;
+    private CanvasManager canvasManagerScript;
+    private int rounds = 0;
+    private int turns = 0;
 
     void Start()
     {
         //HPControlInst = new HPControl();
         //HPControlInst.InstantiateMothafucka();
+
+        canvasManagerScript = canvasObject.GetComponent<CanvasManager>();
 
         AudioSource[] sources = GetComponents<AudioSource>();
         decidedSound = sources[0];
@@ -123,10 +128,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartNewRound()
     {
-        //TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
-        //TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
-        //YouHpTxt.text = ply1.Life.ToString();
-        //OppHpTxt.text = ply2.Life.ToString();
+        rounds += 1;
+        turns = 1;
+
+        canvasManagerScript.SetRounds(rounds,turns);
         
         ply1.NumberCards.Clear();
         ply2.NumberCards.Clear();
@@ -156,17 +161,6 @@ public class GameManager : MonoBehaviour
         phase = GamePhase.PlayerTurn;
 
         UpdateDrawNumberCardText();
-        //canvasManager.SetFunctionality(true);
-    }
-
-    void ShowNotification(string text, Color colour)
-    {
-        /*TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
-        notificationTxt.text = text;
-        decidedSound.Play();
-        Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
-        notificationUIAnimator.Play("Notification_Popup", 0, 0);
-        notificationTxt.color = colour;*/
     }
 
     public IEnumerator EndRound(bool didStay)
@@ -178,8 +172,6 @@ public class GameManager : MonoBehaviour
         }
 
         ShowNotification(notificationText, new Color(0, 49f/255f, 188f/255f, 1f));
-        //canvasAnimator.Play("Out", 0, 0);
-        //canvasManager.SetFunctionality(false);
 
         yield return new WaitForSeconds(1f);
 
@@ -267,6 +259,9 @@ public class GameManager : MonoBehaviour
             UpdateDrawNumberCardText();
             UpdateProgressText();
         }
+
+        turns += 1;
+        canvasManagerScript.SetRounds(rounds,turns);
     }
 
     void MakeGodCubesPlayAnimation(string animationName, Transform transform)
