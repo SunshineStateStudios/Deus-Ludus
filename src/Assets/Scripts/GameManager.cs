@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        HPControlInst = new HPControl();
+        HPControlInst.InstantiateMothafucka();
+
         AudioSource[] sources = GetComponents<AudioSource>();
         decidedSound = sources[0];
         attackGodCubeSound = sources[1];
@@ -51,7 +54,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartNewRound());
         StartCoroutine(ShowUIButtons());
     }
-    
 
     public void UpdateProgressText()
     {
@@ -130,15 +132,6 @@ public class GameManager : MonoBehaviour
         ply2.NumberCards.Clear();
 
         RebuildAbilityCardPool();
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
-        GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
         GivePlayerAbilityCard(ply1);
@@ -325,10 +318,8 @@ public class GameManager : MonoBehaviour
             defender = ply1;
         }
 
-        int laneCount = Mathf.Min(
-            attacker.NumberCards.Count,
-            defender.NumberCards.Count
-        );
+        int laneCount = attacker.NumberCards.Count;
+        if (defender.NumberCards.Count < laneCount) laneCount = defender.NumberCards.Count;
 
         for (int i = 0; i < laneCount; i++)
         {
@@ -409,15 +400,30 @@ public class GameManager : MonoBehaviour
             //OppHpTxt.text = ply2.Life.ToString();
 
             StartCoroutine(Fight(whoWon));
-
             yield return new WaitForSeconds(2.5f);
-
             StartCoroutine(Fight(whoLost));
+            StartCoroutine(HPControlInst.HPanimation(true)); Debug.Log("FUCK YOU");
+            Debug.Log("yeah");
         } else
         {
             ShowNotification("ENEMY WON\n<color=#FFFFFF>Since they're closest to the Threshold.</color>",new Color(241f/255f, 246f/255f, 86f/255f, 1f));
+            if (YouDef - OppAtk >= 0)
+            {
+                
+            } else
+            {
+                ply1.Life += YouDef - OppAtk; // formular for Your Hp if you lose
+                ply2.Life -= YouDef - OppAtk; // formular for Ryzer Hp if you lose
+            }
+            YouHpTxt.text = ply1.Life.ToString();
+            OppHpTxt.text = ply2.Life.ToString();
+            StartCoroutine(Fight(whoLost));
+            yield return new WaitForSeconds(2.5f);
+            StartCoroutine(Fight(whoWon));
+            StartCoroutine(HPControlInst.HPanimation(false)); Debug.Log("FUCK YOU");
+            Debug.Log("yeah2");
         }
-
+        
         yield return new WaitForSeconds(2f);
 
         // remove expired ability cards
@@ -454,7 +460,9 @@ public class GameManager : MonoBehaviour
 
             if (card.triesPassed >= card.triesDecayTime)
             {
-                Destroy(playerAbilityCards.transform.Find(i.ToString()).gameObject);
+                Transform cardRep = playerAbilityCards.transform.Find(i.ToString());
+                if (cardRep == null) continue;
+                Destroy(cardRep.gameObject);
                 card.Remove(this, ply2, ply1);
                 ply2.AbilityCards.RemoveAt(i);
 

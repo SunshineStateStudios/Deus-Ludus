@@ -15,6 +15,7 @@ public class HPVisual : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.enabled = false;
         StartCoroutine(LateStart());
+        Debug.Log("it workin 1");
     }
 
     IEnumerator LateStart()
@@ -23,23 +24,31 @@ public class HPVisual : MonoBehaviour
         manager = gameManagerObject.GetComponent<GameManager>();
         before = manager.ply1.TotalHealth(manager.BlackjackThreshold, false);
         after = before;
+        Debug.Log("it workin 2");
     }
 
     public IEnumerator flipOrNot()
     {
+        after = manager.ply1.TotalHealth(manager.BlackjackThreshold, false);
+        animator.enabled = true;
         if (after >= id){
-            if (before < id){
-                //flip to show gain
+            if (before < id){           //flip to show gain
                 animator.SetBool("playerHP", true);
                 yield return new WaitForSeconds(.5f);
                 animator.SetBool("YouSide", true);
+                before = after;
             }
         }
         if (after <= id){
-            if (before > id){
-                //flip to show loss
+            if (before > id){           //flip to show loss
+                animator.SetFloat("AnimSpeed", -1.0f);
+                animator.SetBool("playerHP", true);
                 yield return new WaitForSeconds(.5f);
+                animator.SetBool("OppSide", true);
+                animator.SetFloat("AnimSpeed", 1.0f);
+                before = after;
             }
         }
+        animator.enabled = false;
     }
 }
