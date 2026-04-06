@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        HPControlInst = new HPControl();
-        HPControlInst.InstantiateMothafucka();
+        //HPControlInst = new HPControl();
+        //HPControlInst.InstantiateMothafucka();
 
         AudioSource[] sources = GetComponents<AudioSource>();
         decidedSound = sources[0];
@@ -402,7 +402,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(Fight(whoWon));
             yield return new WaitForSeconds(2.5f);
             StartCoroutine(Fight(whoLost));
-            StartCoroutine(HPControlInst.HPanimation(true)); Debug.Log("FUCK YOU");
+            //StartCoroutine(HPControlInst.HPanimation(true)); Debug.Log("FUCK YOU");
             Debug.Log("yeah");
         } else
         {
@@ -415,12 +415,12 @@ public class GameManager : MonoBehaviour
                 ply1.Life += YouDef - OppAtk; // formular for Your Hp if you lose
                 ply2.Life -= YouDef - OppAtk; // formular for Ryzer Hp if you lose
             }
-            YouHpTxt.text = ply1.Life.ToString();
-            OppHpTxt.text = ply2.Life.ToString();
+            //YouHpTxt.text = ply1.Life.ToString();
+            //OppHpTxt.text = ply2.Life.ToString();
             StartCoroutine(Fight(whoLost));
             yield return new WaitForSeconds(2.5f);
             StartCoroutine(Fight(whoWon));
-            StartCoroutine(HPControlInst.HPanimation(false)); Debug.Log("FUCK YOU");
+            //StartCoroutine(HPControlInst.HPanimation(false)); Debug.Log("FUCK YOU");
             Debug.Log("yeah2");
         }
         
