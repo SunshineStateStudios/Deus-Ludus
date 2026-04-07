@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
     // Attributes for the drawn/stayed overlay
     public GameObject cardPrompt;
 
+    public GameObject losingMusicObj; //Music Variables
+    public GameObject winningMusicObj;
+    public GameObject defaultMusicObj;
+
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
     // Misc
@@ -35,6 +39,7 @@ public class GameManager : MonoBehaviour
     private bool inventoryPanelHidden = false;
     private List<AbilityCard> abilityCardList;
     private CanvasManager canvasManagerScript;
+    private MusicController musicController = new MusicController();
     private int rounds = 0;
     private int turns = 0;
 
@@ -42,6 +47,12 @@ public class GameManager : MonoBehaviour
     {
         //HPControlInst = new HPControl();
         //HPControlInst.InstantiateMothafucka();
+
+        musicController.losingMusic = losingMusicObj;
+        musicController.winningMusic = winningMusicObj;
+        musicController.defaultMusic = defaultMusicObj;
+        musicController.Initialise();
+        
 
         canvasManagerScript = canvasObject.GetComponent<CanvasManager>();
 
@@ -383,6 +394,7 @@ public class GameManager : MonoBehaviour
             }
             //YouHpTxt.text = ply1.Life.ToString();
             //OppHpTxt.text = ply2.Life.ToString();
+            musicController.ControlMusic();
             StartCoroutine(Fight(whoLost));
             yield return new WaitForSeconds(2.5f);
             StartCoroutine(Fight(whoWon));
@@ -589,9 +601,6 @@ public class GameManager : MonoBehaviour
 
         TitleLabel.text = title;
         ReasonLabel.text = reason;
-
-        int plyIndex = 1;
-        if (owner == ply2) plyIndex = 2;
     }
 
     public void PromptForNumberCard(Player owner, string title, string reason, PromptAbilityCard card)
@@ -620,9 +629,6 @@ public class GameManager : MonoBehaviour
 
         TitleLabel.text = title;
         ReasonLabel.text = reason;
-
-        int plyIndex = 1;
-        if (owner == ply2) plyIndex = 2;
 
         /*for (int i = 0; i < owner.NumberCards.Count; i++)
         {

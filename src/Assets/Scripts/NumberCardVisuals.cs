@@ -22,7 +22,7 @@ public class NumberCardVisuals : MonoBehaviour
     void Start()
     {
         sound = GetComponent<AudioSource>();
-
+        sound.volume = 0.25f;
         StartCoroutine(CardSound());
     }
 
