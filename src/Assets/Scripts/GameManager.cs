@@ -490,14 +490,8 @@ public class GameManager : MonoBehaviour
                 0f
             );
 
-            Ease ease = Ease.InOutSine;
-            float timeToTween = 1.15f;
-
             if (isAbilityCard)
             {
-                ease = Ease.OutBack;
-                timeToTween = 0.75f;
-
                 if (parent == enemyAbilityCards.transform)
                 {
                     targetPos += new Vector3(-0.8f,0.2f,-5.5f);
@@ -506,8 +500,8 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            card.DOMove(targetPos, timeToTween)
-                .SetEase(ease);
+            card.DOMove(targetPos, 0.5f)
+                .SetEase(Ease.InOutSine);
         }
     }
 
