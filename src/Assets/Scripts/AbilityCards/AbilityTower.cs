@@ -34,7 +34,6 @@ public class AbilityTower : PromptAbilityCard
             .GetComponent<TMP_Text>();
 
         healthText.text = oppCard.Health.ToString();
-        gm.UpdateAttackDefendText();
     }
 
     public override int AICardDecision(Player player) {

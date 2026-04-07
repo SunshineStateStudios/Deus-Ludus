@@ -28,8 +28,6 @@ public class AbilityMagician : AbilityCard
 
             damageText.text = card.Damage.ToString();
         }
-
-        gm.UpdateAttackDefendText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

@@ -28,8 +28,6 @@ public class AbilityMoon : AbilityCard
 
             healthText.text = card.Health.ToString();
         }
-
-        gm.UpdateAttackDefendText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

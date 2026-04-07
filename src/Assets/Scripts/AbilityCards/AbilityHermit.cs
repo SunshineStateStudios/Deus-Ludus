@@ -24,8 +24,6 @@ public class AbilityHermit : AbilityCard
         }
 
         gm.DrawTwice(chosenPly);
-        gm.UpdateAttackDefendText();
-        gm.UpdateProgressText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

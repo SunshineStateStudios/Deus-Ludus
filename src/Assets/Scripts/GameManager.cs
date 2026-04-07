@@ -56,18 +56,10 @@ public class GameManager : MonoBehaviour
         ply2 = new Player();
         deck = new Deck();
 
+        canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
+
         StartCoroutine(StartNewRound());
         StartCoroutine(ShowUIButtons());
-    }
-
-    public void UpdateProgressText()
-    {
-        
-    }
-
-    public void UpdateDrawNumberCardText()
-    {
-        
     }
 
     void RebuildAbilityCardPool()
@@ -160,20 +152,13 @@ public class GameManager : MonoBehaviour
 
         phase = GamePhase.PlayerTurn;
 
-        UpdateDrawNumberCardText();
+        if (!canvasManagerScript.GetActive()) canvasManagerScript.SetActive(true);
     }
 
     public IEnumerator EndRound(bool didStay)
     {
-        string notificationText = "DRAWN";
-        if (didStay)
-        {
-            notificationText = "STAYED";
-        }
-
-        ShowNotification(notificationText, new Color(0, 49f/255f, 188f/255f, 1f));
-
-        yield return new WaitForSeconds(1f);
+        canvasManagerScript.SetActive(false);
+        canvasManagerScript.SetStatus("It's the opponent's turn!");
 
         if (!didStay)
         {
@@ -234,15 +219,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        notificationText = "STAYED";
-
-        if (draw)
-        {
-            notificationText = "DRAWN";
-        }
-
-        ShowNotification(notificationText, new Color(241f/255f, 246f/255f, 86f/255f, 1f));
-
         yield return new WaitForSeconds(1f);
 
         if (draw) { DrawNumberCard(ply2); yield return new WaitForSeconds(0.5f); }
@@ -255,9 +231,6 @@ public class GameManager : MonoBehaviour
             phase = GamePhase.PlayerTurn;
             //canvasAnimator.Play("In", 0, 0);
             //canvasManager.SetFunctionality(true);
-
-            UpdateDrawNumberCardText();
-            UpdateProgressText();
         }
 
         turns += 1;
@@ -382,7 +355,6 @@ public class GameManager : MonoBehaviour
 
         if (whoWon == ply1)
         {
-            ShowNotification("YOU WON\n<color=#FFFFFF>Since you're closest to the Threshold.</color>", new Color(0, 49f/255f, 188f/255f, 1f));
             if (OppDef - YouAtk >= 0)
             {
                 
@@ -401,7 +373,6 @@ public class GameManager : MonoBehaviour
             Debug.Log("yeah");
         } else
         {
-            ShowNotification("ENEMY WON\n<color=#FFFFFF>Since they're closest to the Threshold.</color>",new Color(241f/255f, 246f/255f, 86f/255f, 1f));
             if (YouDef - OppAtk >= 0)
             {
                 
@@ -418,7 +389,8 @@ public class GameManager : MonoBehaviour
             //StartCoroutine(HPControlInst.HPanimation(false)); Debug.Log("FUCK YOU");
             Debug.Log("yeah2");
         }
-        
+
+        canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
         yield return new WaitForSeconds(2f);
 
         // remove expired ability cards
@@ -506,7 +478,7 @@ public class GameManager : MonoBehaviour
                 0f
             );
 
-            Ease ease = Ease.InOutBack;
+            Ease ease = Ease.InOutSine;
             float timeToTween = 1.15f;
 
             if (isAbilityCard)
@@ -679,18 +651,6 @@ public class GameManager : MonoBehaviour
         return Instantiate(numberCard, parent);
     }
 
-    public void UpdateAttackDefendText()
-    {
-        /*TMP_Text YouDefenseTxt = YouDefense.GetComponent<TMP_Text>();
-        TMP_Text YouAttackTxt = YouAttack.GetComponent<TMP_Text>();
-        TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
-        TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        YouDefenseTxt.text = ply1.TotalHealth(BlackjackThreshold, false).ToString();
-        YouAttackTxt.text = ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold).ToString() + "?";
-        OppAttackTxt.text = ply2.TotalDamage().ToString() + "?";*/
-    }
-
     public void RemoveAbilityCard(Player ply, int index) {
         ply.AbilityCards.RemoveAt(index);
         RebuildInventoryPanel();
@@ -754,8 +714,6 @@ public class GameManager : MonoBehaviour
     {
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
-
-        UpdateAttackDefendText();
 
         GameObject parent = (ply == ply2)
             ? enemyNumberCards

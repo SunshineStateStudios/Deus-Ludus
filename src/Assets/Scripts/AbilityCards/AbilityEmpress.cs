@@ -12,18 +12,6 @@ public class AbilityEmpress : AbilityCard
         NumberCard card = new NumberCard(Random.Range(1,5), Random.Range(1,4));
         owner.NumberCards.Add(card);
 
-        gm.UpdateProgressText();
-        gm.UpdateDrawNumberCardText();
-
-        /*TMP_Text YouDefenseTxt = gm.YouDefense.GetComponent<TMP_Text>();
-        TMP_Text YouAttackTxt = gm.YouAttack.GetComponent<TMP_Text>();
-        TMP_Text OppDefenseTxt = gm.OppDefense.GetComponent<TMP_Text>();
-        TMP_Text OppAttackTxt = gm.OppAttack.GetComponent<TMP_Text>();
-        YouDefenseTxt.text = gm.ply1.TotalHealth(gm.BlackjackThreshold, false).ToString();
-        YouAttackTxt.text = gm.ply1.TotalDamage(false).ToString();
-        OppDefenseTxt.text = gm.ply2.TotalHealth(gm.BlackjackThreshold).ToString() + "?";
-        OppAttackTxt.text = gm.ply2.TotalDamage().ToString() + "?";*/
-
         GameObject parent = (owner == gm.ply2)
             ? gm.enemyNumberCards
             : gm.playerNumberCards;

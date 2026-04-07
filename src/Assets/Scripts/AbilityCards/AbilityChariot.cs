@@ -22,9 +22,6 @@ public class AbilityChariot : AbilityCard
             DestroyObjScript.Begone();
             }
         }
-        gm.UpdateAttackDefendText();
-        gm.UpdateProgressText();
-        gm.UpdateDrawNumberCardText();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
