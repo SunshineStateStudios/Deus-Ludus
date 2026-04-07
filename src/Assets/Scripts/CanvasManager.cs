@@ -61,9 +61,7 @@ public class CanvasManager : MonoBehaviour
         healthBarTween?.Kill();
         healthBarTweenPos?.Kill();
 
-        float ratio = (float) ply1HP / (float) ply2HP;
-        ratio = Mathf.Clamp01(ratio);
-
+        float ratio = ply1HP / (float)(ply1HP + ply2HP);
         float targetHeight = ratio * maxHealthbarHeight;
 
         RectTransform healthBarTransform = healthBar.GetComponent<RectTransform>();
