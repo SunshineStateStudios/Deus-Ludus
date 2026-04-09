@@ -617,6 +617,8 @@ MonoBehaviour:
   statusLabel: {fileID: 1030705092}
   enemyHealthLabel: {fileID: 1178005887}
   playerHealthLabel: {fileID: 553974791}
+  playerTotalLabel: {fileID: 1676619321}
+  enemyTotalLabel: {fileID: 1538504682}
   healthBar: {fileID: 193077543}
   AbilityCardPromptPanel: {fileID: 2060057774}
   NumberCardPromptPanel: {fileID: 1533268823}
@@ -4548,7 +4550,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 416.08, y: -257.44504}
+  m_AnchoredPosition: {x: 416.08, y: -265}
   m_SizeDelta: {x: -858.8, y: -540.1657}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1409712799
@@ -4966,7 +4968,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -260.75, y: 284}
-  m_SizeDelta: {x: 521.5, y: 33.2709}
+  m_SizeDelta: {x: 521.5, y: 73.377}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1538504684
 MonoBehaviour:
@@ -4988,7 +4990,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Total: ? + 8/21'
+  m_text: 'Total: ?/21
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
   m_sharedMaterial: {fileID: 4166540614853541441, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
@@ -5015,7 +5019,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 31.05
+  m_fontSize: 68.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5292,8 +5296,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260.75, y: -196.7351}
-  m_SizeDelta: {x: 521.5, y: 33.2709}
+  m_AnchoredPosition: {x: -270.14478, y: -216.78815}
+  m_SizeDelta: {x: 502.7104, y: 73.377}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1676619323
 MonoBehaviour:
@@ -5315,7 +5319,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Total: 17/21'
+  m_text: 'Total: ?/21'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
   m_sharedMaterial: {fileID: 4166540614853541441, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
@@ -5342,7 +5346,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 31.05
+  m_fontSize: 68.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

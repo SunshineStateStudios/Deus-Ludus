@@ -638,6 +638,7 @@ public class GameManager : MonoBehaviour
     {
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
+        canvasManagerScript.CalculateText(ply1, ply2, true);
 
         GameObject parent = (ply == ply2)
             ? enemyNumberCards

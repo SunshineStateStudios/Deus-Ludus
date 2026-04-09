@@ -2,9 +2,6 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-// TODO: make canvasmanager non-functional if player draws or stays
-// TODO: add ability/number card prompts
-
 public class CanvasManager : MonoBehaviour
 {
     public GameObject inventoryObj;
@@ -16,6 +13,8 @@ public class CanvasManager : MonoBehaviour
     public GameObject statusLabel;
     public GameObject enemyHealthLabel;
     public GameObject playerHealthLabel;
+    public GameObject playerTotalLabel;
+    public GameObject enemyTotalLabel;
     public GameObject healthBar;
     public GameObject AbilityCardPromptPanel;
     public GameObject NumberCardPromptPanel;
@@ -50,6 +49,19 @@ public class CanvasManager : MonoBehaviour
             timerLabelText.text = minutes.ToString() + ":0" + seconds.ToString();
         } else {
             timerLabelText.text = minutes.ToString() + ":" + seconds.ToString();
+        }
+    }
+
+    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true) {
+        TMP_Text plyTotalText = playerTotalLabel.GetComponent<TMP_Text>();
+        TMP_Text enemyTotalText = enemyTotalLabel.GetComponent<TMP_Text>();
+
+        plyTotalText.text = "Total: " + ply1.BlackjackTotal(gameManagerScript.BlackjackThreshold, false).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
+        
+        if (hideFirstCard) {
+            enemyTotalText.text = "Total: ? + " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, true).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
+        } else {
+            enemyTotalText.text = "Total: " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, false).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         }
     }
 
