@@ -6,8 +6,7 @@ public class MusicController
     public GameObject losingMusic;
     public GameObject winningMusic;
     public GameObject defaultMusic;
-    public GameManager gm;
-    public int yourHp;
+    public int yourHp = 0;
     
 
     private AudioSource losingAudio;
@@ -24,7 +23,7 @@ public class MusicController
         defaultAudio.Play();
     }
 
-    public void ControlMusic()
+    public void ControlMusic(GameManager gm)
     {
         yourHp = gm.ply1.Life;
         if (yourHp >= 9)

@@ -177,7 +177,6 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         phase = GamePhase.AITurn;
-
         yield return new WaitForSeconds(1f);
 
         bool draw = false;
@@ -393,7 +392,6 @@ public class GameManager : MonoBehaviour
             }
             //YouHpTxt.text = ply1.Life.ToString();
             //OppHpTxt.text = ply2.Life.ToString();
-            musicController.ControlMusic();
             StartCoroutine(Fight(whoLost));
             yield return new WaitForSeconds(2.5f);
             StartCoroutine(Fight(whoWon));
@@ -401,6 +399,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("yeah2");
         }
 
+        musicController.ControlMusic(this);
         canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
         yield return new WaitForSeconds(2f);
 
