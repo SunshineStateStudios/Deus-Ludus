@@ -17,6 +17,9 @@ public class CanvasManager : MonoBehaviour
     public GameObject enemyHealthLabel;
     public GameObject playerHealthLabel;
     public GameObject healthBar;
+    public GameObject AbilityCardPromptPanel;
+    public GameObject NumberCardPromptPanel;
+    public GameObject NumberCardButtonPrompt;
 
     private bool inventoryPanelHidden = true;
     private bool active = true;
@@ -47,6 +50,32 @@ public class CanvasManager : MonoBehaviour
             timerLabelText.text = minutes.ToString() + ":0" + seconds.ToString();
         } else {
             timerLabelText.text = minutes.ToString() + ":" + seconds.ToString();
+        }
+    }
+
+    public void PromptForNumberCard(PromptAbilityCard card) {
+        NumberCardPromptPanel.SetActive(true);
+
+        Transform contents = NumberCardPromptPanel.transform.Find("Contents");
+        TMP_Text headerTwT = NumberCardPromptPanel.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>();
+        headerTwT.text = "Choose a number card... (" + card.name + ")";
+
+        for (int i = 0; i < gameManagerScript.ply1.NumberCards.Count; i++) {
+            NumberCard numbCard = gameManagerScript.ply1.NumberCards[i];
+            GameObject buttonPrompt = Instantiate(NumberCardButtonPrompt, contents);
+
+            TMP_Text valueLabel = buttonPrompt.transform.Find("ValueLabel").gameObject.GetComponent<TMP_Text>();
+            TMP_Text damageLabel = buttonPrompt.transform.Find("DamageLabel").gameObject.GetComponent<TMP_Text>();
+            TMP_Text healthLabel = buttonPrompt.transform.Find("HealthLabel").gameObject.GetComponent<TMP_Text>();
+
+            valueLabel.text = numbCard.Value.ToString();
+            damageLabel.text = numbCard.Damage.ToString();
+            healthLabel.text = numbCard.Health.ToString();
+
+            NumberCardPromptScript promptScript = buttonPrompt.GetComponent<NumberCardPromptScript>();
+            promptScript.cardIndex = i;
+            promptScript.card = card;
+            promptScript.gameManager = gameManagerScript;
         }
     }
 
@@ -142,9 +171,11 @@ public class CanvasManager : MonoBehaviour
 
             for (int i = 0; i < gameManagerScript.ply1.AbilityCards.Count; i++) {
                 AbilityCard card = gameManagerScript.ply1.AbilityCards[i];
-                Debug.Log(i);
 
                 GameObject uiRepresentation = Instantiate(AbilityCardUIPrefab, inventoryList);
+                TMP_Text nameLabel = uiRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();
+                nameLabel.text = card.name;
+
                 AbilityCardUIScript uiScript = uiRepresentation.GetComponent<AbilityCardUIScript>();
 
                 uiScript.gameManager = gameManagerScript;

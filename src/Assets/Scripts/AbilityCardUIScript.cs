@@ -18,12 +18,12 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        Debug.Log("oh");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
+        Debug.Log("orrr");
     }
 
     public void OnDestroy()
@@ -33,6 +33,7 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void Draw()
     {
+        Debug.Log("AH");
         gameManager.DrawAbilityCard(1, index);
     }
 }
