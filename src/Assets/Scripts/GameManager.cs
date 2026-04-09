@@ -24,9 +24,6 @@ public class GameManager : MonoBehaviour
     public GameObject inventoryPanelScroll;
     public int BlackjackThreshold = 21;
 
-    // Attributes for the drawn/stayed overlay
-    public GameObject cardPrompt;
-
     public GameObject losingMusicObj; //Music Variables
     public GameObject winningMusicObj;
     public GameObject defaultMusicObj;
@@ -77,7 +74,7 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
 
-        abilityCardList.Add(new AbilityDeath());
+        /*abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityDevil());
         abilityCardList.Add(new AbilityEmperor());
         abilityCardList.Add(new AbilityEmpress());
@@ -97,7 +94,11 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityHighPriestess());
         abilityCardList.Add(new AbilityMagician());
         abilityCardList.Add(new AbilityHermit());
-        abilityCardList.Add(new AbilityHangedMan());
+        abilityCardList.Add(new AbilityHangedMan());*/
+
+        for (int i = 0; i < 50; i++) {
+            abilityCardList.Add(new AbilityJudgement());
+        }
 
         // Scramble the list!
         int n = abilityCardList.Count;
@@ -146,8 +147,6 @@ public class GameManager : MonoBehaviour
         GivePlayerAbilityCard(ply1);
 
         GivePlayerAbilityCard(ply2);
-
-        RebuildInventoryPanel();
 
         for (int i = 0; i < 2; i++)
         {
@@ -509,27 +508,15 @@ public class GameManager : MonoBehaviour
     {
         if (owner.NumberCards[index] == null) return;
 
-        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
-        foreach (Transform child in ScrollViewContentsObj.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        //canvasAnimator.Play("In", 0, 0);
-        //canvasmanager.SetFunctionality(true);
-        cardPrompt.SetActive(false);
-
-        if (inventoryPanelHidden) {
-            //canvasmanager.ResolvePanel();
-            inventoryPanelHidden = false;
-        }
+        canvasManagerScript.HidePrompt();
+        canvasManagerScript.SetActive(true);
+        canvasManagerScript.SetStatus("It's your turn!");
 
         Player opponent = ply2;
         if (owner == ply2) opponent = ply1;
 
         card.PromptChosen(this, owner, opponent, index);
     }
-
 
     public void AnswerNumberCardPrompt(int owner, int index, PromptAbilityCard card)
     {
@@ -539,23 +526,12 @@ public class GameManager : MonoBehaviour
         AnswerNumberCardPrompt(ply, index, card);
     }
 
-    public void AnswerAbilityCardPrompt(Player ply, int index, PromptAbilityCardAlt card) {
+    public void AnswerAbilityCardPrompt(Player ply, int index, PromptAbilityCard card) {
         if (ply.AbilityCards[index] == null) return;
 
-        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
-        foreach (Transform child in ScrollViewContentsObj.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        //canvasAnimator.Play("In", 0, 0);
-        //canvasmanager.SetFunctionality(true);
-        cardPrompt.SetActive(false);
-
-        if (inventoryPanelHidden) {
-            //canvasmanager.ResolvePanel();
-            inventoryPanelHidden = false;
-        }
+        canvasManagerScript.HidePrompt();
+        canvasManagerScript.SetActive(true);
+        canvasManagerScript.SetStatus("It's your turn!");
 
         Player opponent = ply2;
         if (ply == ply2) opponent = ply1;
@@ -563,87 +539,36 @@ public class GameManager : MonoBehaviour
         card.PromptChosen(this, ply, opponent, index);
     }
 
-    public void AnswerAbilityCardPrompt(int ply, int index, PromptAbilityCardAlt card) {
+    public void AnswerAbilityCardPrompt(int ply, int index, PromptAbilityCard card) {
         Player plyChosen = ply1;
         if (ply == 2) plyChosen = ply2;
 
         AnswerAbilityCardPrompt(plyChosen, index, card);
     }
 
-    public void PromptForAbilityCard(Player owner, string title, string reason, PromptAbilityCardAlt card) {
+    public void PromptForAbilityCard(Player owner, PromptAbilityCard card) {
         if (owner == ply2) {
             AnswerAbilityCardPrompt(ply2, card.AICardDecision(owner), card);
             return;
         }
 
-        //if (!canvasmanager.GetPanelHidden()) inventoryPanelHidden = true;
-        //canvasmanager.ResolvePanel();
-
-        //canvasAnimator.Play("Out", 0, 0);
-        //canvasmanager.SetFunctionality(false);
-        cardPrompt.SetActive(true);
-
-        Animator inventoryAnimator = GameObject.Find("Canvas/InventoryContainer/Inventory").GetComponent<Animator>();
-        inventoryAnimator.Play("In", 0, 0);
-
-        GameObject TitleLabelObj = cardPrompt.transform.Find("TitleLabel").gameObject;
-        GameObject ReasonLabelObj = cardPrompt.transform.Find("ReasonLabel").gameObject;
-        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
-
-        TMP_Text TitleLabel = TitleLabelObj.GetComponent<TMP_Text>();
-        TMP_Text ReasonLabel = ReasonLabelObj.GetComponent<TMP_Text>();
-
-        TitleLabel.text = title;
-        ReasonLabel.text = reason;
+        if (!canvasManagerScript.IsInventoryPanelHidden()) canvasManagerScript.ResolvePanel();
+        canvasManagerScript.SetActive(false);
+        canvasManagerScript.SetStatus("Choose an ability card!");
+        canvasManagerScript.ShowPrompt("ability", owner, card);
     }
 
-    public void PromptForNumberCard(Player owner, string title, string reason, PromptAbilityCard card)
+    public void PromptForNumberCard(Player owner, PromptAbilityCard card)
     {
         if (owner == ply2) {
             AnswerNumberCardPrompt(2, card.AICardDecision(owner), card);
             return;
         }
 
-        //if (!canvasmanager.GetPanelHidden()) inventoryPanelHidden = true;
-        //canvasmanager.ResolvePanel();
-
-        //canvasAnimator.Play("Out", 0, 0);
-        //canvasmanager.SetFunctionality(false);
-        cardPrompt.SetActive(true);
-
-        Animator inventoryAnimator = GameObject.Find("Canvas/InventoryContainer/Inventory").GetComponent<Animator>();
-        inventoryAnimator.Play("In", 0, 0);
-
-        GameObject TitleLabelObj = cardPrompt.transform.Find("TitleLabel").gameObject;
-        GameObject ReasonLabelObj = cardPrompt.transform.Find("ReasonLabel").gameObject;
-        GameObject ScrollViewContentsObj = cardPrompt.transform.Find("Scroll View/Viewport/Content").gameObject;
-
-        TMP_Text TitleLabel = TitleLabelObj.GetComponent<TMP_Text>();
-        TMP_Text ReasonLabel = ReasonLabelObj.GetComponent<TMP_Text>();
-
-        TitleLabel.text = title;
-        ReasonLabel.text = reason;
-
-        /*for (int i = 0; i < owner.NumberCards.Count; i++)
-        {
-            NumberCard nmbCard = owner.NumberCards[i];
-            GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, ScrollViewContentsObj.transform);
-            Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
-            cardRepresentation.AddComponent<CardPromptScript>();
-
-            CardPromptScript cardPrompt = cardRepresentation.GetComponent<CardPromptScript>();
-            cardPrompt.cardIndex = i;
-            cardPrompt.plyNumber = plyIndex;
-            cardPrompt.card = card;
-
-            TMP_Text cardText = cardRepresentation.transform.Find("NameLabel").GetComponent<TMP_Text>();
-
-            if (nmbCard.Value == 12) {
-                cardText.text = "A";
-            } else {
-                cardText.text = nmbCard.Value.ToString();
-            }
-        }*/
+        if (!canvasManagerScript.IsInventoryPanelHidden()) canvasManagerScript.ResolvePanel();
+        canvasManagerScript.SetActive(false);
+        canvasManagerScript.SetStatus("Choose a number card!");
+        canvasManagerScript.ShowPrompt("number", owner, card);
     }
 
     public GameObject InstantiateNumberCard(Transform parent)
@@ -653,7 +578,6 @@ public class GameManager : MonoBehaviour
 
     public void RemoveAbilityCard(Player ply, int index) {
         ply.AbilityCards.RemoveAt(index);
-        RebuildInventoryPanel();
     }
 
     public void RemoveNumberCard(Player ply, int index)
@@ -766,28 +690,6 @@ public class GameManager : MonoBehaviour
         RepositionCards(parent.transform);
     }
 
-    void RebuildInventoryPanel()
-    {
-        /*foreach (Transform child in inventoryPanelScroll.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        for (int i = 0; i < ply1.AbilityCards.Count; i++)
-        {   
-            AbilityCard card = ply1.AbilityCards[i];
-            if (card.Drawn) continue;
-
-            GameObject cardRepresentation = Instantiate(abilityCardUIPrefab, inventoryPanelScroll.transform);
-            AbilityCardUIScript cardRepresentationScript = cardRepresentation.GetComponent<AbilityCardUIScript>();
-            TMP_Text cardRepresentationLabel = cardRepresentation.transform.Find("NameLabel").gameObject.GetComponent<TMP_Text>();
-
-            cardRepresentationScript.index = i;
-            cardRepresentationLabel.text = card.name;
-        }*/
-    }
-
-
     public void DrawAbilityCard(Player ply, int index)
     {
         ply.AbilityCards[index].Drawn = true;
@@ -796,7 +698,8 @@ public class GameManager : MonoBehaviour
         if (ply == ply2) oppPly = ply1;
 
         ply.AbilityCards[index].Apply(this, ply, oppPly);
-        RebuildInventoryPanel();
+
+        if (ply == ply1) canvasManagerScript.RebuildInventoryPanel();
 
         // Summon ability card visually
         Transform parent = playerAbilityCards.transform;

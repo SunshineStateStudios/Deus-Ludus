@@ -1055,7 +1055,6 @@ MonoBehaviour:
   attackGodCubeClip: {fileID: 8300000, guid: fc4bfbc86814f524587fb5a959497ebb, type: 3}
   inventoryPanelScroll: {fileID: 0}
   BlackjackThreshold: 21
-  cardPrompt: {fileID: 0}
   losingMusicObj: {fileID: 114911650}
   winningMusicObj: {fileID: 960421182}
   defaultMusicObj: {fileID: 1333455136}
@@ -3046,7 +3045,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 42
+  field of view: 34.8
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3073,7 +3072,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.08, y: 6.14, z: -23.33}
+  m_LocalPosition: {x: -2.698, y: 7.967, z: -23.927}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3456,7 +3455,7 @@ Transform:
   m_GameObject: {fileID: 1115377588}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8, y: 0.2, z: -14.03}
+  m_LocalPosition: {x: -0.8, y: 0.2, z: -14.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3671,7 +3670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4007,7 +4006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4681,7 +4680,7 @@ Transform:
   m_GameObject: {fileID: 1415912175}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -4.309, y: 0.122, z: -39.82}
+  m_LocalPosition: {x: -3.142, y: 0.122, z: -25.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

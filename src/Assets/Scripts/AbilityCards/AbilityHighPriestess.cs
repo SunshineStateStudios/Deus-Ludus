@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class AbilityHighPriestess : PromptAbilityCardAlt
+public class AbilityHighPriestess : PromptAbilityCard
 {
     public override string name => "High Priestess";
     public override string description => "Sacrifice an ability you hold to reveal the opponent's hidden card.";
@@ -9,7 +9,7 @@ public class AbilityHighPriestess : PromptAbilityCardAlt
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        gm.PromptForAbilityCard(owner, "Choose an Ability Card!", "The High Priestess card calls for it...", this);
+        gm.PromptForAbilityCard(owner, this);
     }
 
     public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)

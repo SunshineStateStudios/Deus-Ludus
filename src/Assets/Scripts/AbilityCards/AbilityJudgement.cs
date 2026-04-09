@@ -9,7 +9,7 @@ public class AbilityJudgement : PromptAbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        gm.PromptForNumberCard(owner, "Choose a Number Card!", "The Judgement card calls for it...", this);
+        gm.PromptForNumberCard(owner, this);
     }
 
     public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)

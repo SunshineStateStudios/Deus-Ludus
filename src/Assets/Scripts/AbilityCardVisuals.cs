@@ -9,15 +9,15 @@ public class AbilityCardVisuals : MonoBehaviour
 
     void Start()
     {
-        whiteOverlayScript = GameObject.Find("Canvas/WhiteOverlay").GetComponent<WhiteFlash>();
-        whiteOverlayScript.Flash(new Color(1f,1f,1f,0.5f));
+        //whiteOverlayScript = GameObject.Find("Canvas/WhiteOverlay").GetComponent<WhiteFlash>();
+        //whiteOverlayScript.Flash(new Color(1f,1f,1f,0.5f));
     }
 
     void OnMouseEnter() {
-        canvas.SetActive(true);
+        //canvas.SetActive(true);
     }
 
     void OnMouseExit() {
-        canvas.SetActive(false);
+        //canvas.SetActive(false);
     }
 }

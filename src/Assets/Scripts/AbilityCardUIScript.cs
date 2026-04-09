@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using TMPro;
+using UnityEngine.UI;
 
-public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class AbilityCardUIScript : MonoBehaviour
 {
     public int index;
     public GameManager gameManager;
@@ -10,30 +9,15 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private GameObject nameText;
     private GameObject contentsText;
+    private Button button;
 
     void Start()
     {
-        
+        button = GetComponent<Button>();
+        button.onClick.AddListener(CallbackPrompt);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("oh");
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Debug.Log("orrr");
-    }
-
-    public void OnDestroy()
-    {
-        
-    }
-
-    public void Draw()
-    {
-        Debug.Log("AH");
+    void CallbackPrompt() {
         gameManager.DrawAbilityCard(1, index);
     }
 }

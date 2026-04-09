@@ -151,6 +151,97 @@ public class CanvasManager : MonoBehaviour
         SetStatus(status, new Color(1f,1f,1f,1f));
     }
 
+    public void RebuildInventoryPanel() {
+        Transform inventoryList = transform.Find("InventoryPanel/Panel");
+        TMP_Text cardsCount = transform.Find("InventoryPanel/CardsCount").GetComponent<TMP_Text>();
+        cardsCount.text = gameManagerScript.ply1.AbilityCards.Count.ToString() + "/7";
+
+        foreach (Transform child in inventoryList) {
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < gameManagerScript.ply1.AbilityCards.Count; i++) {
+            AbilityCard card = gameManagerScript.ply1.AbilityCards[i];
+            if (card.Drawn) continue;
+
+            GameObject uiRepresentation = Instantiate(AbilityCardUIPrefab, inventoryList);
+            uiRepresentation.name = i.ToString();
+                
+            TMP_Text nameLabel = uiRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();
+            nameLabel.text = card.name;
+
+            AbilityCardUIScript uiScript = uiRepresentation.GetComponent<AbilityCardUIScript>();
+
+            uiScript.gameManager = gameManagerScript;
+            uiScript.index = i;
+        }
+    }
+
+    public void HidePrompt() {
+        NumberCardPromptPanel.SetActive(false);
+        AbilityCardPromptPanel.SetActive(false);
+    }
+
+    public void ShowPrompt(string type, Player ply, PromptAbilityCard card) {
+        if (type.Equals("number")) {
+            NumberCardPromptPanel.SetActive(true);
+
+            Transform promptContents = NumberCardPromptPanel.transform.Find("Contents");
+            TMP_Text titleText = NumberCardPromptPanel.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>();
+
+            titleText.text = "Choose a number card... (" + card.name + ")";
+
+            for (int i = 0; i < ply.NumberCards.Count; i++) {
+                NumberCard numbCard = ply.NumberCards[i];
+                GameObject cardRepresentation = Instantiate(NumberCardButtonPrompt, promptContents);
+
+                TMP_Text valueLabel = cardRepresentation.transform.Find("ValueLabel").gameObject.GetComponent<TMP_Text>();
+                TMP_Text damageLabel = cardRepresentation.transform.Find("DamageLabel").gameObject.GetComponent<TMP_Text>();
+                TMP_Text healthLabel = cardRepresentation.transform.Find("HealthLabel").gameObject.GetComponent<TMP_Text>();
+
+                valueLabel.text = numbCard.Value.ToString();
+                damageLabel.text = numbCard.Damage.ToString();
+                healthLabel.text = numbCard.Health.ToString();
+
+                NumberCardPromptScript promptScript = cardRepresentation.GetComponent<NumberCardPromptScript>();
+                promptScript.cardIndex = i;
+                promptScript.card = card;
+                promptScript.gameManager = gameManagerScript;
+            }
+
+            return;
+        }
+
+        AbilityCardPromptPanel.SetActive(true);
+
+        Transform promptContentsAbility = AbilityCardPromptPanel.transform.Find("Contents");
+        TMP_Text titleTextAbility = AbilityCardPromptPanel.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>();
+
+        titleTextAbility.text = "Choose an ability card... (" + card.name + ")";
+
+        for (int i = 0; i < ply.AbilityCards.Count; i++) {
+            AbilityCard abilityCard = ply.AbilityCards[i];
+            if (abilityCard.Drawn) continue;
+
+            GameObject cardRepresentation = Instantiate(AbilityCardUIPrefab, promptContentsAbility);
+            Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
+
+            TMP_Text nameLabel = cardRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();
+            nameLabel.text = abilityCard.name.ToString();
+
+            cardRepresentation.AddComponent<AbilityCardPromptScript>();
+
+            AbilityCardPromptScript promptScript = cardRepresentation.GetComponent<AbilityCardPromptScript>();
+            promptScript.cardIndex = i;
+            promptScript.card = card;
+            promptScript.gameManager = gameManagerScript;
+        }
+    }
+
+    public bool IsInventoryPanelHidden() {
+        return inventoryPanelHidden;
+    }
+
     public void ResolvePanel(bool hide) {
         if (!active) return;
         inventoryPanelHidden = hide;
@@ -160,27 +251,7 @@ public class CanvasManager : MonoBehaviour
             inventoryAnimator.Play("InventoryClose", 0, 0);
         } else {
             inventoryAnimator.Play("InventoryOpen", 0, 0);
-
-            Transform inventoryList = transform.Find("InventoryPanel/Panel");
-            TMP_Text cardsCount = transform.Find("InventoryPanel/CardsCount").GetComponent<TMP_Text>();
-            cardsCount.text = gameManagerScript.ply1.AbilityCards.Count.ToString() + "/7";
-
-            foreach (Transform child in inventoryList) {
-                Destroy(child.gameObject);
-            }
-
-            for (int i = 0; i < gameManagerScript.ply1.AbilityCards.Count; i++) {
-                AbilityCard card = gameManagerScript.ply1.AbilityCards[i];
-
-                GameObject uiRepresentation = Instantiate(AbilityCardUIPrefab, inventoryList);
-                TMP_Text nameLabel = uiRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();
-                nameLabel.text = card.name;
-
-                AbilityCardUIScript uiScript = uiRepresentation.GetComponent<AbilityCardUIScript>();
-
-                uiScript.gameManager = gameManagerScript;
-                uiScript.index = i;
-            }
+            RebuildInventoryPanel();
         }
     }
 
