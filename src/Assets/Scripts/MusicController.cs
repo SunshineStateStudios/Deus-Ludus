@@ -28,13 +28,13 @@ public class MusicController
         yourHp = gm.ply1.Life;
         if (yourHp >= 9)
         {
-            losingAudio.volume = 1f;
-            winningAudio.volume = 0f;
+            losingAudio.volume = 0f;
+            winningAudio.volume = 1f;
             defaultAudio.volume = 0f;
         } else if (yourHp <= 11)
         {
-            losingAudio.volume = 0f;
-            winningAudio.volume = 1f;
+            losingAudio.volume = 1f;
+            winningAudio.volume = 0f;
             defaultAudio.volume = 0f;
         } else
         {
