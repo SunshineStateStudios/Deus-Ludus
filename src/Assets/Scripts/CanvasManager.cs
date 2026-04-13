@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using System.Collections;
 
 public class CanvasManager : MonoBehaviour
 {
@@ -29,12 +30,15 @@ public class CanvasManager : MonoBehaviour
     private Tween healthBarTween;
     private Tween healthBarTweenPos;
     private float maxHealthbarHeight = 431.6709f;
+    private Animator plyTotalLabelAnimator;
+    private bool alreadyFlourished = false;
 
     void Start()
     {
         gameManagerScript = gameManager.GetComponent<GameManager>();
         inventoryAnimator = inventoryObj.GetComponent<Animator>();
         canvasAnimator = GetComponent<Animator>();
+        plyTotalLabelAnimator = playerTotalLabel.GetComponent<Animator>();
     }
 
     void Update() {
@@ -52,17 +56,40 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true) {
+    void FlourishTotal() {
+        AudioSource flourishSound = GetComponents<AudioSource>()[0];
+        flourishSound.Play();
+
+        plyTotalLabelAnimator.Play("Flourish", 0, 0);
+    }
+
+    IEnumerator UpdateText(Player ply1, Player ply2, bool hideFirstCard) {
+        yield return new WaitForSeconds(2f);
+
         TMP_Text plyTotalText = playerTotalLabel.GetComponent<TMP_Text>();
         TMP_Text enemyTotalText = enemyTotalLabel.GetComponent<TMP_Text>();
 
-        plyTotalText.text = "Total: " + ply1.BlackjackTotal(gameManagerScript.BlackjackThreshold, false).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
+        int total = ply1.BlackjackTotal(gameManagerScript.BlackjackThreshold, false);
+        if (total > gameManagerScript.BlackjackThreshold) {
+            if (!alreadyFlourished) {
+                alreadyFlourished = true;
+                FlourishTotal();
+            }
+        } else {
+            if (alreadyFlourished) alreadyFlourished = false;
+        }
+
+        plyTotalText.text = "Total: " + total.ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         
         if (hideFirstCard) {
             enemyTotalText.text = "Total: ? + " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, true).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         } else {
             enemyTotalText.text = "Total: " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, false).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         }
+    }
+
+    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true) { // Updating the text requires a delay
+        StartCoroutine(UpdateText(ply1, ply2, hideFirstCard));
     }
 
     public void PromptForNumberCard(PromptAbilityCard card) {
