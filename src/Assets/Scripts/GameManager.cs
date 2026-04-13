@@ -141,7 +141,6 @@ public class GameManager : MonoBehaviour
             DrawNumberCard(ply1);
 
         phase = GamePhase.AITurn;
-
         yield return new WaitForSeconds(1f);
 
         for (int i = ply2.AbilityCards.Count - 1; i >= 0; i--)
