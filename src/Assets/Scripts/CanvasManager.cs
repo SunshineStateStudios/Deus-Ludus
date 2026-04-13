@@ -107,9 +107,15 @@ public class CanvasManager : MonoBehaviour
             TMP_Text damageLabel = buttonPrompt.transform.Find("DamageLabel").gameObject.GetComponent<TMP_Text>();
             TMP_Text healthLabel = buttonPrompt.transform.Find("HealthLabel").gameObject.GetComponent<TMP_Text>();
 
-            valueLabel.text = numbCard.Value.ToString();
-            damageLabel.text = numbCard.Damage.ToString();
-            healthLabel.text = numbCard.Health.ToString();
+            if (numbCard.Value == 12) {
+                valueLabel.text = "A";
+                damageLabel.text = "1/11";
+                healthLabel.text = "11/1";
+            } else {
+                valueLabel.text = numbCard.Value.ToString();
+                damageLabel.text = numbCard.Damage.ToString();
+                healthLabel.text = numbCard.Health.ToString();
+            }
 
             NumberCardPromptScript promptScript = buttonPrompt.GetComponent<NumberCardPromptScript>();
             promptScript.cardIndex = i;
@@ -138,6 +144,7 @@ public class CanvasManager : MonoBehaviour
     }
 
     public void SetActive(bool setting) {
+        Debug.Log("er");
         canvasAnimator.ResetControllerState();
         if (setting) {
             canvasAnimator.Play("Show", 0, 0);
