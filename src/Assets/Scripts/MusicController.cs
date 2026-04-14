@@ -25,47 +25,46 @@ public class MusicController
         winningAudio.Play();
         defaultAudio.Play();
     }
-    public IEnumerator musicFade(AudioSource music, float duration, float targetVolume)
+    /*public IEnumerator musicFade(AudioSource music, float duration, float targetVolume)
     {
         float currentTime = 0;
         float start = music.volume;
-        while (currentTime <= duration)
+        while (currentTime < duration)
         {
             currentTime += Time.deltaTime;
             music.volume = Mathf.Lerp(start, targetVolume, currentTime / duration);
             yield return null;
         }
         music.volume = targetVolume;
-    }
-
+    }*/
     public void ControlMusic(GameManager gm)
     {
         yourHp = gm.ply1.Life;
         if (yourHp <= 9)
         {
-            losingAudio.volume = 0.5f;
+            losingAudio.volume = 1f;
             winningAudio.volume = 0;
             defaultAudio.volume = 0;
-            StartCoroutine(musicFade(losingAudio, 2f, 1f));
-            StartCoroutine(musicFade(winningAudio, 2f, 0f));
-            StartCoroutine(musicFade(defaultAudio, 2f, 0f));
+            //StartCoroutine(musicFade(losingAudio, 2f, 1f));
+            //StartCoroutine(musicFade(winningAudio, 2f, 0f));
+            //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
             
         } else if (yourHp >= 11)
         {
             losingAudio.volume = 0;
-            winningAudio.volume = 0.5f;
+            winningAudio.volume = 1f;
             defaultAudio.volume = 0;
-            StartCoroutine(musicFade(losingAudio, 2f, 0f));
-            StartCoroutine(musicFade(winningAudio, 2f, 1f));
-            StartCoroutine(musicFade(defaultAudio, 2f, 0f));
+            //StartCoroutine(musicFade(losingAudio, 2f, 0f));
+            //StartCoroutine(musicFade(winningAudio, 2f, 1f));
+            //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
         } else
         {
             losingAudio.volume = 0;
             winningAudio.volume = 0;
-            defaultAudio.volume = 0.5f;
-            StartCoroutine(musicFade(losingAudio, 2f, 0f));
-            StartCoroutine(musicFade(winningAudio, 2f, 0f));
-            StartCoroutine(musicFade(defaultAudio, 2f, 1f));
+            defaultAudio.volume = 1f;
+            //StartCoroutine(musicFade(losingAudio, 2f, 0f));
+            //StartCoroutine(musicFade(winningAudio, 2f, 0f));
+            //StartCoroutine(musicFade(defaultAudio, 2f, 1f));
 
         }
     }

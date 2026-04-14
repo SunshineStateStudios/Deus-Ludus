@@ -640,10 +640,9 @@ public class GameManager : MonoBehaviour
             //StartCoroutine(HPControlInst.HPanimation(false)); Debug.Log("FUCK YOU");
             Debug.Log("yeah2");
         }
-
-        musicController.ControlMusic();
         canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
         yield return new WaitForSeconds(2f);
+        musicController.ControlMusic(this);
 
         // remove expired ability cards
         // ply
