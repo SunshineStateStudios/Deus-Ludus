@@ -14,12 +14,15 @@ public class CanvasManager : MonoBehaviour
     public GameObject statusLabel;
     public GameObject enemyHealthLabel;
     public GameObject playerHealthLabel;
+    public GameObject playerADLabel;
+    public GameObject enemyADLabel;
     public GameObject playerTotalLabel;
     public GameObject enemyTotalLabel;
     public GameObject healthBar;
     public GameObject AbilityCardPromptPanel;
     public GameObject NumberCardPromptPanel;
     public GameObject NumberCardButtonPrompt;
+    public GameObject InventoryDescriptionPanel;
 
     private bool inventoryPanelHidden = true;
     private bool active = true;
@@ -68,6 +71,8 @@ public class CanvasManager : MonoBehaviour
 
         TMP_Text plyTotalText = playerTotalLabel.GetComponent<TMP_Text>();
         TMP_Text enemyTotalText = enemyTotalLabel.GetComponent<TMP_Text>();
+        TMP_Text ply1ADLabel = playerADLabel.GetComponent<TMP_Text>();
+        TMP_Text ply2ADLabel = enemyADLabel.GetComponent<TMP_Text>();
 
         int total = ply1.BlackjackTotal(gameManagerScript.BlackjackThreshold, false);
         if (total > gameManagerScript.BlackjackThreshold) {
@@ -78,6 +83,14 @@ public class CanvasManager : MonoBehaviour
         } else {
             if (alreadyFlourished) alreadyFlourished = false;
         }
+
+        int ply1AttackTotal = ply1.TotalDamage(false);
+        int ply1HealthTotal = ply1.TotalHealth(gameManagerScript.BlackjackThreshold, false);
+        int ply2AttackTotal = ply2.TotalDamage(true);
+        int ply2HealthTotal = ply2.TotalHealth(gameManagerScript.BlackjackThreshold, true);
+
+        ply1ADLabel.text = "A: <color=#d62d2dff>" + ply1AttackTotal.ToString() + "</color> / D: <color=#2d6ed6ff>" + ply1HealthTotal.ToString() + "</color>";
+        ply2ADLabel.text = "A: <color=#d62d2dff>? + " + ply2AttackTotal.ToString() + "</color> / D: <color=#2d6ed6ff>? + " + ply2HealthTotal.ToString() + "</color>";
 
         plyTotalText.text = "Total: " + total.ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         
@@ -220,6 +233,10 @@ public class CanvasManager : MonoBehaviour
 
             uiScript.gameManager = gameManagerScript;
             uiScript.index = i;
+            uiScript.cardDesc = card.description;
+            uiScript.cardName = card.name;
+            uiScript.cardSprite = card.icon;
+            uiScript.InventoryDescriptionPanel = InventoryDescriptionPanel;
         }
     }
 
