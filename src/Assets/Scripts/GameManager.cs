@@ -90,6 +90,10 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityWheelOfFortune());
         abilityCardList.Add(new AbilityWorld());
 
+        foreach (AbilityCard card in abilityCardList) {
+            card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
+        }
+
         int n = abilityCardList.Count;
         for (int i = n - 1; i > 0; i--)
         {
