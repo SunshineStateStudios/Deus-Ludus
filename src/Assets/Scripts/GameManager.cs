@@ -656,7 +656,8 @@ public class GameManager : MonoBehaviour
                 card.Remove(this, ply1, ply2);
                 ply1.AbilityCards.RemoveAt(i);
 
-                Destroy(playerAbilityCards.transform.Find(i.ToString()).gameObject);
+                Transform abilityCardManifestation = playerAbilityCards.transform.Find(i.ToString());
+                if (abilityCardManifestation != null) Destroy(abilityCardManifestation.gameObject);
 
                 for (int x = i + 1; x < ply1.AbilityCards.Count; x++)
                 {

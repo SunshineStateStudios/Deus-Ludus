@@ -134,7 +134,7 @@ MonoBehaviour:
   dashLabel: {fileID: 1878599951584376135}
   damageLabel: {fileID: 1538562865426066651}
   healthLabel: {fileID: 8824129909480260098}
-  GodCubePrefab: {fileID: 6855623370456457537, guid: be19ffe7add2b2d6b9e21f9924c62d3f, type: 3}
+  GodFigurePrefab: {fileID: 919132149155446097, guid: 63f5a092c71571848b30011a7cb74300, type: 3}
   particles: {fileID: 5929686334483776848}
 --- !u!82 &1824350507675583439
 AudioSource:

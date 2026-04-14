@@ -8,7 +8,7 @@ public class NumberCardVisuals : MonoBehaviour
     public GameObject dashLabel;
     public GameObject damageLabel;
     public GameObject healthLabel;
-    public GameObject GodCubePrefab;
+    public GameObject GodFigurePrefab;
     public ParticleSystem particles;
     private AudioSource sound;
     private bool canShowVisuals = false;
@@ -44,8 +44,8 @@ public class NumberCardVisuals : MonoBehaviour
         particles.Emit(60);
         canvas.SetActive(true);
 
-        GameObject godCubeInstance = Instantiate(GodCubePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
+        GameObject godFigureInstance = Instantiate(GodFigurePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
         canShowVisuals = true;
-        godCubeInstance.transform.rotation = Quaternion.identity;
+        godFigureInstance.transform.rotation = Quaternion.identity;
     }
 }
