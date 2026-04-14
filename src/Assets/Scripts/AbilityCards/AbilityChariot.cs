@@ -15,11 +15,14 @@ public class AbilityChariot : AbilityCard
         for (int i = opponent.AbilityCards.Count-1; i >= 0; i--)
         {
             AbilityCard opponentsLastUsedPassive = opponent.AbilityCards[i];
-            if (opponentsLastUsedPassive.Drawn){
-            opponent.AbilityCards.RemoveAt(i);
-            GameObject cardRepresentation = parentCards.Find(i.ToString()).gameObject;
-            DestroyObj DestroyObjScript = cardRepresentation.GetComponent<DestroyObj>();
-            DestroyObjScript.Begone();
+                if (opponentsLastUsedPassive.Drawn){
+                opponent.AbilityCards.RemoveAt(i);
+                Transform cardRepTransform = parentCards.Find(i.ToString());
+                if (cardRepTransform == null) continue;
+
+                GameObject cardRepresentation = cardRepTransform.gameObject;
+                DestroyObj DestroyObjScript = cardRepresentation.GetComponent<DestroyObj>();
+                DestroyObjScript.Begone();
             }
         }
     }

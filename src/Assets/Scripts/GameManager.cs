@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     private int rounds = 0;
     private int turns = 0;
 
-    // ✅ CENTRAL FIX
     bool IsPlayerTurn()
     {
         return phase == GamePhase.PlayerTurn;
@@ -69,10 +68,27 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
 
-        for (int i = 0; i < 50; i++)
-        {
-            abilityCardList.Add(new AbilityJudgement());
-        }
+        abilityCardList.Add(new AbilityChariot());
+        abilityCardList.Add(new AbilityDeath());
+        abilityCardList.Add(new AbilityDevil());
+        abilityCardList.Add(new AbilityEmperor());
+        abilityCardList.Add(new AbilityEmpress());
+        abilityCardList.Add(new AbilityHangedMan());
+        abilityCardList.Add(new AbilityHermit());
+        abilityCardList.Add(new AbilityHierophant());
+        abilityCardList.Add(new AbilityHighPriestess());
+        abilityCardList.Add(new AbilityJudgement());
+        abilityCardList.Add(new AbilityJustice());
+        abilityCardList.Add(new AbilityLovers());
+        abilityCardList.Add(new AbilityMagician());
+        abilityCardList.Add(new AbilityMoon());
+        abilityCardList.Add(new AbilityStar());
+        abilityCardList.Add(new AbilityStrength());
+        abilityCardList.Add(new AbilitySun());
+        abilityCardList.Add(new AbilityTemperance());
+        abilityCardList.Add(new AbilityTower());
+        abilityCardList.Add(new AbilityWheelOfFortune());
+        abilityCardList.Add(new AbilityWorld());
 
         int n = abilityCardList.Count;
         for (int i = n - 1; i > 0; i--)
@@ -128,7 +144,7 @@ public class GameManager : MonoBehaviour
         if (IsPlayerTurn())
         {
             canvasManagerScript.SetStatus("It's your turn!");
-            canvasManagerScript.SetActive(true);
+            if (rounds > 1) canvasManagerScript.SetActive(true);
         }
     }
 
@@ -150,7 +166,7 @@ public class GameManager : MonoBehaviour
             if (!card.AIShouldDraw(this, ply2)) continue;
 
             DrawAbilityCard(ply2, i);
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(1f);
         }
 
         bool draw = ply2.BlackjackTotal(BlackjackThreshold, false) < BlackjackThreshold;
@@ -408,6 +424,7 @@ public class GameManager : MonoBehaviour
         foreach (Transform child in transform)
         {
             Transform childTransform = child.Find("GodCube(Clone)");
+            if (childTransform == null) continue;
             Transform cubeTransform = child.Find("GodCube(Clone)/Cube");
             childTransform.transform.rotation = Quaternion.identity;
 
@@ -576,11 +593,6 @@ public class GameManager : MonoBehaviour
     {
         phase = GamePhase.Combat;
 
-        //TMP_Text progressTxtObj = progressText.GetComponent<TMP_Text>();
-
-        //progressTxtObj.text = "They're gonna fight!";
-        //TMP_Text notificationTxt = notificationUIText.GetComponent<TMP_Text>();
-
         Player whoWon = DetermineBlackjackWinner();
         Player whoLost = ply1;
 
@@ -589,20 +601,13 @@ public class GameManager : MonoBehaviour
         if (whoWon == ply1) whoLost = ply2;
 
         yield return new WaitForSeconds(1f);
-        //TMP_Text OppDefenseTxt = OppDefense.GetComponent<TMP_Text>();
-        //TMP_Text OppAttackTxt = OppAttack.GetComponent<TMP_Text>();
-        //OppDefenseTxt.text = ply2.TotalHealth(BlackjackThreshold, false).ToString();
-        //OppAttackTxt.text = ply2.TotalDamage(false).ToString();
+
         int YouDef = ply1.TotalHealth(BlackjackThreshold, false);
         int YouAtk = ply1.TotalDamage(false);
         int OppDef = ply2.TotalHealth(BlackjackThreshold, false);
         int OppAtk = ply2.TotalDamage(false);
-        //TMP_Text YouHpTxt = TempYouHp.GetComponent<TMP_Text>();
-        //TMP_Text OppHpTxt = TempOppHp.GetComponent<TMP_Text>();
 
         decidedSound.Play();
-        //Animator notificationUIAnimator = notificationUI.GetComponent<Animator>();
-        //notificationUIAnimator.Play("Notification_Popup", 0, 0);
 
         if (whoWon == ply1)
         {
@@ -614,13 +619,10 @@ public class GameManager : MonoBehaviour
                 ply2.Life += OppDef - YouAtk; // formular for Ryzer Hp if you win
                 ply1.Life -= OppDef - YouAtk; // formular for Your Hp if you win
             }
-            //YouHpTxt.text = ply1.Life.ToString();
-            //OppHpTxt.text = ply2.Life.ToString();
 
             StartCoroutine(Fight(whoWon));
             yield return new WaitForSeconds(2.5f);
             StartCoroutine(Fight(whoLost));
-            //StartCoroutine(HPControlInst.HPanimation(true)); Debug.Log("FUCK YOU");
             Debug.Log("yeah");
         } else
         {
@@ -632,12 +634,9 @@ public class GameManager : MonoBehaviour
                 ply1.Life += YouDef - OppAtk; // formular for Your Hp if you lose
                 ply2.Life -= YouDef - OppAtk; // formular for Ryzer Hp if you lose
             }
-            //YouHpTxt.text = ply1.Life.ToString();
-            //OppHpTxt.text = ply2.Life.ToString();
             StartCoroutine(Fight(whoLost));
             yield return new WaitForSeconds(2.5f);
             StartCoroutine(Fight(whoWon));
-            //StartCoroutine(HPControlInst.HPanimation(false)); Debug.Log("FUCK YOU");
             Debug.Log("yeah2");
         }
         canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
