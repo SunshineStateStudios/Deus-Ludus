@@ -4,20 +4,19 @@ using UnityEngine.UI;
 
 public class AbilityCardVisuals : MonoBehaviour
 {
-    public GameObject canvas;
-    private WhiteFlash whiteOverlayScript;
+    private GameObject canvas;
 
     void Start()
     {
-        //whiteOverlayScript = GameObject.Find("Canvas/WhiteOverlay").GetComponent<WhiteFlash>();
-        //whiteOverlayScript.Flash(new Color(1f,1f,1f,0.5f));
+        canvas = transform.Find("Canvas").gameObject;
+        canvas.SetActive(false);
     }
 
     void OnMouseEnter() {
-        //canvas.SetActive(true);
+        canvas.SetActive(true);
     }
 
     void OnMouseExit() {
-        //canvas.SetActive(false);
+        canvas.SetActive(false);
     }
 }

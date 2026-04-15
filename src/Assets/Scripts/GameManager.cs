@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 
     public AbilityCard GivePlayerAbilityCard(Player ply)
     {
-        if (abilityCardList.Count > 0 && ply.AbilityCards.Count < 7)
+        if (abilityCardList.Count > 0 && ply.AbilityCards.Count < 5)
         {
             AbilityCard chosenCard = abilityCardList[0];
             ply.AbilityCards.Add(chosenCard);
@@ -391,6 +391,9 @@ public class GameManager : MonoBehaviour
         GameObject cardRepresentation = Instantiate(numberCard, parent.transform);
         cardRepresentation.name = (ply.NumberCards.Count - 1).ToString();
 
+        NumberCardVisuals cardVisualsScript = cardRepresentation.transform.Find("Card").gameObject.GetComponent<NumberCardVisuals>();
+        cardVisualsScript.canvasManager = canvasManagerScript;
+
         RepositionCards(parent.transform, false);
 
         TMP_Text valueText = cardRepresentation.transform.Find("Card/Canvas/ValueLabel").GetComponent<TMP_Text>();
@@ -425,7 +428,7 @@ public class GameManager : MonoBehaviour
         abilityCardDebounce = 0;
 
         ply.AbilityCards[index].Drawn = true;
-        canvasManagerScript.RecountAbilityCardCount();
+        canvasManagerScript.WhiteFlash();
 
         Player opp = (ply == ply2) ? ply1 : ply2;
         ply.AbilityCards[index].Apply(this, ply, opp);
@@ -436,8 +439,6 @@ public class GameManager : MonoBehaviour
         Transform parent = (ply == ply2) ? enemyAbilityCards.transform : playerAbilityCards.transform;
 
         GameObject obj = Instantiate(abilityCard, parent);
-        obj.name = index.ToString();
-
         RepositionCards(parent.transform, true);
 
         TMP_Text txt = obj.transform.Find("Card/Canvas/NameLabel").GetComponent<TMP_Text>();

@@ -33,6 +33,7 @@ public class CanvasManager : MonoBehaviour
     private float timePassed = 0;
     private Tween healthBarTween;
     private Tween healthBarTweenPos;
+    private Tween whiteFlashTween;
     private float maxHealthbarHeight = 431.6709f;
     private Animator plyTotalLabelAnimator;
     private bool alreadyFlourished = false;
@@ -65,6 +66,15 @@ public class CanvasManager : MonoBehaviour
         flourishSound.Play();
 
         plyTotalLabelAnimator.Play("Flourish", 0, 0);
+    }
+
+    public void WhiteFlash() {
+        whiteFlashTween?.Kill();
+        
+        Image flashImg = transform.Find("White").gameObject.GetComponent<Image>();
+
+        flashImg.color = new Color(1f,1f,1f,0.5f);
+        whiteFlashTween = flashImg.DOFade(0f, 1f);
     }
 
     IEnumerator UpdateText(Player ply1, Player ply2, bool hideFirstCard) {
@@ -189,7 +199,7 @@ public class CanvasManager : MonoBehaviour
         Transform inventoryList = transform.Find("InventoryPanel/Panel");
         TMP_Text cardsCount = transform.Find("InventoryPanel/CardsCount").GetComponent<TMP_Text>();
 
-        cardsCount.text = count.ToString() + "/7";
+        cardsCount.text = count.ToString() + "/5";
     }
 
     public void RebuildInventoryPanel() {

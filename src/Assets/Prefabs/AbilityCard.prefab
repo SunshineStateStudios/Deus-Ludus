@@ -224,7 +224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8755fac3639a5e189671f7049eb5eb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityCardVisuals
-  canvas: {fileID: 7376623157381713014}
 --- !u!1 &6083414081065006307
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3421346345341093793
 RectTransform:
   m_ObjectHideFlags: 0
