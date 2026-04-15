@@ -23,6 +23,7 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
     void CallbackPrompt()
     {
         gameManager.DrawAbilityCard(1, index);
+        ShowPanel(false);
     }
 
     void ShowPanel(bool show) {
@@ -35,7 +36,9 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
             NameTxt.text = cardName;
             DescriptionTxt.text = cardDesc;
+
             Icon.sprite = cardSprite;
+            Icon.preserveAspect = true;
             return;
         }
 

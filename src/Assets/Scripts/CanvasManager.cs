@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using System.Collections;
@@ -105,38 +106,6 @@ public class CanvasManager : MonoBehaviour
         StartCoroutine(UpdateText(ply1, ply2, hideFirstCard));
     }
 
-    public void PromptForNumberCard(PromptAbilityCard card) {
-        NumberCardPromptPanel.SetActive(true);
-
-        Transform contents = NumberCardPromptPanel.transform.Find("Contents");
-        TMP_Text headerTwT = NumberCardPromptPanel.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>();
-        headerTwT.text = "Choose a number card... (" + card.name + ")";
-
-        for (int i = 0; i < gameManagerScript.ply1.NumberCards.Count; i++) {
-            NumberCard numbCard = gameManagerScript.ply1.NumberCards[i];
-            GameObject buttonPrompt = Instantiate(NumberCardButtonPrompt, contents);
-
-            TMP_Text valueLabel = buttonPrompt.transform.Find("ValueLabel").gameObject.GetComponent<TMP_Text>();
-            TMP_Text damageLabel = buttonPrompt.transform.Find("DamageLabel").gameObject.GetComponent<TMP_Text>();
-            TMP_Text healthLabel = buttonPrompt.transform.Find("HealthLabel").gameObject.GetComponent<TMP_Text>();
-
-            if (numbCard.Value == 12) {
-                valueLabel.text = "A";
-                damageLabel.text = "1/11";
-                healthLabel.text = "11/1";
-            } else {
-                valueLabel.text = numbCard.Value.ToString();
-                damageLabel.text = numbCard.Damage.ToString();
-                healthLabel.text = numbCard.Health.ToString();
-            }
-
-            NumberCardPromptScript promptScript = buttonPrompt.GetComponent<NumberCardPromptScript>();
-            promptScript.cardIndex = i;
-            promptScript.card = card;
-            promptScript.gameManager = gameManagerScript;
-        }
-    }
-
     public void SetHealth(int ply1HP, int ply2HP) {
         TMP_Text enemyHealthLabelText = enemyHealthLabel.GetComponent<TMP_Text>();
         TMP_Text playerHealthLabelText = playerHealthLabel.GetComponent<TMP_Text>();
@@ -157,7 +126,6 @@ public class CanvasManager : MonoBehaviour
     }
 
     public void SetActive(bool setting) {
-        Debug.Log("er");
         canvasAnimator.ResetControllerState();
         if (setting) {
             canvasAnimator.Play("Show", 0, 0);
@@ -210,10 +178,24 @@ public class CanvasManager : MonoBehaviour
         SetStatus(status, new Color(1f,1f,1f,1f));
     }
 
-    public void RebuildInventoryPanel() {
+    public void RecountAbilityCardCount() {
+        int count = 0;
+        for (int i = 0; i < gameManagerScript.ply1.AbilityCards.Count; i++) {
+            AbilityCard card = gameManagerScript.ply1.AbilityCards[i];
+            if (card.Drawn) continue;
+            count++;
+        }
+
         Transform inventoryList = transform.Find("InventoryPanel/Panel");
         TMP_Text cardsCount = transform.Find("InventoryPanel/CardsCount").GetComponent<TMP_Text>();
-        cardsCount.text = gameManagerScript.ply1.AbilityCards.Count.ToString() + "/7";
+
+        cardsCount.text = count.ToString() + "/7";
+    }
+
+    public void RebuildInventoryPanel() {
+        RecountAbilityCardCount();
+
+        Transform inventoryList = transform.Find("InventoryPanel/Panel");
 
         foreach (Transform child in inventoryList) {
             Destroy(child.gameObject);
@@ -228,6 +210,10 @@ public class CanvasManager : MonoBehaviour
                 
             TMP_Text nameLabel = uiRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();
             nameLabel.text = card.name;
+
+            Image img = uiRepresentation.transform.Find("Image").gameObject.GetComponent<Image>();
+            img.sprite = card.icon;
+            img.preserveAspect = true;
 
             AbilityCardUIScript uiScript = uiRepresentation.GetComponent<AbilityCardUIScript>();
 

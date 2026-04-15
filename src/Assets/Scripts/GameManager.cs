@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public GameObject losingMusicObj;
     public GameObject winningMusicObj;
     public GameObject defaultMusicObj;
+    public bool alreadyPrompted { get; set; }
 
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     private MusicController musicController = new MusicController();
     private int rounds = 0;
     private int turns = 0;
+    private float abilityCardDebounce = 0;
 
     bool IsPlayerTurn()
     {
@@ -44,6 +46,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        alreadyPrompted = false;
+        
         musicController.losingMusic = losingMusicObj;
         musicController.winningMusic = winningMusicObj;
         musicController.defaultMusic = defaultMusicObj;
@@ -62,6 +66,10 @@ public class GameManager : MonoBehaviour
         canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
 
         StartCoroutine(StartNewRound());
+    }
+
+    void Update() {
+        abilityCardDebounce += Time.deltaTime;
     }
 
     void RebuildAbilityCardPool()
@@ -226,6 +234,9 @@ public class GameManager : MonoBehaviour
 
     public void PromptForAbilityCard(Player owner, PromptAbilityCard card)
     {
+        if (alreadyPrompted) return;
+        alreadyPrompted = true;
+
         if (owner == ply2)
         {
             AnswerAbilityCardPrompt(ply2, card.AICardDecision(owner), card);
@@ -241,6 +252,9 @@ public class GameManager : MonoBehaviour
 
     public void PromptForNumberCard(Player owner, PromptAbilityCard card)
     {
+        if (alreadyPrompted) return;
+        alreadyPrompted = true;
+
         if (owner == ply2)
         {
             AnswerNumberCardPrompt(owner, card.AICardDecision(owner), card);
@@ -258,6 +272,7 @@ public class GameManager : MonoBehaviour
     {
         if (ply.AbilityCards[index] == null) return;
 
+        alreadyPrompted = false;
         canvasManagerScript.HidePrompt();
 
         if (IsPlayerTurn())
@@ -281,6 +296,7 @@ public class GameManager : MonoBehaviour
     {
         if (owner.NumberCards[index] == null) return;
 
+        alreadyPrompted = false;
         canvasManagerScript.HidePrompt();
 
         if (IsPlayerTurn())
@@ -404,7 +420,12 @@ public class GameManager : MonoBehaviour
 
     public void DrawAbilityCard(Player ply, int index)
     {
+        if (alreadyPrompted) return;
+        if (abilityCardDebounce <= 0.75f) return;
+        abilityCardDebounce = 0;
+
         ply.AbilityCards[index].Drawn = true;
+        canvasManagerScript.RecountAbilityCardCount();
 
         Player opp = (ply == ply2) ? ply1 : ply2;
         ply.AbilityCards[index].Apply(this, ply, opp);
