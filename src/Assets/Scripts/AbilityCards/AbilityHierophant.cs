@@ -35,6 +35,24 @@ public class AbilityHierophant : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        if (owner.NumberCards.Count <= 1)
+            return false;
+
+        int blackjackTotal = owner.BlackjackTotal(gm.BlackjackThreshold, false);
+
+        if (blackjackTotal > gm.BlackjackThreshold)
+            return true;
+
+        NumberCard highestCard = owner.NumberCards[0];
+        foreach (NumberCard card in owner.NumberCards)
+        {
+            if (card.Damage > highestCard.Damage)
+                highestCard = card;
+        }
+
+        if (highestCard.Value >= 6 && blackjackTotal >= gm.BlackjackThreshold - 2)
+            return true;
+
+        return false;
     }
 }

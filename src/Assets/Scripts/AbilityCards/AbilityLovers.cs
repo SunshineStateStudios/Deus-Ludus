@@ -22,6 +22,20 @@ public class AbilityLovers : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        Player opponent = gm.ply1;
+
+        if (owner.AbilityCards.Count <= 1)
+            return false;
+
+        int myAbilities = owner.AbilityCards.Count;
+        int oppAbilities = opponent.AbilityCards.Count;
+
+        if (oppAbilities >= myAbilities)
+            return false;
+
+        if (myAbilities + 2 <= oppAbilities)
+            return true;
+
+        return Random.value < 0.25f;
     }
 }

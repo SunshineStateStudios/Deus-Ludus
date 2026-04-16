@@ -33,6 +33,6 @@ public class AbilityHermit : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        return owner.BlackjackTotal(gm.BlackjackThreshold, false) > gm.BlackjackThreshold;
     }
 }

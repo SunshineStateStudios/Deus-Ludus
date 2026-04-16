@@ -37,6 +37,24 @@ public class AbilityMoon : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        Player opponent = gm.ply2;
+        if (owner == gm.ply2) opponent = gm.ply1;
+
+        bool hasValidTargets = false;
+        int totalImpact = 0;
+
+        foreach (NumberCard card in opponent.NumberCards)
+        {
+            if (card.Suit != 2)
+                continue;
+
+            hasValidTargets = true;
+            totalImpact += Mathf.Max(0, card.Health - 1);
+        }
+
+        if (!hasValidTargets)
+            return false;
+
+        return totalImpact >= 2;
     }
 }

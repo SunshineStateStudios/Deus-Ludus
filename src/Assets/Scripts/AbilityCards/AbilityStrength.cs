@@ -40,6 +40,6 @@ public class AbilityStrength : PromptAbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        return owner.NumberCards.Count >= 2;
     }
 }
