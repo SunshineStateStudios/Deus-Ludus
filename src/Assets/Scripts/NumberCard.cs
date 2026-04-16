@@ -19,7 +19,7 @@ public class NumberCard : Card
     {
         Value = val;
         //Suit = suit;
-        Suit = 4;
+        Suit = 0;
 
         switch(Value)
         {
