@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using DG.Tweening;
 
 public class MusicController
 {
@@ -42,26 +43,38 @@ public class MusicController
         yourHp = gm.ply1.Life;
         if (yourHp <= 9)
         {
-            losingAudio.volume = 1f;
+            /*losingAudio.volume = 1f;
             winningAudio.volume = 0;
-            defaultAudio.volume = 0;
+            defaultAudio.volume = 0;*/
+
+            losingAudio.DOFade(1f, 5f);
+            winningAudio.DOFade(0f, 5f);
+            defaultAudio.DOFade(0f, 5f);
             //StartCoroutine(musicFade(losingAudio, 2f, 1f));
             //StartCoroutine(musicFade(winningAudio, 2f, 0f));
             //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
             
         } else if (yourHp >= 11)
         {
-            losingAudio.volume = 0;
+            /*losingAudio.volume = 0;
             winningAudio.volume = 1f;
-            defaultAudio.volume = 0;
+            defaultAudio.volume = 0;*/
+
+            losingAudio.DOFade(0f, 5f);
+            winningAudio.DOFade(1f, 5f);
+            defaultAudio.DOFade(0f, 5f);
             //StartCoroutine(musicFade(losingAudio, 2f, 0f));
             //StartCoroutine(musicFade(winningAudio, 2f, 1f));
             //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
         } else
         {
-            losingAudio.volume = 0;
+            /*losingAudio.volume = 0;
             winningAudio.volume = 0;
-            defaultAudio.volume = 1f;
+            defaultAudio.volume = 1f;*/
+
+            losingAudio.DOFade(0f, 5f);
+            winningAudio.DOFade(0f, 5f);
+            defaultAudio.DOFade(1f, 5f);
             //StartCoroutine(musicFade(losingAudio, 2f, 0f));
             //StartCoroutine(musicFade(winningAudio, 2f, 0f));
             //StartCoroutine(musicFade(defaultAudio, 2f, 1f));
