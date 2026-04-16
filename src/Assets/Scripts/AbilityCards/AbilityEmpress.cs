@@ -45,6 +45,14 @@ public class AbilityEmpress : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
+        int currentTotal = owner.BlackjackTotal(gm.BlackjackThreshold, false);
+
+        if (currentTotal >= gm.BlackjackThreshold)
+            return false;
+
+        if (currentTotal >= gm.BlackjackThreshold - 3)
+            return Random.value > 0.3f;
+
         return true;
     }
 }

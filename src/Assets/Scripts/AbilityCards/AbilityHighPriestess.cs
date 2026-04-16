@@ -60,6 +60,14 @@ public class AbilityHighPriestess : PromptAbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        if (owner.AbilityCards.Count <= 1)
+            return false;
+
+        Player opponent = gm.ply1;
+        NumberCard opponentFirstCard = opponent.NumberCards[0];
+
+        int threatValue = opponentFirstCard.Value + opponentFirstCard.Damage + opponentFirstCard.Health;
+
+        return threatValue >= 8;
     }
 }

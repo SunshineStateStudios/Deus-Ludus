@@ -41,6 +41,21 @@ public class AbilityJustice : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        if (owner.NumberCards.Count == 0)
+            return false;
+
+        int damageTotal = 0;
+        int healthTotal = 0;
+
+        foreach (NumberCard card in owner.NumberCards)
+        {
+            damageTotal += card.Damage;
+            healthTotal += card.Health;
+        }
+
+        float avgDamage = (float) damageTotal / owner.NumberCards.Count;
+        float avgHealth = (float) healthTotal / owner.NumberCards.Count;
+
+        return avgHealth > avgDamage;
     }
 }

@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityChariot : AbilityCard
 {
     public override string name => "Chariot";
-    public override string description => "Remove opponent's most recently played passive";
+    public override string description => "Remove opponent's most recently played ability card.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -34,6 +34,17 @@ public class AbilityChariot : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        Player opponent = gm.ply2;
+        if (owner == gm.ply2) opponent = gm.ply1;
+
+        int count = 0;
+
+        for (int i = 0; i < opponent.AbilityCards.Count; i++) {
+            if (opponent.AbilityCards[i].Drawn) {
+                count++;
+            }
+        }
+
+        return count > 1;
     }
 }

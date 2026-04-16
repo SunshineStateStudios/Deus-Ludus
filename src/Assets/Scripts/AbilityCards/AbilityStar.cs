@@ -37,6 +37,24 @@ public class AbilityStar : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true; // Always draw
+        int totalImpact = 0;
+        int egyptianCount = 0;
+
+        foreach (NumberCard card in owner.NumberCards)
+        {
+            if (card.Suit != 3)
+                continue;
+
+            egyptianCount++;
+            totalImpact += card.Health;
+        }
+
+        if (egyptianCount == 0)
+            return false;
+
+        if (egyptianCount == 1 && totalImpact < 3)
+            return false;
+
+        return totalImpact >= 4;
     }
 }

@@ -45,6 +45,17 @@ public class AbilityEmperor : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        int currentTotal = owner.BlackjackTotal(gm.BlackjackThreshold, false);
+
+        if (currentTotal >= gm.BlackjackThreshold - 4)
+            return false;
+
+        if (currentTotal <= gm.BlackjackThreshold / 2)
+            return true;
+
+        if (currentTotal < gm.BlackjackThreshold - 1)
+            return Random.value > 0.5f;
+
+        return false;
     }
 }

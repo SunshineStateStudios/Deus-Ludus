@@ -58,6 +58,50 @@ public class AbilityTower : PromptAbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        Player opponent = gm.ply2;
+        if (owner == gm.ply1) opponent = gm.ply1;
+
+        int highestOpponentDefense = 0;
+        foreach (NumberCard card in opponent.NumberCards)
+        {
+            if (card.Health > highestOpponentDefense)
+            {
+                highestOpponentDefense = card.Health;
+            }
+        }
+
+        int highestAIHealth = 0;
+        foreach (NumberCard card in owner.NumberCards)
+        {
+            if (card.Health > highestAIHealth)
+            {
+                highestAIHealth = card.Health;
+            }
+        }
+
+        // The AI should draw the card to match or surpass the opponent's defense
+        if (highestOpponentDefense > highestAIHealth) return true;
+
+        // Optionally, the AI can also draw if it has a weak overall defense and the opponent has a strong defense
+        int totalAIHealth = 0;
+        foreach (NumberCard card in owner.NumberCards)
+        {
+            totalAIHealth += card.Health;
+        }
+
+        int totalOpponentHealth = 0;
+        foreach (NumberCard card in opponent.NumberCards)
+        {
+            totalOpponentHealth += card.Health;
+        }
+
+        // If the opponent's total health is significantly higher, the AI may want to draw the card
+        if (totalOpponentHealth > totalAIHealth)
+        {
+            return true;
+        }
+
+        // Otherwise, the AI doesn't need to draw the card
+        return false;
     }
 }

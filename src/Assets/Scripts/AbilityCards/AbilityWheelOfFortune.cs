@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityWheelOfFortune : AbilityCard
 {
     public override string name => "The Wheel of Fortune";
-    public override string description => "1/2 chance to either triple the attack of your latest number card or set the attack of your latest number card to 0";
+    public override string description => "50% chance to either triple the attack of your latest number card or set the attack of your latest number card to 0";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -25,6 +25,6 @@ public class AbilityWheelOfFortune : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        return Random.Range(1,2) == 1;
     }
 }

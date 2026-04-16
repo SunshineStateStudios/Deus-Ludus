@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class AbilityDevil : AbilityCard
 {
     public override string name => "The Devil";
@@ -17,6 +19,27 @@ public class AbilityDevil : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        int cardsTotal = owner.BlackjackTotal(gm.BlackjackThreshold, false);
+        int difference = gm.BlackjackThreshold - cardsTotal;
+
+        bool shouldDraw = false;
+
+        if (difference == 1) {
+            shouldDraw = Random.Range(1,3) == 1;
+        } else if (difference == 2) {
+            shouldDraw = Random.Range(1,4) == 1;
+        } else if (difference == 3) {
+            shouldDraw = Random.Range(1,5) == 1;
+        } else if (difference == 4) {
+            shouldDraw = Random.Range(1,6) == 1;
+        } else if (difference == 5) {
+            shouldDraw = Random.Range(1,7) == 1;
+        } else if (difference == 6) {
+            shouldDraw = Random.Range(1,8) == 1;
+        } else if (difference < 0) {
+            shouldDraw = true;
+        }
+
+        return shouldDraw;
     }
 }

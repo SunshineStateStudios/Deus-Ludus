@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityMagician : AbilityCard
 {
     public override string name => "Magician";
-    public override string description => "Pick between a choice of Two Number Cards from the number card pool";
+    public override string description => "Pick between a choice of two number cards from the number card pool";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

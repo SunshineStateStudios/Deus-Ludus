@@ -30,6 +30,20 @@ public class AbilityHangedMan : AbilityCard
 
     public override bool AIShouldDraw(GameManager gm, Player owner)
     {
-        return true;
+        Player opponent = gm.ply2;
+        if (owner == gm.ply2) opponent = gm.ply1;
+
+        if (opponent.NumberCards.Count == 0)
+            return false;
+
+        int maxThreat = 0;
+        foreach (NumberCard card in opponent.NumberCards)
+        {
+            int threat = card.Damage * card.Health;
+            if (threat > maxThreat)
+                maxThreat = threat;
+        }
+
+        return maxThreat >= 4;
     }
 }
