@@ -408,9 +408,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            valueText.text = card.Value.ToString();
-            damageText.text = card.Damage.ToString();
-            healthText.text = card.Health.ToString();
+            if (card.Value == 12) {
+                valueText.text = "A";
+                damageText.text = "1/11";
+                healthText.text = "11/1";
+            }
         }
     }
 
