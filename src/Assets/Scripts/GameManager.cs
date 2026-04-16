@@ -401,6 +401,21 @@ public class GameManager : MonoBehaviour
         TMP_Text healthText = cardRepresentation.transform.Find("Card/Canvas/HealthLabel").GetComponent<TMP_Text>();
         
         Sprite Suit = Resources.Load<Sprite>("Suits/Japanese_Suit");
+        switch(card.Suit)
+        {
+            case 1:
+                Suit = Resources.Load<Sprite>("Suits/Mayan_Suit");
+                break;
+            case 2:
+                Suit = Resources.Load<Sprite>("Suits/Japanese_Suit");
+                break;
+            case 3:
+                Suit = Resources.Load<Sprite>("Suits/Egyptian_Suit");
+                break;
+            case 4:
+                Suit = Resources.Load<Sprite>("Suits/Greek_Suit");
+                break;
+        }
         SpriteRenderer cardSuit = cardRepresentation.transform.Find("Card/Suit_Label").GetComponent<SpriteRenderer>();
 
         if (ply == ply2 && ply2.NumberCards.Count == 1)
@@ -416,6 +431,7 @@ public class GameManager : MonoBehaviour
                 damageText.text = "1/11";
                 healthText.text = "11/1";
             }
+            cardSuit.sprite = Suit;
         }
     }
 

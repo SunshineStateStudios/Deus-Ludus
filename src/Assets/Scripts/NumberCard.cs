@@ -2,7 +2,7 @@
 
 Suit numbers to actual suits:
 1: mayan
-2: norse
+2: japanese
 3: egyptian
 4: greek
 
