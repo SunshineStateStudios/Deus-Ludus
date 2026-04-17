@@ -412,6 +412,10 @@ public class GameManager : MonoBehaviour
                 valueText.text = "A";
                 damageText.text = "1/11";
                 healthText.text = "11/1";
+            } else {
+                valueText.text = card.Value.ToString();
+                damageText.text = card.Damage.ToString();
+                healthText.text = card.Health.ToString();
             }
         }
     }
