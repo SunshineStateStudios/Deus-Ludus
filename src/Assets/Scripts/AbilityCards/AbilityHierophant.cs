@@ -9,6 +9,7 @@ public class AbilityHierophant : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         if (owner.NumberCards.Count <= 1) return;
         int chosenCardIndex = 0;
 
@@ -26,6 +27,16 @@ public class AbilityHierophant : AbilityCard
         if (owner == gm.ply2) chosenPly = 2;
 
         gm.RemoveNumberCard(chosenPly, chosenCardIndex);
+        if (owner == gm.ply1)
+        {
+            if (gm.ply1.NumberCards.Count >= 6)
+            {
+                canvasMngr.ShowDrawButton(false);
+            } else
+            {
+                canvasMngr.ShowDrawButton(true);
+            }
+        }
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

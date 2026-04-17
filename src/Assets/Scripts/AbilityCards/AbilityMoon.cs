@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityMoon : AbilityCard
 {
     public override string name => "Moon";
-    public override string description => "Sets the defence of all of the opponent's Norse number cards to 1.";
+    public override string description => "Sets the defence of all of the opponent's Japanese number cards to 1.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

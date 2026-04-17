@@ -13,6 +13,7 @@ public class AbilityHermit : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         if (owner.NumberCards.Count <= 0) return;
         if (owner == gm.ply2) chosenPly = 2; //player var for opp use
 
@@ -24,6 +25,17 @@ public class AbilityHermit : AbilityCard
         }
 
         gm.DrawTwice(chosenPly);
+
+        if (owner == gm.ply1)
+        {
+            if (gm.ply1.NumberCards.Count >= 6)
+            {
+                canvasMngr.ShowDrawButton(false);
+            } else
+            {
+                canvasMngr.ShowDrawButton(true);
+            }
+        }
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
