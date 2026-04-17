@@ -572,71 +572,75 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Fight(Player attacker)
     {
+        if (attacker != null) {
 
-        GameObject physicalAttackerCards = playerNumberCards;
-        GameObject physicalDefenderCards = enemyNumberCards;
+            GameObject physicalAttackerCards = playerNumberCards;
+            GameObject physicalDefenderCards = enemyNumberCards;
 
-        GameObject hiddenCard = enemyNumberCards.transform.Find("0").gameObject;
-        NumberCard enemyFirstCard = ply2.NumberCards[0];
+            GameObject hiddenCard = enemyNumberCards.transform.Find("0").gameObject;
+            NumberCard enemyFirstCard = ply2.NumberCards[0];
 
-        TMP_Text valueText =
-            hiddenCard.transform.Find("Card/Canvas/ValueLabel")
-            .GetComponent<TMP_Text>();
+            TMP_Text valueText =
+                hiddenCard.transform.Find("Card/Canvas/ValueLabel")
+                .GetComponent<TMP_Text>();
 
-        TMP_Text damageText =
-            hiddenCard.transform.Find("Card/Canvas/DamageLabel")
-            .GetComponent<TMP_Text>();
+            TMP_Text damageText =
+                hiddenCard.transform.Find("Card/Canvas/DamageLabel")
+                .GetComponent<TMP_Text>();
 
-        TMP_Text healthText =
-            hiddenCard.transform.Find("Card/Canvas/HealthLabel")
-            .GetComponent<TMP_Text>();
+            TMP_Text healthText =
+                hiddenCard.transform.Find("Card/Canvas/HealthLabel")
+                .GetComponent<TMP_Text>();
 
-        valueText.text = enemyFirstCard.Value.ToString();
-        damageText.text = enemyFirstCard.Damage.ToString();
-        healthText.text = enemyFirstCard.Health.ToString();
+            valueText.text = enemyFirstCard.Value.ToString();
+            damageText.text = enemyFirstCard.Damage.ToString();
+            healthText.text = enemyFirstCard.Health.ToString();
 
-        Player defender = ply2;
+            Player defender = ply2;
 
-        if (attacker == ply2)
-        {
-            physicalAttackerCards = enemyNumberCards;
-            physicalDefenderCards = playerNumberCards;
-            defender = ply1;
-        }
-
-        int laneCount = attacker.NumberCards.Count;
-        if (defender.NumberCards.Count < laneCount) laneCount = defender.NumberCards.Count;
-
-        for (int i = 0; i < laneCount; i++)
-        {
-            Transform attackerCard = physicalAttackerCards.transform.GetChild(i);
-            Transform defenderCard = physicalDefenderCards.transform.GetChild(i);
-
-            Transform attackerCube = attackerCard.Find("GodCube(Clone)");
-            Transform defenderCube = defenderCard.Find("GodCube(Clone)");
-
-            if (attackerCube == null || defenderCube == null)
-                continue;
-
-            Animator attackerAnimator = attackerCube.Find("Cube").GetComponent<Animator>();
-            Animator defenderAnimator = defenderCube.Find("Cube").GetComponent<Animator>();
-
-            // Face correct direction
             if (attacker == ply2)
-                attackerCube.rotation = Quaternion.Euler(0f, 180f, 0f);
-            else
-                attackerCube.rotation = Quaternion.identity;
+            {
+                physicalAttackerCards = enemyNumberCards;
+                physicalDefenderCards = playerNumberCards;
+                defender = ply1;
+            }
 
-            attackerAnimator.Play("Attack", 0, 0);
+            int laneCount = attacker.NumberCards.Count;
+            if (defender.NumberCards.Count < laneCount) laneCount = defender.NumberCards.Count;
 
-            attackGodCubeSound.PlayOneShot(attackGodCubeClip, 1f);
+            for (int i = 0; i < laneCount; i++)
+            {
+                Transform attackerCard = physicalAttackerCards.transform.GetChild(i);
+                Transform defenderCard = physicalDefenderCards.transform.GetChild(i);
 
-            yield return new WaitForSeconds(0.6f);
+                Transform attackerCube = attackerCard.Find("GodCube(Clone)");
+                Transform defenderCube = defenderCard.Find("GodCube(Clone)");
 
-            defenderAnimator.Play("Defend", 0, 0);
+                if (attackerCube == null || defenderCube == null)
+                    continue;
 
-            yield return new WaitForSeconds(0.6f);
+                Animator attackerAnimator = attackerCube.Find("Cube").GetComponent<Animator>();
+                Animator defenderAnimator = defenderCube.Find("Cube").GetComponent<Animator>();
+
+                // Face correct direction
+                if (attacker == ply2)
+                    attackerCube.rotation = Quaternion.Euler(0f, 180f, 0f);
+                else
+                    attackerCube.rotation = Quaternion.identity;
+
+                attackerAnimator.Play("Attack", 0, 0);
+
+                attackGodCubeSound.PlayOneShot(attackGodCubeClip, 1f);
+
+                yield return new WaitForSeconds(0.6f);
+
+                defenderAnimator.Play("Defend", 0, 0);
+
+                yield return new WaitForSeconds(0.6f);
+            }
         }
+
+        yield return new WaitForSeconds(0.6f);
     }
 
     Player DetermineBlackjackWinner()
