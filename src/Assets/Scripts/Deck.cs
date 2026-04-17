@@ -30,6 +30,7 @@ public class Deck
             NumberCard temp = cards[i];
             cards[i] = cards[randomIndex];
             cards[randomIndex] = temp;
+            temp.Suit = Random.Range(1, 5);
         }
     }
 

@@ -9,6 +9,7 @@ public class NumberCardVisuals : MonoBehaviour
     public GameObject damageLabel;
     public GameObject healthLabel;
     public GameObject GodFigurePrefab;
+    //public GameObject suitPrefab;
     public CanvasManager canvasManager;
     public ParticleSystem particles;
     private AudioSource sound;
@@ -47,7 +48,12 @@ public class NumberCardVisuals : MonoBehaviour
         //canvasManager.WhiteFlash();
 
         GameObject godFigureInstance = Instantiate(GodFigurePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
+        //GameObject suitInstance = Instantiate(suitPrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
         canShowVisuals = true;
+        
         godFigureInstance.transform.rotation = Quaternion.identity;
+        /*suitInstance.transform.rotation = Quaternion.identity;
+        suitInstance.transform.Rotate(90, 0, 0);
+        suitInstance.transform.position = new Vector3(0f, 0f, 0f);*/
     }
 }
