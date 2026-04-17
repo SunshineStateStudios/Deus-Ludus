@@ -16,6 +16,15 @@ public class AbilityWheelOfFortune : AbilityCard
         } else {
             chosenNumberCard.Damage = 0;
         }
+
+        GameObject parent = gm.playerNumberCards;
+        if (owner == gm.ply2) parent = gm.enemyNumberCards;
+
+        Transform cardRepresentation = parent.transform.Find((owner.NumberCards.Count-1).ToString());
+        TMP_Text damageText =
+            cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+            .GetComponent<TMP_Text>();
+        damageText.text = chosenNumberCard.Damage.ToString();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

@@ -10,6 +10,7 @@ public class AbilityDevil : AbilityCard
     {
         gm.BlackjackThreshold += 6;
         if (gm.BlackjackThreshold > 30) gm.BlackjackThreshold = 30;
+        gm.canvasObject.GetComponent<CanvasManager>().CalculateText(gm.ply1, gm.ply2, true, 0f);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

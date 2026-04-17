@@ -23,7 +23,7 @@ public class AbilitySun : AbilityCard
             if (parent == gm.enemyNumberCards && i == 0) continue;
 
             TMP_Text damageText =
-                cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+                cardRepresentation.Find("Card/Canvas/DamageLabel")
                     .GetComponent<TMP_Text>();
 
             damageText.text = card.Damage.ToString();

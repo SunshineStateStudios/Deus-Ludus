@@ -15,7 +15,7 @@ public class Deck
         cards = new List<NumberCard>();
         for (int i = 1; i <= 12; i++)
         {
-            cards.Add(new NumberCard(i, Random.Range(1,4)));
+            cards.Add(new NumberCard(i, Random.Range(1, 5)));
         }
 
         Shuffle();
@@ -30,7 +30,6 @@ public class Deck
             NumberCard temp = cards[i];
             cards[i] = cards[randomIndex];
             cards[randomIndex] = temp;
-            temp.Suit = Random.Range(1, 5);
         }
     }
 

@@ -45,7 +45,7 @@ public class NumberCardVisuals : MonoBehaviour
     {
         particles.Emit(60);
         canvas.SetActive(true);
-        //canvasManager.WhiteFlash();
+        canvasManager.WhiteFlash();
 
         GameObject godFigureInstance = Instantiate(GodFigurePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
         //GameObject suitInstance = Instantiate(suitPrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);

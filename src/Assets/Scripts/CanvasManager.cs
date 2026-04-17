@@ -77,8 +77,8 @@ public class CanvasManager : MonoBehaviour
         whiteFlashTween = flashImg.DOFade(0f, 1f);
     }
 
-    IEnumerator UpdateText(Player ply1, Player ply2, bool hideFirstCard) {
-        yield return new WaitForSeconds(2f);
+    IEnumerator UpdateText(Player ply1, Player ply2, bool hideFirstCard, float delay = 2f) {
+        yield return new WaitForSeconds(delay);
 
         TMP_Text plyTotalText = playerTotalLabel.GetComponent<TMP_Text>();
         TMP_Text enemyTotalText = enemyTotalLabel.GetComponent<TMP_Text>();
@@ -112,8 +112,8 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true) { // Updating the text requires a delay
-        StartCoroutine(UpdateText(ply1, ply2, hideFirstCard));
+    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true, float delay = 2f) { // Updating the text requires a delay
+        StartCoroutine(UpdateText(ply1, ply2, hideFirstCard, delay));
     }
 
     public void SetHealth(int ply1HP, int ply2HP) {
@@ -141,6 +141,7 @@ public class CanvasManager : MonoBehaviour
             canvasAnimator.Play("Show", 0, 0);
         } else {
             canvasAnimator.Play("Hide", 0, 0);
+            if (!IsInventoryPanelHidden()) ResolvePanel();
         }
 
         active = setting;

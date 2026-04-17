@@ -18,8 +18,7 @@ public class NumberCard : Card
     public NumberCard(int val, int suit)
     {
         Value = val;
-        //Suit = suit;
-        Suit = 0;
+        Suit = suit;
 
         switch(Value)
         {

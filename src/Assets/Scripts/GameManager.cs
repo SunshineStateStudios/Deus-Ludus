@@ -342,7 +342,12 @@ public class GameManager : MonoBehaviour
 
     public void RepositionCards(Transform parent, bool isAbilityCard = false)
     {
-        int cardCount = parent.childCount;
+        int cardCount = 0;
+        foreach (Transform child in parent) {
+            if (!child) continue;
+            cardCount++;
+        }
+
         float normalSpacing = 1.2f;
         float compressedSpacing = 0.9f;
         float spacing = cardCount > 3 ? compressedSpacing : normalSpacing;
@@ -375,9 +380,37 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            Debug.Log("argg");
+            card.DOKill();
             card.DOMove(targetPos, 0.5f)
                 .SetEase(Ease.InOutSine);
         }
+    }
+
+    public void UpdateNumberCardSuit(Player ply, int cardIndex, int suit) {
+        NumberCard card = ply.NumberCards[cardIndex];
+        GameObject parent = (ply == ply2) ? enemyNumberCards : playerNumberCards;
+        GameObject cardRepresentation = parent.transform.Find(cardIndex.ToString()).gameObject;
+
+        Sprite Suit = Resources.Load<Sprite>("Suits/Japanese_Suit");
+        switch(card.Suit)
+        {
+            case 1:
+                Suit = Resources.Load<Sprite>("Suits/Mayan_Suit");
+                break;
+            case 2:
+                Suit = Resources.Load<Sprite>("Suits/Japanese_Suit");
+                break;
+            case 3:
+                Suit = Resources.Load<Sprite>("Suits/Egyptian_Suit");
+                break;
+            case 4:
+                Suit = Resources.Load<Sprite>("Suits/Greek_Suit");
+                break;
+        }
+
+        SpriteRenderer cardSuit = cardRepresentation.transform.Find("Card/Suit_Label").GetComponent<SpriteRenderer>();
+        cardSuit.sprite = Suit;
     }
 
     void DrawNumberCard(Player ply)
@@ -399,24 +432,6 @@ public class GameManager : MonoBehaviour
         TMP_Text valueText = cardRepresentation.transform.Find("Card/Canvas/ValueLabel").GetComponent<TMP_Text>();
         TMP_Text damageText = cardRepresentation.transform.Find("Card/Canvas/DamageLabel").GetComponent<TMP_Text>();
         TMP_Text healthText = cardRepresentation.transform.Find("Card/Canvas/HealthLabel").GetComponent<TMP_Text>();
-        
-        Sprite Suit = Resources.Load<Sprite>("Suits/Japanese_Suit");
-        switch(card.Suit)
-        {
-            case 1:
-                Suit = Resources.Load<Sprite>("Suits/Mayan_Suit");
-                break;
-            case 2:
-                Suit = Resources.Load<Sprite>("Suits/Japanese_Suit");
-                break;
-            case 3:
-                Suit = Resources.Load<Sprite>("Suits/Egyptian_Suit");
-                break;
-            case 4:
-                Suit = Resources.Load<Sprite>("Suits/Greek_Suit");
-                break;
-        }
-        SpriteRenderer cardSuit = cardRepresentation.transform.Find("Card/Suit_Label").GetComponent<SpriteRenderer>();
 
         if (ply == ply2 && ply2.NumberCards.Count == 1)
         {
@@ -426,6 +441,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            UpdateNumberCardSuit(ply, (ply.NumberCards.Count - 1), card.Suit);
+
             if (card.Value == 12) {
                 valueText.text = "A";
                 damageText.text = "1/11";
@@ -435,7 +452,6 @@ public class GameManager : MonoBehaviour
                 damageText.text = card.Damage.ToString();
                 healthText.text = card.Health.ToString();
             }
-            cardSuit.sprite = Suit;
         }
     }
 
@@ -464,6 +480,7 @@ public class GameManager : MonoBehaviour
         Transform parent = (ply == ply2) ? enemyAbilityCards.transform : playerAbilityCards.transform;
 
         GameObject obj = Instantiate(abilityCard, parent);
+        obj.name = index.ToString();
         RepositionCards(parent.transform, true);
 
         TMP_Text txt = obj.transform.Find("Card/Canvas/NameLabel").GetComponent<TMP_Text>();
