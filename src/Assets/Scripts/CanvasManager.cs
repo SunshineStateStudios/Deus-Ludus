@@ -46,6 +46,12 @@ public class CanvasManager : MonoBehaviour
         plyTotalLabelAnimator = playerTotalLabel.GetComponent<Animator>();
     }
 
+    public void ShowDrawButton(bool visibility)
+    {
+        GameObject drawButtonObject = transform.Find("OptionsPanel/DrawButton").gameObject;
+        drawButtonObject.SetActive(visibility);
+    }
+
     void Update() {
         timePassed += Time.deltaTime;
 

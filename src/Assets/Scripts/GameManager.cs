@@ -418,6 +418,17 @@ public class GameManager : MonoBehaviour
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
 
+        if (ply == ply1)
+        {
+            if (ply1.NumberCards.Count >= 6)
+            {
+                canvasManagerScript.ShowDrawButton(false);
+            } else
+            {
+                canvasManagerScript.ShowDrawButton(true);
+            }
+        }
+
         canvasManagerScript.CalculateText(ply1, ply2, true);
 
         GameObject parent = (ply == ply2) ? enemyNumberCards : playerNumberCards;
@@ -468,11 +479,13 @@ public class GameManager : MonoBehaviour
         if (abilityCardDebounce <= 0.75f) return;
         abilityCardDebounce = 0;
 
-        ply.AbilityCards[index].Drawn = true;
+        AbilityCard abilityCardPlayer = ply.AbilityCards[index];
+
+        abilityCardPlayer.Drawn = true;
         canvasManagerScript.WhiteFlash();
 
         Player opp = (ply == ply2) ? ply1 : ply2;
-        ply.AbilityCards[index].Apply(this, ply, opp);
+        abilityCardPlayer.Apply(this, ply, opp);
 
         if (ply == ply1)
             canvasManagerScript.RebuildInventoryPanel();
@@ -484,7 +497,7 @@ public class GameManager : MonoBehaviour
         RepositionCards(parent.transform, true);
 
         TMP_Text txt = obj.transform.Find("Card/Canvas/NameLabel").GetComponent<TMP_Text>();
-        txt.text = ply.AbilityCards[index].name;
+        txt.text = abilityCardPlayer.name;
     }
 
     void MakeGodCubesPlayAnimation(string animationName, Transform transform)
