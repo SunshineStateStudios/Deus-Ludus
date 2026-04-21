@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: aea96d0f461bfe04fbfb3ca783a7fa6c
+guid: 709a51aa2b4e10b4e9f46840cc9107ff
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,9 +127,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Greek_Suit_DL
+  - name: Greek_Suit_DL_2
     originalName: 
-    pivot: {x: 0.5092593, y: -0.033175357}
+    pivot: {x: 0.4884793, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 216
-      height: 211
-    spriteID: c3f953481aa895447a6a510515b44e12
+      width: 217
+      height: 206
+    spriteID: ec676db07a5f8274b8e05c50dc7a949e
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,12 +153,12 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 236670125
+      value0: 2681726634
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Greek_Suit_DL
+    name: Greek_Suit_DL_2
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -167,11 +167,11 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
-        y: 7
-        width: 216
-        height: 211
-      spriteId: c3f953481aa895447a6a510515b44e12
+        x: 5
+        y: 0
+        width: 217
+        height: 206
+      spriteId: ec676db07a5f8274b8e05c50dc7a949e
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -181,5 +181,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 222, y: 222}
+  canvasSize: {x: 222, y: 206}
   previousTextureSize: {x: 256, y: 256}
