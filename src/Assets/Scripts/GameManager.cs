@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
 
-        abilityCardList.Add(new AbilityChariot());
+        /*abilityCardList.Add(new AbilityChariot());
         abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityDevil());
         abilityCardList.Add(new AbilityEmperor());
@@ -96,7 +96,9 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityTower());
         abilityCardList.Add(new AbilityWheelOfFortune());
-        abilityCardList.Add(new AbilityWorld());
+        abilityCardList.Add(new AbilityWorld());*/
+
+        for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityWheelOfFortune());
 
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
@@ -337,6 +339,8 @@ public class GameManager : MonoBehaviour
             Transform card = cardsObject.transform.Find(i.ToString());
             if (card != null) { card.gameObject.name = (i - 1).ToString(); }
         }
+
+        canvasManagerScript.CalculateText(ply1,ply2,false,0f);
         ply.NumberCards.RemoveAt(index); RepositionCards(cardsObject.transform, false);
     }
 
@@ -424,7 +428,7 @@ public class GameManager : MonoBehaviour
 
         if (ply == ply1)
         {
-            if (ply1.NumberCards.Count >= 6)
+            if (ply1.NumberCards.Count >= 6 || ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
             {
                 canvasManagerScript.ShowDrawButton(false);
             } else
@@ -462,13 +466,11 @@ public class GameManager : MonoBehaviour
 
             if (card.Value == 12) {
                 valueText.text = "A";
-                damageText.text = "1/11";
-                healthText.text = "11/1";
             } else {
                 valueText.text = card.Value.ToString();
-                damageText.text = card.Damage.ToString();
-                healthText.text = card.Health.ToString();
             }
+            damageText.text = card.Damage.ToString();
+            healthText.text = card.Health.ToString();
         }
     }
 

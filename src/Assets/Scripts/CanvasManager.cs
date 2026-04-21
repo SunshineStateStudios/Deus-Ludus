@@ -265,7 +265,11 @@ public class CanvasManager : MonoBehaviour
                 TMP_Text damageLabel = cardRepresentation.transform.Find("DamageLabel").gameObject.GetComponent<TMP_Text>();
                 TMP_Text healthLabel = cardRepresentation.transform.Find("HealthLabel").gameObject.GetComponent<TMP_Text>();
 
-                valueLabel.text = numbCard.Value.ToString();
+                if (numbCard.Value == 12) {
+                    valueLabel.text = "A";
+                } else {
+                    valueLabel.text = numbCard.Value.ToString();
+                }
                 damageLabel.text = numbCard.Damage.ToString();
                 healthLabel.text = numbCard.Health.ToString();
 

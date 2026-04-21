@@ -12,7 +12,7 @@ public class AbilityWheelOfFortune : AbilityCard
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         NumberCard chosenNumberCard = owner.NumberCards[owner.NumberCards.Count-1];
 
-        if (Random.Range(1,2) == 1) {
+        if (Random.value <= 0.5) {
             chosenNumberCard.Damage *= 3;
         } else {
             chosenNumberCard.Damage = 0;

@@ -14,7 +14,8 @@ public class AbilityJudgement : PromptAbilityCard
 
     public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)
     {
-        Debug.Log(indexChosen);
+        owner.NumberCards[indexChosen].Suit = Random.Range(1,4);
+        gm.UpdateNumberCardSuit(owner, indexChosen, owner.NumberCards[indexChosen].Suit);
     }
 
     public override int AICardDecision(Player player) {
