@@ -9,9 +9,9 @@ public class AbilitySun : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        for (int i = 0; i < opponent.NumberCards.Count; i++)
+        for (int i = 0; i < owner.NumberCards.Count; i++)
         {
-            NumberCard card = opponent.NumberCards[i];
+            NumberCard card = owner.NumberCards[i];
             if (card.Suit != 1) continue;
             card.Damage = card.Damage * 2;
 
@@ -19,8 +19,7 @@ public class AbilitySun : AbilityCard
             if (owner == gm.ply2) parent = gm.enemyNumberCards;
 
             Transform cardRepresentation = parent.transform.Find(i.ToString());
-        
-            if (parent == gm.enemyNumberCards && i == 0) continue;
+            if (cardRepresentation == null) continue;
 
             TMP_Text damageText =
                 cardRepresentation.Find("Card/Canvas/DamageLabel")
