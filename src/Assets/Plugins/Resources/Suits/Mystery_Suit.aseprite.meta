@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e0a458697dadf2d408b1ad94e27c01a8
+guid: 09542bb6eedfb3c4799098d52356acb9
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,9 +127,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Mayan_Suit_DL_2
+  - name: Mystery_Suit 1
     originalName: 
-    pivot: {x: 0.5045871, y: 0}
+    pivot: {x: 0.47490352, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 218
-      height: 223
-    spriteID: 7a399676beb4283498fb179422f757f4
+      width: 259
+      height: 416
+    spriteID: 4f5f2c294fc9f354e9e08ffcbb671c28
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 3167085092
+      value0: 541492102
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Mayan_Suit_DL_2
+    name: Mystery_Suit 1
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Mayan_Suit
+    - name: Mystery_Suit
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
+        x: 80
         y: 0
-        width: 218
-        height: 223
-      spriteId: 7a399676beb4283498fb179422f757f4
+        width: 259
+        height: 416
+      spriteId: 4f5f2c294fc9f354e9e08ffcbb671c28
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -181,5 +181,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 222, y: 225}
-  previousTextureSize: {x: 256, y: 256}
+  canvasSize: {x: 406, y: 421}
+  previousTextureSize: {x: 512, y: 512}

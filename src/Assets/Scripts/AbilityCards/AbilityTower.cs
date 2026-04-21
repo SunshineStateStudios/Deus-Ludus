@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityTower : PromptAbilityCard
 {
     public override string name => "Tower";
-    public override string description => "Choose a Number Card you hold to copy the highest defense the opponent has.";
+    public override string description => "Choose a Number Card you hold to copy the <color=#ff8282>highest defense</color> the opponent has.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -14,6 +14,7 @@ public class AbilityTower : PromptAbilityCard
 
     public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         NumberCard chosenCard = owner.NumberCards[indexChosen];
         NumberCard oppCard = opponent.NumberCards[0];
 
@@ -34,6 +35,7 @@ public class AbilityTower : PromptAbilityCard
             .GetComponent<TMP_Text>();
 
         healthText.text = oppCard.Health.ToString();
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override int AICardDecision(Player player) {

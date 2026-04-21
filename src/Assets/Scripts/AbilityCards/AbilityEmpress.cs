@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityEmpress : AbilityCard
 {
     public override string name => "Empress";
-    public override string description => "Draws a number card between 1-4";
+    public override string description => "Draws a <color=#ff8282>number</color> card between 1-4";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

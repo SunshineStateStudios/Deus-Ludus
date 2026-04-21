@@ -3,7 +3,7 @@ using UnityEngine;
 public class AbilityDevil : AbilityCard
 {
     public override string name => "The Devil";
-    public override string description => "Increases the threshold by 6 points.";
+    public override string description => "Increases the <color=#ff85f7>threshold</color> by <color=#ff8282>6</color> points.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

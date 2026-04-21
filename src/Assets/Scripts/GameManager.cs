@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour
             DrawNumberCard(ply1);
 
         phase = GamePhase.AITurn;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         for (int i = ply2.AbilityCards.Count - 1; i >= 0; i--)
         {
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
             if (!card.AIShouldDraw(this, ply2)) continue;
 
             DrawAbilityCard(ply2, i);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
 
         bool draw = ply2.BlackjackTotal(BlackjackThreshold, false) < BlackjackThreshold;
@@ -408,6 +408,10 @@ public class GameManager : MonoBehaviour
                 Suit = Resources.Load<Sprite>("Suits/Greek_Suit");
                 break;
         }
+        if (ply == ply2 && ply2.NumberCards.Count == 1)
+        {
+            Suit = Resources.Load<Sprite>("Suits/Mystery_Suit");
+        }
 
         SpriteRenderer cardSuit = cardRepresentation.transform.Find("Card/Suit_Label").GetComponent<SpriteRenderer>();
         cardSuit.sprite = Suit;
@@ -446,6 +450,8 @@ public class GameManager : MonoBehaviour
 
         if (ply == ply2 && ply2.NumberCards.Count == 1)
         {
+            UpdateNumberCardSuit(ply, (ply.NumberCards.Count - 1), card.Suit);
+            
             valueText.text = "?";
             damageText.text = "?";
             healthText.text = "?";

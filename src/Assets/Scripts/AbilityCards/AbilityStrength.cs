@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityStrength : PromptAbilityCard
 {
     public override string name => "Strength";
-    public override string description => "Pick a number card you hold to double its attack.";
+    public override string description => "Pick a number card you hold to double its <color=#ff8282>attack</color>.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -14,7 +14,9 @@ public class AbilityStrength : PromptAbilityCard
 
     public override void PromptChosen(GameManager gm, Player owner, Player opponent, int indexChosen)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         owner.NumberCards[indexChosen].Damage *= 2;
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override int AICardDecision(Player player) {

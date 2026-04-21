@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityEmperor : AbilityCard
 {
     public override string name => "Emperor";
-    public override string description => "Draws a number card between 5-8";
+    public override string description => "Draws a <color=#ff8282>number</color> card between 5-8";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

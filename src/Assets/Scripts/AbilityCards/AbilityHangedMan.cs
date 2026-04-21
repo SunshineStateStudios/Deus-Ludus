@@ -4,11 +4,12 @@ using TMPro;
 public class AbilityHangedMan : AbilityCard
 {
     public override string name => "Hanged Man";
-    public override string description => "Discard the Number Card the Opponent holds with the highest attack";
+    public override string description => "Discard the Number Card the Opponent holds with the <color=#ff8282>highest attack</color>";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         int chosenIndex = 0;
 
         for (int i = 0; i < opponent.NumberCards.Count; i++) {
@@ -21,6 +22,7 @@ public class AbilityHangedMan : AbilityCard
         }
 
         gm.RemoveNumberCard(opponent, chosenIndex);
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

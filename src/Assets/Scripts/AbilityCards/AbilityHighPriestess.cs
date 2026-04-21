@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityHighPriestess : PromptAbilityCard
 {
     public override string name => "High Priestess";
-    public override string description => "Sacrifice an ability you hold to reveal the opponent's hidden card.";
+    public override string description => "Sacrifice an <color=#ff8282>ability</color> you hold to reveal the opponent's <color=#ff8282>hidden</color> card.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

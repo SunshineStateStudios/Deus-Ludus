@@ -3,7 +3,7 @@ using UnityEngine;
 public class AbilityTemperance : AbilityCard
 {
     public override string name => "Temperance";
-    public override string description => "Reduces the threshold by 4 points.";
+    public override string description => "Reduces the <color=#ff85f7>threshold</color> by <color=#ff8282>4</color> points.";
     public override int triesDecayTime => 1;
     
     public override void Apply(GameManager gm, Player owner, Player opponent)

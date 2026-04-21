@@ -36,6 +36,7 @@ public class AbilityHermit : AbilityCard
                 canvasMngr.ShowDrawButton(true);
             }
         }
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

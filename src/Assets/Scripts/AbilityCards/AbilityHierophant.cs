@@ -4,7 +4,7 @@ using UnityEngine;
 public class AbilityHierophant : AbilityCard
 {
     public override string name => "Hierophant";
-    public override string description => "Discard the number card you hold with the highest attack.";
+    public override string description => "Discard the number card you hold with the <color=#ff8282>highest attack</color>.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
@@ -37,6 +37,7 @@ public class AbilityHierophant : AbilityCard
                 canvasMngr.ShowDrawButton(true);
             }
         }
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

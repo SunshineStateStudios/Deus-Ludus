@@ -4,7 +4,7 @@ using TMPro;
 public class AbilitySun : AbilityCard
 {
     public override string name => "Sun";
-    public override string description => "Doubles the attack of all Mayan number cards you've drawn.";
+    public override string description => "Doubles the <color=#ff8282>attack<color=#ffffff> of all <color=#27A6F5>Mayan</color> number cards you've drawn.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

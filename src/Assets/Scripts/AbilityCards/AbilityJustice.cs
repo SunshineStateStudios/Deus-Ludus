@@ -4,11 +4,12 @@ using TMPro;
 public class AbilityJustice : AbilityCard
 {
     public override string name => "Justice";
-    public override string description => "Swap all your Number Cards' attack values with their defence values.";
+    public override string description => "Swap all your Number Cards' <color=#ff8282>attack</color> values with their <color=#8787ff>defence</color> values.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         GameObject parent = gm.playerNumberCards;
         if (owner == gm.ply2) parent = gm.enemyNumberCards;
 
@@ -32,6 +33,7 @@ public class AbilityJustice : AbilityCard
             healthText.text = card.Health.ToString();
             damageText.text = card.Damage.ToString();
         }
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

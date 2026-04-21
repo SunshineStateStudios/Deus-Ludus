@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityChariot : AbilityCard
 {
     public override string name => "Chariot";
-    public override string description => "Remove opponent's most recently played ability card.";
+    public override string description => "Remove <color=#ff8282>opponent's<color=#ffffff> most recently played <color=#ff8282>number</color> card.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

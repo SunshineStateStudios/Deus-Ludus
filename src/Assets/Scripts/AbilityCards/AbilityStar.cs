@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityStar : AbilityCard
 {
     public override string name => "Star";
-    public override string description => "Doubles the defence of all Egyptian number cards you've drawn.";
+    public override string description => "Doubles the <color=#8787ff>defence<color=#ffffff> of all <color=#FFF700>Egyptian</color> number cards you've drawn.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
