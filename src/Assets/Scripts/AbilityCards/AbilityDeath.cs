@@ -14,6 +14,16 @@ public class AbilityDeath : AbilityCard
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         canvasMngr.CalculateText(gm.ply1, gm.ply2, true, 0f);
         canvasMngr.playerTotalLabel.GetComponent<Animator>().Play("ThresholdChanged", 0, 0);
+        
+        if (owner != gm.ply1) return;
+
+        if (gm.ply1.NumberCards.Count < 6) {
+            if (gm.ply1.BlackjackTotal(gm.BlackjackThreshold, false) >= gm.BlackjackThreshold) {
+                canvasMngr.ShowDrawButton(false);
+            } else {
+                canvasMngr.ShowDrawButton(true);
+            }
+        }
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
