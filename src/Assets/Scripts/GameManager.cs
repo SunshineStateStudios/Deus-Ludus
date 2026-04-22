@@ -600,7 +600,11 @@ public class GameManager : MonoBehaviour
                 hiddenCard.transform.Find("Card/Canvas/HealthLabel")
                 .GetComponent<TMP_Text>();
 
-            valueText.text = enemyFirstCard.Value.ToString();
+            if (enemyFirstCard.Value == 12) {
+                valueText.text = "A";
+            } else {
+                valueText.text = enemyFirstCard.Value.ToString();
+            }
             damageText.text = enemyFirstCard.Damage.ToString();
             healthText.text = enemyFirstCard.Health.ToString();
 
@@ -699,6 +703,8 @@ public class GameManager : MonoBehaviour
         int YouAtk = ply1.TotalDamage(false);
         int OppDef = ply2.TotalHealth(BlackjackThreshold, false);
         int OppAtk = ply2.TotalDamage(false);
+
+        canvasManagerScript.CalculateText(ply1,ply2,false,0f);
 
         decidedSound.Play();
 
