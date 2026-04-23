@@ -9,6 +9,7 @@ public class AbilitySun : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         for (int i = 0; i < owner.NumberCards.Count; i++)
         {
             NumberCard card = owner.NumberCards[i];
@@ -27,6 +28,7 @@ public class AbilitySun : AbilityCard
 
             damageText.text = card.Damage.ToString();
         }
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

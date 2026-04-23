@@ -4,16 +4,17 @@ using TMPro;
 public class AbilityMoon : AbilityCard
 {
     public override string name => "Moon";
-    public override string description => "Sets the <color=#8787ff>defence<color=#ffffff> of all of the opponent's <color=#ff3838>Japanese</color> number cards to 1.";
+    public override string description => "Sets the <color=#8787ff>defence<color=#ffffff> of all of the opponent's <color=#ff3838>Japanese</color> number cards to 0.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         for (int i = 0; i < opponent.NumberCards.Count; i++)
         {
             NumberCard card = opponent.NumberCards[i];
             if (card.Suit != 2) continue;
-            card.Health = 1;
+            card.Health = 0;
 
             GameObject parent = gm.enemyNumberCards;
             if (owner == gm.ply2) parent = gm.playerNumberCards;
@@ -28,6 +29,7 @@ public class AbilityMoon : AbilityCard
 
             healthText.text = card.Health.ToString();
         }
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

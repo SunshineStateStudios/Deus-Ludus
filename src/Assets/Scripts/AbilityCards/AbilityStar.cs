@@ -9,6 +9,7 @@ public class AbilityStar : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         for (int i = 0; i < opponent.NumberCards.Count; i++)
         {
             NumberCard card = opponent.NumberCards[i];
@@ -28,6 +29,7 @@ public class AbilityStar : AbilityCard
 
             healthText.text = card.Health.ToString();
         }
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
