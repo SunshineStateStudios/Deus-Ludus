@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityTower : PromptAbilityCard
 {
     public override string name => "Tower";
-    public override string description => "Choose a Number Card you hold to copy the <color=#ff8282>highest defense</color> the opponent has.";
+    public override string description => "Choose a Number Card you hold to copy the <color=#8787ff>highest defense</color> the opponent has.";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class AbilityHermit : AbilityCard
 {
     public override string name => "Hermit";
-    public override string description => "Reset your hand back to 2 Number Cards";
+    public override string description => "<color=#ff8282>Reset</color> your hand back to 2 Number Cards";
     public override int triesDecayTime => 1;
     int chosenCardIndex = 0;
     int chosenPly = 1; //default player is you

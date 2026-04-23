@@ -9,6 +9,7 @@ public class AbilityEmperor : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         NumberCard card = new NumberCard(Random.Range(5,9), Random.Range(1,4));
         owner.NumberCards.Add(card);
 
@@ -38,6 +39,7 @@ public class AbilityEmperor : AbilityCard
         healthText.text = card.Health.ToString();
 
         gm.RepositionCards(parent.transform);
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

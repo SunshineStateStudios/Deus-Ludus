@@ -107,8 +107,8 @@ public class CanvasManager : MonoBehaviour
         int ply2AttackTotal = ply2.TotalDamage(true);
         int ply2HealthTotal = ply2.TotalHealth(gameManagerScript.BlackjackThreshold, true);
 
-        ply1ADLabel.text = "A: <color=#d62d2dff>" + ply1AttackTotal.ToString() + "</color> / D: <color=#2d6ed6ff>" + ply1HealthTotal.ToString() + "</color>";
-        ply2ADLabel.text = "A: <color=#d62d2dff>? + " + ply2AttackTotal.ToString() + "</color> / D: <color=#2d6ed6ff>? + " + ply2HealthTotal.ToString() + "</color>";
+        ply1ADLabel.text = "<color=#d62d2dff>A: " + ply1AttackTotal.ToString() + "</color> / <color=#2d6ed6ff>D: " + ply1HealthTotal.ToString() + "</color>";
+        ply2ADLabel.text = "<color=#d62d2dff>A: ? + " + ply2AttackTotal.ToString() + "</color> / <color=#2d6ed6ff>D: ? + " + ply2HealthTotal.ToString() + "</color>";
 
         plyTotalText.text = "Total: " + total.ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         

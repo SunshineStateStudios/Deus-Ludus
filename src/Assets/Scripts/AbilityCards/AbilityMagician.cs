@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityMagician : PromptAbilityCard
 {
     public override string name => "Magician";
-    public override string description => "Pick an ability card in your inventory to copy it.";
+    public override string description => "Pick an <color=#ff8282>ability<color=#ffffff> card in your inventory to <color=#ff8282>copy<color=#ffffff> that card";
     public override int triesDecayTime => 1;
     
     public override void Apply(GameManager gm, Player owner, Player opponent)
