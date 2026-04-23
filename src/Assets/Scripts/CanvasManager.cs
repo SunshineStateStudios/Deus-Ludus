@@ -9,6 +9,7 @@ public class CanvasManager : MonoBehaviour
     public GameObject inventoryObj;
     public GameObject gameManager;
     public GameObject AbilityCardUIPrefab;
+    public GameObject AbilityCardUIPromptPrefab;
     public GameObject timerLabel;
     public GameObject turnsLabel;
     public GameObject roundsLabel;
@@ -257,6 +258,8 @@ public class CanvasManager : MonoBehaviour
 
             titleText.text = "Choose a number card... (" + card.name + ")";
 
+            foreach (Transform child in promptContents) Destroy(child.gameObject);
+
             for (int i = 0; i < ply.NumberCards.Count; i++) {
                 NumberCard numbCard = ply.NumberCards[i];
                 GameObject cardRepresentation = Instantiate(NumberCardButtonPrompt, promptContents);
@@ -289,11 +292,13 @@ public class CanvasManager : MonoBehaviour
 
         titleTextAbility.text = "Choose an ability card... (" + card.name + ")";
 
+        foreach (Transform child in promptContentsAbility) Destroy(child.gameObject);
+
         for (int i = 0; i < ply.AbilityCards.Count; i++) {
             AbilityCard abilityCard = ply.AbilityCards[i];
             if (abilityCard.Drawn) continue;
 
-            GameObject cardRepresentation = Instantiate(AbilityCardUIPrefab, promptContentsAbility);
+            GameObject cardRepresentation = Instantiate(AbilityCardUIPromptPrefab, promptContentsAbility);
             Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
 
             TMP_Text nameLabel = cardRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();

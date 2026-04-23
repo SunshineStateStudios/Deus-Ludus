@@ -29,7 +29,7 @@ public class AbilityHierophant : AbilityCard
         gm.RemoveNumberCard(chosenPly, chosenCardIndex);
         if (owner == gm.ply1)
         {
-            if (gm.ply1.NumberCards.Count >= 6)
+            if (gm.ply1.NumberCards.Count >= 6 || gm.ply1.BlackjackTotal(gm.BlackjackThreshold, false) >= gm.BlackjackThreshold)
             {
                 canvasMngr.ShowDrawButton(false);
             } else

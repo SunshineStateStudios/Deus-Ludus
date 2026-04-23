@@ -33,7 +33,12 @@ public class AbilityHighPriestess : PromptAbilityCard
         hiddenCard.transform.Find("Card/Canvas/HealthLabel")
         .GetComponent<TMP_Text>();
 
-        valueText.text = enemyFirstCard.Value.ToString();
+        if (enemyFirstCard.Value == 12) {
+            valueText.text = "A";
+        } else {
+            valueText.text = enemyFirstCard.Value.ToString();
+        }
+        
         damageText.text = enemyFirstCard.Damage.ToString();
         healthText.text = enemyFirstCard.Health.ToString();
     }

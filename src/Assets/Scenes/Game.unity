@@ -612,6 +612,7 @@ MonoBehaviour:
   inventoryObj: {fileID: 1175367172}
   gameManager: {fileID: 241583326}
   AbilityCardUIPrefab: {fileID: 4698474434786249846, guid: dfe78cbf274c16e2f99138757b35b18d, type: 3}
+  AbilityCardUIPromptPrefab: {fileID: 2502003031476697309, guid: b7f73866a0c218a44b9fb2c538dd7164, type: 3}
   timerLabel: {fileID: 1304456288}
   turnsLabel: {fileID: 1794776400}
   roundsLabel: {fileID: 835080104}
