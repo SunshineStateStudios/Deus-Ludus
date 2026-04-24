@@ -47,6 +47,7 @@ public class PauseController : MonoBehaviour
     }
     public IEnumerator PauseDeusLudusTheGame()
     {
+        Time.timeScale = 0f;
         pause.gameObject.SetActive(true);
         pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
@@ -54,6 +55,7 @@ public class PauseController : MonoBehaviour
     }
     public IEnumerator ResumeDeusLudusTheGame()
     {
+        Time.timeScale = 1f;
         pauseGroup.DOFade(0f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
         pause.gameObject.SetActive(false);

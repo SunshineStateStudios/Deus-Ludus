@@ -16,18 +16,12 @@ public class AbilityChariot : AbilityCard
         Transform parentCards = gm.playerAbilityCards.transform;
         if (owner == gm.ply2) parentCards = gm.enemyAbilityCards.transform;
 
-        for (int i = opponent.AbilityCards.Count-1; i >= 0; i--)
-        {
-            AbilityCard opponentsLastUsedPassive = opponent.AbilityCards[i];
-                if (opponentsLastUsedPassive.Drawn){
-                opponent.AbilityCards.RemoveAt(i);
-                Transform cardRepTransform = parentCards.Find(i.ToString());
-                if (cardRepTransform == null) continue;
+        for (int i = opponent.AbilityCards.Count-1; i >= 0; i--) {
+            AbilityCard abilityCard = opponent.AbilityCards[i];
+            if (!abilityCard.Drawn) continue;
 
-                GameObject cardRepresentation = cardRepTransform.gameObject;
-                DestroyObj DestroyObjScript = cardRepresentation.GetComponent<DestroyObj>();
-                DestroyObjScript.Begone();
-            }
+            gm.RemoveAbilityCard(opponent, i);
+            break;
         }
     }
 

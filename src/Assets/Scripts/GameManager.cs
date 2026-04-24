@@ -317,6 +317,12 @@ public class GameManager : MonoBehaviour
 
     public void RemoveAbilityCard(Player ply, int index) {
         ply.AbilityCards.RemoveAt(index);
+
+        Transform parentCards = playerAbilityCards.transform;
+        if (ply == ply2) parentCards = enemyAbilityCards.transform;
+
+        Transform cardRepTransform = parentCards.Find(index.ToString());
+        Destroy(cardRepTransform.gameObject);
     }
 
     public void RemoveNumberCard(int ply, int index) {
