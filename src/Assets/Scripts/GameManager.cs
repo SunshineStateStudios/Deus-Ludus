@@ -205,6 +205,14 @@ public class GameManager : MonoBehaviour
             {
                 canvasManagerScript.SetStatus("It's your turn!");
                 canvasManagerScript.SetActive(true);
+
+                if (ply1.NumberCards.Count >= 6 || ply1.BlackjackTotal(BlackjackThreshold, false) >= BlackjackThreshold)
+                {
+                    canvasManagerScript.ShowDrawButton(false);
+                } else
+                {
+                    canvasManagerScript.ShowDrawButton(true);
+                }
             }
         }
 

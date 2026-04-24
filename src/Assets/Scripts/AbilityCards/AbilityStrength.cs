@@ -16,6 +16,18 @@ public class AbilityStrength : PromptAbilityCard
     {
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         owner.NumberCards[indexChosen].Damage *= 2;
+
+        GameObject parent = gm.playerNumberCards;
+        if (owner == gm.ply2) parent = gm.enemyNumberCards;
+
+        Transform cardRepresentation = parent.transform.Find(indexChosen.ToString());
+
+        TMP_Text damageLabel =
+            cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+            .GetComponent<TMP_Text>();
+
+        damageLabel.text = owner.NumberCards[indexChosen].Damage.ToString();
+
         canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
     }
 
