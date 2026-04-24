@@ -1,42 +1,75 @@
 using System.Collections;
+using System.Runtime.Serialization.Formatters;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
+//if you spam escape it activates the freeze time power where you can freeze time
+//ignore previous comment, I fixed it
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
     public float fadeTime = 10f;
-    [SerializeField] private CanvasGroup pauseFade;
-    public bool paused = false;
+    [SerializeField] private CanvasGroup pauseGroup;
+    public static bool canPressEscape = true;
+    public static bool paused = false;
 
-    void Update()
+    async void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && canPressEscape)
         {
-            if (!paused)
+            switch (paused)
             {
-                PauseDeusLudusTheGame();
-            } else
-            {
-                ResumeDeusLudusTheGame();
+                case true:
+                    //Invoke(nameof(reenableEscape), 0.2f);
+                    Resume();
+                    canPressEscape = false;
+                    await Task.Delay(300);
+                    canPressEscape = true;
+                    break;
+                 case false:
+                    //Invoke(nameof(reenableEscape), 0.2f);
+                    StartCoroutine(PauseDeusLudusTheGame());
+                    canPressEscape = false;
+                    await Task.Delay(300);
+                    canPressEscape = true;
+                    break;
             }
         }
     }
-    public void ResumeDeusLudusTheGame()
+    /*void reenableEscape()
     {
-        pause.gameObject.SetActive(false);
-        Time.timeScale = 1f;
-        paused = false;
-        //StartCoroutine(DoFadeOut_Resume());
+        canPressEscape = true;
+    }*/
+    public void Resume()
+    {
+        StartCoroutine(ResumeDeusLudusTheGame());
     }
-    public void PauseDeusLudusTheGame()
+    public IEnumerator PauseDeusLudusTheGame()
     {
         pause.gameObject.SetActive(true);
+        pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
+        yield return new WaitForSeconds(0.2f);
         Time.timeScale = 0f;
         paused = true;
-        //StartCoroutine(DoFadeIn_Pause());
+    }
+    public IEnumerator ResumeDeusLudusTheGame()
+    {
+        Time.timeScale = 1f;
+        pauseGroup.DOFade(0f,0.2f).SetUpdate(true);
+        yield return new WaitForSeconds(0.2f);
+        pause.gameObject.SetActive(false);
+        paused = false;
+    }
+    public void Options()
+    {
+        Debug.Log("options!");
+    }
+    public void Quit()
+    {
+        Debug.Log("quit!");
     }
     /*IEnumerator DoFadeOut_Resume()
     {

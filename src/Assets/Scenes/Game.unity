@@ -2417,9 +2417,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '26
-
-'
+  m_text: hello!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1fa92693498ac3947a938afac2d77209, type: 2}
   m_sharedMaterial: {fileID: 630950936364446140, guid: 1fa92693498ac3947a938afac2d77209, type: 2}
@@ -4272,8 +4270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseController
   pause: {fileID: 1934126038}
   fadeTime: 3
-  pauseFade: {fileID: 1934126040}
-  paused: 0
+  pauseGroup: {fileID: 1934126040}
 --- !u!1 &999493418
 GameObject:
   m_ObjectHideFlags: 0
@@ -9805,9 +9802,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '26
-
-'
+  m_text: hi
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1fa92693498ac3947a938afac2d77209, type: 2}
   m_sharedMaterial: {fileID: 630950936364446140, guid: 1fa92693498ac3947a938afac2d77209, type: 2}
@@ -9972,12 +9967,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1201392299}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+        m_TargetAssemblyTypeName: PauseController, Assembly-CSharp
+        m_MethodName: Options
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -10035,8 +10030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseController
   pause: {fileID: 1934126038}
   fadeTime: 3
-  pauseFade: {fileID: 1934126040}
-  paused: 0
+  pauseGroup: {fileID: 1934126040}
 --- !u!1 &1280275112
 GameObject:
   m_ObjectHideFlags: 0
@@ -16963,7 +16957,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1723653021}
         m_TargetAssemblyTypeName: PauseController, Assembly-CSharp
-        m_MethodName: ResumeDeusLudusTheGame
+        m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17025,8 +17019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseController
   pause: {fileID: 1934126038}
   fadeTime: 3
-  pauseFade: {fileID: 1934126040}
-  paused: 0
+  pauseGroup: {fileID: 1934126040}
 --- !u!1 &1794776400
 GameObject:
   m_ObjectHideFlags: 0
@@ -17489,12 +17482,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1928210128}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+        m_TargetAssemblyTypeName: PauseController, Assembly-CSharp
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -17552,8 +17545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseController
   pause: {fileID: 1934126038}
   fadeTime: 3
-  pauseFade: {fileID: 1934126040}
-  paused: 0
+  pauseGroup: {fileID: 1934126040}
 --- !u!1 &1934126038
 GameObject:
   m_ObjectHideFlags: 0
@@ -17604,7 +17596,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1934126038}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
