@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 
-//if you spam escape it activates the freeze time power where you can freeze time
-//ignore previous comment, I fixed it
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
@@ -52,12 +50,10 @@ public class PauseController : MonoBehaviour
         pause.gameObject.SetActive(true);
         pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
-        Time.timeScale = 0f;
         paused = true;
     }
     public IEnumerator ResumeDeusLudusTheGame()
     {
-        Time.timeScale = 1f;
         pauseGroup.DOFade(0f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
         pause.gameObject.SetActive(false);
