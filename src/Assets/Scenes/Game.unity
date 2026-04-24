@@ -765,6 +765,7 @@ MonoBehaviour:
   NumberCardPromptPanel: {fileID: 1533268823}
   NumberCardButtonPrompt: {fileID: 6026728480752834025, guid: 69c97b5c537d4cadfb9fadacf3f8ef1d, type: 3}
   InventoryDescriptionPanel: {fileID: 223089754}
+  timerPause: 0
 --- !u!114 &187481884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4271,6 +4272,7 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   fadeTime: 3
   pauseGroup: {fileID: 1934126040}
+  canvasManagerObject: {fileID: 187481881}
 --- !u!1 &999493418
 GameObject:
   m_ObjectHideFlags: 0
@@ -10031,6 +10033,7 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   fadeTime: 3
   pauseGroup: {fileID: 1934126040}
+  canvasManagerObject: {fileID: 0}
 --- !u!1 &1280275112
 GameObject:
   m_ObjectHideFlags: 0
@@ -17020,6 +17023,7 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   fadeTime: 3
   pauseGroup: {fileID: 1934126040}
+  canvasManagerObject: {fileID: 0}
 --- !u!1 &1794776400
 GameObject:
   m_ObjectHideFlags: 0
@@ -17546,6 +17550,7 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   fadeTime: 3
   pauseGroup: {fileID: 1934126040}
+  canvasManagerObject: {fileID: 0}
 --- !u!1 &1934126038
 GameObject:
   m_ObjectHideFlags: 0
