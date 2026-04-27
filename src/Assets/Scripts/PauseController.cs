@@ -6,10 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 
+//if you spam escape it activates the freeze time power where you can freeze time
+//ignore previous comment, I fixed it
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
-    public float fadeTime = 10f;
+    //public float fadeTime = 10f;
     [SerializeField] private CanvasGroup pauseGroup;
     public static bool canPressEscape = true;
     public static bool paused = false;
@@ -47,10 +49,10 @@ public class PauseController : MonoBehaviour
     }
     public IEnumerator PauseDeusLudusTheGame()
     {
-        Time.timeScale = 0f;
         pause.gameObject.SetActive(true);
         pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
+        Time.timeScale = 0f;
         paused = true;
     }
     public IEnumerator ResumeDeusLudusTheGame()

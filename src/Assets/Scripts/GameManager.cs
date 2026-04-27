@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
 
-        /*abilityCardList.Add(new AbilityChariot());
+        abilityCardList.Add(new AbilityChariot());
         abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityDevil());
         abilityCardList.Add(new AbilityEmperor());
@@ -96,9 +96,9 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityTower());
         abilityCardList.Add(new AbilityWheelOfFortune());
-        abilityCardList.Add(new AbilityWorld());*/
+        abilityCardList.Add(new AbilityWorld());
 
-        for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityJudgement());
+        //for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityJudgement());
 
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
@@ -398,7 +398,6 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            Debug.Log("argg");
             card.DOKill();
             card.DOMove(targetPos, 0.5f)
                 .SetEase(Ease.InOutSine);
