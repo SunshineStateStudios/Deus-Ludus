@@ -330,6 +330,7 @@ public class GameManager : MonoBehaviour
         if (ply == ply2) parentCards = enemyAbilityCards.transform;
 
         Transform cardRepTransform = parentCards.Find(index.ToString());
+        if (cardRepTransform == null) return;
         Destroy(cardRepTransform.gameObject);
     }
 
