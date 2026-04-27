@@ -5,12 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 //if you spam escape it activates the freeze time power where you can freeze time
 //ignore previous comment, I fixed it
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
+    public SceneManager sceneManager;
     //public float fadeTime = 10f;
     [SerializeField] private CanvasGroup pauseGroup;
     public static bool canPressEscape = true;
@@ -63,13 +65,9 @@ public class PauseController : MonoBehaviour
         pause.gameObject.SetActive(false);
         paused = false;
     }
-    public void Options()
-    {
-        Debug.Log("options!");
-    }
     public void Quit()
     {
-        Debug.Log("quit!");
+        SceneManager.LoadScene(0);
     }
     /*IEnumerator DoFadeOut_Resume()
     {
