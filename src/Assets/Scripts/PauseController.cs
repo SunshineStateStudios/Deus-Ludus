@@ -12,16 +12,23 @@ using UnityEngine.SceneManagement;
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
-    public GameObject pauseMusic;
-    public GameObject gameplayMusic;
-    public AudioSource winningMusic;
-    public AudioSource losingMusic;
-    public AudioSource defaultMusic;
+    //public GameObject pauseMusic;
+    //public GameObject gameplayMusic;
+    //public AudioSource winningMusic;
+    //public AudioSource losingMusic;
+    //public AudioSource defaultMusic;
     public SceneManager sceneManager;
+    public GameManager gm;
     //public float fadeTime = 10f;
     [SerializeField] private CanvasGroup pauseGroup;
     public static bool canPressEscape = true;
-    public static bool paused = false;
+    public bool paused = false;
+    private MusicController musicControl;
+
+    void Start()
+    {
+        musicControl = gm.musicController;
+    }
 
     async void Update()
     {
@@ -30,14 +37,14 @@ public class PauseController : MonoBehaviour
             switch (paused)
             {
                 case true:
-                    //Invoke(nameof(reenableEscape), 0.2f);
+                    paused = true;
                     Resume();
                     canPressEscape = false;
                     await Task.Delay(300);
                     canPressEscape = true;
                     break;
                  case false:
-                    //Invoke(nameof(reenableEscape), 0.2f);
+                    paused = false;
                     StartCoroutine(PauseDeusLudusTheGame());
                     canPressEscape = false;
                     await Task.Delay(300);
@@ -57,25 +64,20 @@ public class PauseController : MonoBehaviour
     public IEnumerator PauseDeusLudusTheGame()
     {
         pause.gameObject.SetActive(true);
-        pauseMusic.gameObject.SetActive(true);
-        gameplayMusic.gameObject.SetActive(false);
         pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
         Time.timeScale = 0f;
         paused = true;
+        musicControl.ControlMusic(gm);
     }
     public IEnumerator ResumeDeusLudusTheGame()
     {
-        pauseMusic.gameObject.SetActive(false);
-        gameplayMusic.gameObject.SetActive(true);
-        winningMusic.Play();
-        losingMusic.Play();
-        defaultMusic.Play();
         Time.timeScale = 1f;
         pauseGroup.DOFade(0f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
         pause.gameObject.SetActive(false);
         paused = false;
+        musicControl.ControlMusic(gm);
     }
     public void Quit()
     {

@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public GameObject PauseSunMusicObj;
     public GameObject PauseMoonMusicObj;
     public GameObject PauseDefaultMusicObj;
+    public MusicController musicController = new MusicController();
     public bool alreadyPrompted { get; set; }
 
     private AudioSource decidedSound;
@@ -37,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     private List<AbilityCard> abilityCardList;
     private CanvasManager canvasManagerScript;
-    private MusicController musicController = new MusicController();
     private int rounds = 0;
     private int turns = 0;
     private float abilityCardDebounce = 0;

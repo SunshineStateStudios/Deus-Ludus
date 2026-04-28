@@ -23,6 +23,8 @@ public class MusicController
     private AudioSource pauseMoonAudio;
     private AudioSource pauseDefaultAudio;
 
+    private GameObject pauseornot;
+
     public void Initialise()
     {
         //battle music
@@ -38,6 +40,9 @@ public class MusicController
         losingAudio.Play();
         winningAudio.Play();
         defaultAudio.Play();
+        pauseSunAudio.Play();
+        pauseMoonAudio.Play();
+        pauseDefaultAudio.Play();
     }
     /*public IEnumerator musicFade(AudioSource music, float duration, float targetVolume)
     {
@@ -53,54 +58,66 @@ public class MusicController
     }*/
     public void ControlMusic(GameManager gm)
     {
+        //PauseController pauseController = pauseornot.GetComponent<PauseController>();
+        pauseornot = GameObject.Find("Canvas/Pause");
         yourHp = gm.ply1.Life;
         if (yourHp <= 9)
         {
-            /*losingAudio.volume = 1f;
-            winningAudio.volume = 0;
-            defaultAudio.volume = 0;*/
-
-            losingAudio.DOFade(1f, 5f);
-            winningAudio.DOFade(0f, 5f);
-            defaultAudio.DOFade(0f, 5f);
-            pauseSunAudio.DOFade(0.5f, 5f);
-            pauseMoonAudio.DOFade(0f, 5f);
-            pauseDefaultAudio.DOFade(0f, 5f);
-            //StartCoroutine(musicFade(losingAudio, 2f, 1f));
-            //StartCoroutine(musicFade(winningAudio, 2f, 0f));
-            //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
-            
+            if (pauseornot.activeInHierarchy)
+            {
+                losingAudio.DOFade(0f, 5f);
+                winningAudio.DOFade(0f, 5f);
+                defaultAudio.DOFade(0f, 5f);
+                pauseSunAudio.DOFade(0.5f, 5f);
+                pauseMoonAudio.DOFade(0f, 5f);
+                pauseDefaultAudio.DOFade(0f, 5f);
+            } else
+            {
+                losingAudio.DOFade(1f, 5f);
+                winningAudio.DOFade(0f, 5f);
+                defaultAudio.DOFade(0f, 5f);
+                pauseSunAudio.DOFade(0f, 5f);
+                pauseMoonAudio.DOFade(0f, 5f);
+                pauseDefaultAudio.DOFade(0f, 5f);
+            }
         } else if (yourHp >= 11)
         {
-            /*losingAudio.volume = 0;
-            winningAudio.volume = 1f;
-            defaultAudio.volume = 0;*/
-
-            losingAudio.DOFade(0f, 5f);
-            winningAudio.DOFade(1f, 5f);
-            defaultAudio.DOFade(0f, 5f);
-            pauseSunAudio.DOFade(0f, 5f);
-            pauseMoonAudio.DOFade(0.5f, 5f);
-            pauseDefaultAudio.DOFade(0f, 5f);
-            //StartCoroutine(musicFade(losingAudio, 2f, 0f));
-            //StartCoroutine(musicFade(winningAudio, 2f, 1f));
-            //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
+            if (pauseornot.activeInHierarchy)
+            {
+                losingAudio.DOFade(0f, 5f);
+                winningAudio.DOFade(0f, 5f);
+                defaultAudio.DOFade(0f, 5f);
+                pauseSunAudio.DOFade(0f, 5f);
+                pauseMoonAudio.DOFade(0.5f, 5f);
+                pauseDefaultAudio.DOFade(0f, 5f);
+            } else
+            {
+                losingAudio.DOFade(0f, 5f);
+                winningAudio.DOFade(1f, 5f);
+                defaultAudio.DOFade(0f, 5f);
+                pauseSunAudio.DOFade(0f, 5f);
+                pauseMoonAudio.DOFade(0f, 5f);
+                pauseDefaultAudio.DOFade(0f, 5f);
+            }
         } else
         {
-            /*losingAudio.volume = 0;
-            winningAudio.volume = 0;
-            defaultAudio.volume = 1f;*/
-
-            losingAudio.DOFade(0f, 5f);
-            winningAudio.DOFade(0f, 5f);
-            defaultAudio.DOFade(1f, 5f);
-            pauseSunAudio.DOFade(0f, 5f);
-            pauseMoonAudio.DOFade(0f, 5f);
-            pauseDefaultAudio.DOFade(0.5f, 5f);
-            //StartCoroutine(musicFade(losingAudio, 2f, 0f));
-            //StartCoroutine(musicFade(winningAudio, 2f, 0f));
-            //StartCoroutine(musicFade(defaultAudio, 2f, 1f));
-
+            if (pauseornot.activeInHierarchy)
+            {
+                losingAudio.DOFade(0f, 5f);
+                winningAudio.DOFade(0f, 5f);
+                defaultAudio.DOFade(0f, 5f);
+                pauseSunAudio.DOFade(0f, 5f);
+                pauseMoonAudio.DOFade(0.5f, 5f);
+                pauseDefaultAudio.DOFade(0f, 5f);
+            } else
+            {
+                losingAudio.DOFade(0f, 5f);
+                winningAudio.DOFade(0f, 5f);
+                defaultAudio.DOFade(1f, 5f);
+                pauseSunAudio.DOFade(0f, 5f);
+                pauseMoonAudio.DOFade(0f, 5f);
+                pauseDefaultAudio.DOFade(0f, 5f);
+            }
         }
     }
 
