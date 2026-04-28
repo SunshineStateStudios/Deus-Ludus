@@ -8,17 +8,24 @@ public class NumberCardVisuals : MonoBehaviour
     public GameObject dashLabel;
     public GameObject damageLabel;
     public GameObject healthLabel;
-    public GameObject GodFigurePrefab;
+    public GameObject[] Male_GodPrefabs; // indexes of the arrays correspond to models
+    public GameObject[] Female_GodPrefabs;
+    public int cardSuit;
     public Transform GodPos;
     public CanvasManager canvasManager;
     public ParticleSystem particles;
     private AudioSource sound;
     private bool canShowVisuals = false;
+    private GameObject ChosenGodModel;
 
     IEnumerator CardSound()
     {
         yield return new WaitForSeconds(.3f);
         sound.Play();
+    }
+
+    public GameObject GetChosenGodModel() {
+        return ChosenGodModel;
     }
 
     void Start()
@@ -51,7 +58,15 @@ public class NumberCardVisuals : MonoBehaviour
         }
         canvasManager.WhiteFlash();
 
-        GameObject godFigureInstance = Instantiate(GodFigurePrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
+        GameObject chosenModel;
+        if (Random.value >= 0.5) {
+            chosenModel = Male_GodPrefabs[cardSuit-1];
+        } else {
+            chosenModel = Female_GodPrefabs[cardSuit-1];
+        }
+
+        GameObject godFigureInstance = Instantiate(chosenModel, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
+        ChosenGodModel = godFigureInstance;
         //GameObject suitInstance = Instantiate(suitPrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
         canShowVisuals = true;
         

@@ -464,6 +464,7 @@ public class GameManager : MonoBehaviour
         cardRepresentation.name = (ply.NumberCards.Count - 1).ToString();
 
         NumberCardVisuals cardVisualsScript = cardRepresentation.transform.Find("Card").gameObject.GetComponent<NumberCardVisuals>();
+        cardVisualsScript.cardSuit = card.Suit;
         cardVisualsScript.canvasManager = canvasManagerScript;
 
         RepositionCards(parent.transform, false);
