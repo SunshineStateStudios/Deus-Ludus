@@ -10,18 +10,31 @@ public class MusicController
     public GameObject losingMusic;
     public GameObject winningMusic;
     public GameObject defaultMusic;
+    public GameObject sunPause;
+    public GameObject moonPause;
+    public GameObject defaultPause;
     public int yourHp = 0;
     
 
     private AudioSource losingAudio;
     private AudioSource winningAudio;
     private AudioSource defaultAudio;
+    private AudioSource pauseSunAudio;
+    private AudioSource pauseMoonAudio;
+    private AudioSource pauseDefaultAudio;
 
     public void Initialise()
     {
+        //battle music
         losingAudio = losingMusic.GetComponent<AudioSource>();
         winningAudio = winningMusic.GetComponent<AudioSource>();
         defaultAudio = defaultMusic.GetComponent<AudioSource>();
+
+        //pause music
+        pauseSunAudio = sunPause.GetComponent<AudioSource>();
+        pauseMoonAudio = moonPause.GetComponent<AudioSource>();
+        pauseDefaultAudio = defaultPause.GetComponent<AudioSource>();
+
         losingAudio.Play();
         winningAudio.Play();
         defaultAudio.Play();
@@ -50,6 +63,9 @@ public class MusicController
             losingAudio.DOFade(1f, 5f);
             winningAudio.DOFade(0f, 5f);
             defaultAudio.DOFade(0f, 5f);
+            pauseSunAudio.DOFade(0.5f, 5f);
+            pauseMoonAudio.DOFade(0f, 5f);
+            pauseDefaultAudio.DOFade(0f, 5f);
             //StartCoroutine(musicFade(losingAudio, 2f, 1f));
             //StartCoroutine(musicFade(winningAudio, 2f, 0f));
             //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
@@ -63,6 +79,9 @@ public class MusicController
             losingAudio.DOFade(0f, 5f);
             winningAudio.DOFade(1f, 5f);
             defaultAudio.DOFade(0f, 5f);
+            pauseSunAudio.DOFade(0f, 5f);
+            pauseMoonAudio.DOFade(0.5f, 5f);
+            pauseDefaultAudio.DOFade(0f, 5f);
             //StartCoroutine(musicFade(losingAudio, 2f, 0f));
             //StartCoroutine(musicFade(winningAudio, 2f, 1f));
             //StartCoroutine(musicFade(defaultAudio, 2f, 0f));
@@ -75,6 +94,9 @@ public class MusicController
             losingAudio.DOFade(0f, 5f);
             winningAudio.DOFade(0f, 5f);
             defaultAudio.DOFade(1f, 5f);
+            pauseSunAudio.DOFade(0f, 5f);
+            pauseMoonAudio.DOFade(0f, 5f);
+            pauseDefaultAudio.DOFade(0.5f, 5f);
             //StartCoroutine(musicFade(losingAudio, 2f, 0f));
             //StartCoroutine(musicFade(winningAudio, 2f, 0f));
             //StartCoroutine(musicFade(defaultAudio, 2f, 1f));

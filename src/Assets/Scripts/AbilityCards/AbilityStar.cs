@@ -23,8 +23,11 @@ public class AbilityStar : AbilityCard
         
             if (parent == gm.enemyNumberCards && i == 0) continue;
 
+            Transform HealthLabel = cardRepresentation.transform.Find("HealthLabel");
+            if (HealthLabel == null) continue;
+
             TMP_Text healthText =
-                cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
+                HealthLabel.gameObject
                 .GetComponent<TMP_Text>();
 
             healthText.text = card.Health.ToString();

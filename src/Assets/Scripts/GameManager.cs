@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     public GameObject losingMusicObj;
     public GameObject winningMusicObj;
     public GameObject defaultMusicObj;
+    public GameObject PauseSunMusicObj;
+    public GameObject PauseMoonMusicObj;
+    public GameObject PauseDefaultMusicObj;
     public bool alreadyPrompted { get; set; }
 
     private AudioSource decidedSound;
@@ -51,6 +54,9 @@ public class GameManager : MonoBehaviour
         musicController.losingMusic = losingMusicObj;
         musicController.winningMusic = winningMusicObj;
         musicController.defaultMusic = defaultMusicObj;
+        musicController.sunPause = PauseSunMusicObj;
+        musicController.moonPause = PauseMoonMusicObj;
+        musicController.defaultPause = PauseDefaultMusicObj;
         musicController.Initialise();
 
         canvasManagerScript = canvasObject.GetComponent<CanvasManager>();

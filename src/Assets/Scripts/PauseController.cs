@@ -12,6 +12,11 @@ using UnityEngine.SceneManagement;
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
+    public GameObject pauseMusic;
+    public GameObject gameplayMusic;
+    public AudioSource winningMusic;
+    public AudioSource losingMusic;
+    public AudioSource defaultMusic;
     public SceneManager sceneManager;
     //public float fadeTime = 10f;
     [SerializeField] private CanvasGroup pauseGroup;
@@ -52,6 +57,8 @@ public class PauseController : MonoBehaviour
     public IEnumerator PauseDeusLudusTheGame()
     {
         pause.gameObject.SetActive(true);
+        pauseMusic.gameObject.SetActive(true);
+        gameplayMusic.gameObject.SetActive(false);
         pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
         Time.timeScale = 0f;
@@ -59,6 +66,11 @@ public class PauseController : MonoBehaviour
     }
     public IEnumerator ResumeDeusLudusTheGame()
     {
+        pauseMusic.gameObject.SetActive(false);
+        gameplayMusic.gameObject.SetActive(true);
+        winningMusic.Play();
+        losingMusic.Play();
+        defaultMusic.Play();
         Time.timeScale = 1f;
         pauseGroup.DOFade(0f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
