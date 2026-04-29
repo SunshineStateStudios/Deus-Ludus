@@ -137,15 +137,15 @@ MonoBehaviour:
   damageLabel: {fileID: 1538562865426066651}
   healthLabel: {fileID: 8824129909480260098}
   Male_GodPrefabs:
-  - {fileID: 919132149155446097, guid: a43e3f6ff60cee041be01ad27ed9daef, type: 3}
-  - {fileID: 919132149155446097, guid: 69b3993bd34d8034597dbc5895f251ac, type: 3}
-  - {fileID: 919132149155446097, guid: 88e189cbb80d0e140a2e9016a5f7af3b, type: 3}
-  - {fileID: 919132149155446097, guid: 36762418cf4d1ca4188afa6cb05f68ab, type: 3}
+  - {fileID: 8873364161598080298, guid: 942d050c0001d2e968ef7badbe4f6e05, type: 3}
+  - {fileID: 5525345417621465990, guid: df4bff869d6cb4fde8157aace922554e, type: 3}
+  - {fileID: 6499285219727339494, guid: cddbc0e3f7ebff1bb869bcfb718ce669, type: 3}
+  - {fileID: 2869557883559865259, guid: 39588881bbbfb011680c57afb7ade897, type: 3}
   Female_GodPrefabs:
-  - {fileID: 919132149155446097, guid: 1312bd7c98a5a6646953ec34fe08b362, type: 3}
-  - {fileID: 919132149155446097, guid: 69b3993bd34d8034597dbc5895f251ac, type: 3}
-  - {fileID: 919132149155446097, guid: 07f724d64660af14581dd486f4fbcf68, type: 3}
-  - {fileID: 919132149155446097, guid: eec00b141ac885b48a1f453e24213b74, type: 3}
+  - {fileID: 7350360015427329097, guid: df724ac4c8afaaf77aba185d7db66842, type: 3}
+  - {fileID: 5525345417621465990, guid: df4bff869d6cb4fde8157aace922554e, type: 3}
+  - {fileID: 54028110948680194, guid: bf9ff9f64f6a65ca3b38b3d7948e8a36, type: 3}
+  - {fileID: 54028110948680194, guid: bf9ff9f64f6a65ca3b38b3d7948e8a36, type: 3}
   cardSuit: 0
   GodPos: {fileID: 2695904295220384047}
   canvasManager: {fileID: 0}
@@ -707,13 +707,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5449497841736508675}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.62, y: -0.518, z: -4.32}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -1.063, y: -0.092, z: -0.012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4573962000136689267}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 180}
 --- !u!1 &5896489787823923561
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,7 +777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4052382506918877120
 RectTransform:
   m_ObjectHideFlags: 0

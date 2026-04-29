@@ -30,6 +30,8 @@ public class NumberCardVisuals : MonoBehaviour
 
     void Start()
     {
+        if (transform.parent.parent.gameObject.name.Equals("EnemyNumberCards")) GodPos.Rotate(0f,-180f,0f);
+
         sound = GetComponent<AudioSource>();
         sound.volume = 0.25f;
         StartCoroutine(CardSound());
@@ -65,14 +67,10 @@ public class NumberCardVisuals : MonoBehaviour
             chosenModel = Female_GodPrefabs[cardSuit-1];
         }
 
-        GameObject godFigureInstance = Instantiate(chosenModel, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
+        GameObject godFigureInstance = Instantiate(chosenModel, GodPos.transform);
         ChosenGodModel = godFigureInstance;
         //GameObject suitInstance = Instantiate(suitPrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
         canShowVisuals = true;
-        
-        godFigureInstance.transform.rotation = Quaternion.identity;
-        godFigureInstance.transform.position = GodPos.transform.position;
-        godFigureInstance.transform.position += new Vector3(0.8f, 0f, 0f);
         /*suitInstance.transform.rotation = Quaternion.identity;
         suitInstance.transform.Rotate(90, 0, 0);
         suitInstance.transform.position = new Vector3(0f, 0f, 0f);*/
