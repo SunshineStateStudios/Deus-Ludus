@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public GameObject PauseSunMusicObj;
     public GameObject PauseMoonMusicObj;
     public GameObject PauseDefaultMusicObj;
+    public GameObject PauseOrNot;
     public MusicController musicController = new MusicController();
     public bool alreadyPrompted { get; set; }
 
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
         musicController.sunPause = PauseSunMusicObj;
         musicController.moonPause = PauseMoonMusicObj;
         musicController.defaultPause = PauseDefaultMusicObj;
+        musicController.pauseornot = PauseOrNot;
         musicController.Initialise();
 
         canvasManagerScript = canvasObject.GetComponent<CanvasManager>();

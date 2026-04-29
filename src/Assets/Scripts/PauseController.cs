@@ -22,7 +22,7 @@ public class PauseController : MonoBehaviour
     //public float fadeTime = 10f;
     [SerializeField] private CanvasGroup pauseGroup;
     public static bool canPressEscape = true;
-    public bool paused = false;
+    public static bool paused = false;
     private MusicController musicControl;
 
     void Start()
@@ -37,14 +37,12 @@ public class PauseController : MonoBehaviour
             switch (paused)
             {
                 case true:
-                    paused = true;
                     Resume();
                     canPressEscape = false;
                     await Task.Delay(300);
                     canPressEscape = true;
                     break;
-                 case false:
-                    paused = false;
+                 case false: 
                     StartCoroutine(PauseDeusLudusTheGame());
                     canPressEscape = false;
                     await Task.Delay(300);
@@ -66,9 +64,9 @@ public class PauseController : MonoBehaviour
         pause.gameObject.SetActive(true);
         pauseGroup.DOFade(1f,0.2f).SetUpdate(true);
         yield return new WaitForSeconds(0.2f);
-        Time.timeScale = 0f;
         paused = true;
         musicControl.ControlMusic(gm);
+        Time.timeScale = 0f;
     }
     public IEnumerator ResumeDeusLudusTheGame()
     {
