@@ -3,9 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuHandler : MonoBehaviour
 {
+    public GameObject settingsMenu;
     private string CurrentMenu = "Main";
 
-    public void GoToSettings() {
+    public void GoToSettings()
+    {
+        settingsMenu.SetActive(true); 
         Debug.Log("settings");
     }
 
@@ -16,7 +19,7 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void Quit()
     {
-        Debug.Log("Quit");
+        Application.Quit();
     }
     public void Credits()
     {
