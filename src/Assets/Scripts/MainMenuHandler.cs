@@ -12,10 +12,6 @@ public class MainMenuHandler : MonoBehaviour
     public void Play()
     {
         if (!CurrentMenu.Equals("Main")) return;
-        LoadScene(1);
-    }
-    public void LoadScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(sceneIndex);
+        SceneManager.LoadScene(1);
     }
 }

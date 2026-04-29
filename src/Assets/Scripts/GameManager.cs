@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public MusicController musicController = new MusicController();
     public bool alreadyPrompted { get; set; }
 
+    public CanvasGroup blackFade;
+
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
 
@@ -50,6 +52,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(unfadeBlack());
         alreadyPrompted = false;
         
         musicController.losingMusic = losingMusicObj;
@@ -74,6 +77,13 @@ public class GameManager : MonoBehaviour
         canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
 
         StartCoroutine(StartNewRound());
+    }
+    IEnumerator unfadeBlack()
+    {
+        blackFade.DOFade(0f, 1.5f);
+        yield return new WaitForSeconds(1.5f);
+        blackFade.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
     }
 
     void Update() {
@@ -363,7 +373,7 @@ public class GameManager : MonoBehaviour
             if (card != null) { card.gameObject.name = (i - 1).ToString(); }
         }
 
-        canvasManagerScript.CalculateText(ply1,ply2,false,0f);
+        canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
         ply.NumberCards.RemoveAt(index); RepositionCards(cardsObject.transform, false);
     }
 
@@ -727,7 +737,7 @@ public class GameManager : MonoBehaviour
         int OppDef = ply2.TotalHealth(BlackjackThreshold, false);
         int OppAtk = ply2.TotalDamage(false);
 
-        canvasManagerScript.CalculateText(ply1,ply2,false,0f);
+        canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
 
         decidedSound.Play();
 

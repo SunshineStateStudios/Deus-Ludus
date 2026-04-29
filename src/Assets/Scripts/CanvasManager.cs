@@ -84,7 +84,7 @@ public class CanvasManager : MonoBehaviour
         whiteFlashTween = flashImg.DOFade(0f, 1f);
     }
 
-    IEnumerator UpdateText(Player ply1, Player ply2, bool hideFirstCard, float delay = 2f) {
+    IEnumerator UpdateText(Player ply1, Player ply2, bool hideFirstCard, bool hideStats, float delay = 2f) {
         yield return new WaitForSeconds(delay);
 
         TMP_Text plyTotalText = playerTotalLabel.GetComponent<TMP_Text>();
@@ -105,11 +105,17 @@ public class CanvasManager : MonoBehaviour
         int ply1AttackTotal = ply1.TotalDamage(false);
         int ply1HealthTotal = ply1.TotalHealth(gameManagerScript.BlackjackThreshold, false);
         int ply2AttackTotal = ply2.TotalDamage(true);
+        int ply2AttackTotalRevealed = ply2.TotalDamage(false);
         int ply2HealthTotal = ply2.TotalHealth(gameManagerScript.BlackjackThreshold, true);
+        int ply2HealthTotalRevealed = ply2.TotalHealth(gameManagerScript.BlackjackThreshold, false);
 
         ply1ADLabel.text = "<color=#d62d2dff>A: " + ply1AttackTotal.ToString() + "</color> / <color=#2d6ed6ff>D: " + ply1HealthTotal.ToString() + "</color>";
-        ply2ADLabel.text = "<color=#d62d2dff>A: ? + " + ply2AttackTotal.ToString() + "</color> / <color=#2d6ed6ff>D: ? + " + ply2HealthTotal.ToString() + "</color>";
 
+        if (hideStats) {
+            ply2ADLabel.text = "<color=#d62d2dff>A: ? + " + ply2AttackTotal.ToString() + "</color> / <color=#2d6ed6ff>D: ? + " + ply2HealthTotal.ToString() + "</color>";
+        } else {
+            ply2ADLabel.text = "<color=#d62d2dff>A: " + ply2AttackTotalRevealed.ToString() + "</color> / <color=#2d6ed6ff>D: " + ply2HealthTotalRevealed.ToString() + "</color>";
+        }
         plyTotalText.text = "Total: " + total.ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
         
         if (hideFirstCard) {
@@ -119,8 +125,8 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true, float delay = 2f) { // Updating the text requires a delay
-        StartCoroutine(UpdateText(ply1, ply2, hideFirstCard, delay));
+    public void CalculateText(Player ply1, Player ply2, bool hideFirstCard = true, bool hideStats = true, float delay = 2f) { // Updating the text requires a delay
+        StartCoroutine(UpdateText(ply1, ply2, hideFirstCard, hideStats, delay));
     }
 
     public void SetHealth(int ply1HP, int ply2HP) {

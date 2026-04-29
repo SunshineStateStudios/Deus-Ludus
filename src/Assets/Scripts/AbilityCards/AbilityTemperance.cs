@@ -12,7 +12,7 @@ public class AbilityTemperance : AbilityCard
         if (gm.BlackjackThreshold < 9) gm.BlackjackThreshold = 9;
 
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
-        canvasMngr.CalculateText(gm.ply1, gm.ply2, true, 0f);
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true, true, 0f);
         canvasMngr.playerTotalLabel.GetComponent<Animator>().Play("ThresholdChanged", 0, 0);
 
         if (owner != gm.ply1) return;
