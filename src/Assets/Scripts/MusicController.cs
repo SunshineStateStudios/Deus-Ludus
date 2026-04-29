@@ -22,8 +22,7 @@ public class MusicController
     private AudioSource pauseSunAudio;
     private AudioSource pauseMoonAudio;
     private AudioSource pauseDefaultAudio;
-
-    private GameObject pauseornot;
+    public GameObject pauseornot;
 
     public void Initialise()
     {
@@ -59,64 +58,63 @@ public class MusicController
     public void ControlMusic(GameManager gm)
     {
         //PauseController pauseController = pauseornot.GetComponent<PauseController>();
-        pauseornot = GameObject.Find("Canvas/Pause");
         yourHp = gm.ply1.Life;
         if (yourHp <= 9)
         {
             if (pauseornot.activeInHierarchy)
             {
-                losingAudio.DOFade(0f, 5f);
-                winningAudio.DOFade(0f, 5f);
-                defaultAudio.DOFade(0f, 5f);
-                pauseSunAudio.DOFade(0.5f, 5f);
-                pauseMoonAudio.DOFade(0f, 5f);
-                pauseDefaultAudio.DOFade(0f, 5f);
+                losingAudio.DOFade(0f, 3f).SetUpdate(true);
+                winningAudio.DOFade(0f, 3f).SetUpdate(true);
+                defaultAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseSunAudio.DOFade(1f, 3f).SetUpdate(true);
+                pauseMoonAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseDefaultAudio.DOFade(0f, 3f).SetUpdate(true);
             } else
             {
-                losingAudio.DOFade(1f, 5f);
-                winningAudio.DOFade(0f, 5f);
-                defaultAudio.DOFade(0f, 5f);
-                pauseSunAudio.DOFade(0f, 5f);
-                pauseMoonAudio.DOFade(0f, 5f);
-                pauseDefaultAudio.DOFade(0f, 5f);
+                losingAudio.DOFade(1f, 5f).SetUpdate(true);
+                winningAudio.DOFade(0f, 5f).SetUpdate(true);
+                defaultAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseSunAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseMoonAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseDefaultAudio.DOFade(0f, 5f).SetUpdate(true);
             }
         } else if (yourHp >= 11)
         {
             if (pauseornot.activeInHierarchy)
             {
-                losingAudio.DOFade(0f, 5f);
-                winningAudio.DOFade(0f, 5f);
-                defaultAudio.DOFade(0f, 5f);
-                pauseSunAudio.DOFade(0f, 5f);
-                pauseMoonAudio.DOFade(0.5f, 5f);
-                pauseDefaultAudio.DOFade(0f, 5f);
+                losingAudio.DOFade(0f, 3f).SetUpdate(true);
+                winningAudio.DOFade(0f, 3f).SetUpdate(true);
+                defaultAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseSunAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseMoonAudio.DOFade(1f, 3f).SetUpdate(true);
+                pauseDefaultAudio.DOFade(0f, 3f).SetUpdate(true);
             } else
             {
-                losingAudio.DOFade(0f, 5f);
-                winningAudio.DOFade(1f, 5f);
-                defaultAudio.DOFade(0f, 5f);
-                pauseSunAudio.DOFade(0f, 5f);
-                pauseMoonAudio.DOFade(0f, 5f);
-                pauseDefaultAudio.DOFade(0f, 5f);
+                losingAudio.DOFade(0f, 5f).SetUpdate(true);
+                winningAudio.DOFade(1f, 5f).SetUpdate(true);
+                defaultAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseSunAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseMoonAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseDefaultAudio.DOFade(0f, 5f).SetUpdate(true);
             }
         } else
         {
             if (pauseornot.activeInHierarchy)
             {
-                losingAudio.DOFade(0f, 5f);
-                winningAudio.DOFade(0f, 5f);
-                defaultAudio.DOFade(0f, 5f);
-                pauseSunAudio.DOFade(0f, 5f);
-                pauseMoonAudio.DOFade(0.5f, 5f);
-                pauseDefaultAudio.DOFade(0f, 5f);
+                losingAudio.DOFade(0f, 3f).SetUpdate(true);
+                winningAudio.DOFade(0f, 3f).SetUpdate(true);
+                defaultAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseSunAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseMoonAudio.DOFade(0f, 3f).SetUpdate(true);
+                pauseDefaultAudio.DOFade(1f, 3f).SetUpdate(true);
             } else
             {
-                losingAudio.DOFade(0f, 5f);
-                winningAudio.DOFade(0f, 5f);
-                defaultAudio.DOFade(1f, 5f);
-                pauseSunAudio.DOFade(0f, 5f);
-                pauseMoonAudio.DOFade(0f, 5f);
-                pauseDefaultAudio.DOFade(0f, 5f);
+                losingAudio.DOFade(0f, 5f).SetUpdate(true);
+                winningAudio.DOFade(0f, 5f).SetUpdate(true);
+                defaultAudio.DOFade(1f, 5f).SetUpdate(true);
+                pauseSunAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseMoonAudio.DOFade(0f, 5f).SetUpdate(true);
+                pauseDefaultAudio.DOFade(0f, 5f).SetUpdate(true);
             }
         }
     }

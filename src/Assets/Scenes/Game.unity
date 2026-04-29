@@ -1274,6 +1274,7 @@ MonoBehaviour:
   PauseSunMusicObj: {fileID: 1215680115}
   PauseMoonMusicObj: {fileID: 872943621}
   PauseDefaultMusicObj: {fileID: 2126628308}
+  PauseOrNot: {fileID: 1934126038}
 --- !u!82 &241583329
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4412,7 +4413,6 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   gm: {fileID: 241583328}
   pauseGroup: {fileID: 1934126040}
-  paused: 0
 --- !u!1 &999493418
 GameObject:
   m_ObjectHideFlags: 0
@@ -17176,7 +17176,6 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   gm: {fileID: 241583328}
   pauseGroup: {fileID: 1934126040}
-  paused: 0
 --- !u!1 &1724904455
 GameObject:
   m_ObjectHideFlags: 0
@@ -17737,7 +17736,6 @@ MonoBehaviour:
   pause: {fileID: 1934126038}
   gm: {fileID: 241583328}
   pauseGroup: {fileID: 1934126040}
-  paused: 0
 --- !u!1 &1934126038
 GameObject:
   m_ObjectHideFlags: 0
