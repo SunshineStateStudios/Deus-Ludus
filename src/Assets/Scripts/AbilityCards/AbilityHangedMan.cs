@@ -22,7 +22,7 @@ public class AbilityHangedMan : AbilityCard
         }
 
         gm.RemoveNumberCard(opponent, chosenIndex);
-        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

@@ -12,14 +12,8 @@ using UnityEngine.SceneManagement;
 public class PauseController : MonoBehaviour
 {
     public GameObject pause;
-    //public GameObject pauseMusic;
-    //public GameObject gameplayMusic;
-    //public AudioSource winningMusic;
-    //public AudioSource losingMusic;
-    //public AudioSource defaultMusic;
     public SceneManager sceneManager;
     public GameManager gm;
-    //public float fadeTime = 10f;
     [SerializeField] private CanvasGroup pauseGroup;
     public static bool canPressEscape = true;
     public static bool paused = false;
@@ -51,10 +45,6 @@ public class PauseController : MonoBehaviour
             }
         }
     }
-    /*void reenableEscape()
-    {
-        canPressEscape = true;
-    }*/
     public void Resume()
     {
         StartCoroutine(ResumeDeusLudusTheGame());
@@ -79,6 +69,7 @@ public class PauseController : MonoBehaviour
     }
     public void Quit()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
     /*IEnumerator DoFadeOut_Resume()

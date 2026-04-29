@@ -4,12 +4,22 @@ using UnityEngine.SceneManagement;
 public class MainMenuHandler : MonoBehaviour
 {
     public GameObject settingsMenu;
+    public GameObject optionsMusic;
+    public GameObject mainMenuMusic;
+    public GameObject checkCredits;
     private string CurrentMenu = "Main";
 
     public void GoToSettings()
     {
         settingsMenu.SetActive(true); 
-        Debug.Log("settings");
+        optionsMusic.SetActive(true);
+        mainMenuMusic.SetActive(false);
+    }
+    public void ExitSettings()
+    {
+        settingsMenu.SetActive(false); 
+        optionsMusic.SetActive(false);
+        mainMenuMusic.SetActive(true);
     }
 
     public void Play()
@@ -23,6 +33,10 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void Credits()
     {
-        Debug.Log("Credits");
+        checkCredits.SetActive(true);
+    }
+    public void exitCredits()
+    {
+        checkCredits.SetActive(false);
     }
 }
