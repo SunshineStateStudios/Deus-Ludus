@@ -24,7 +24,7 @@ public class AbilityMoon : AbilityCard
             if (parent == gm.enemyNumberCards && i == 0) continue;
 
             TMP_Text healthText =
-                cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
+                cardRepresentation.transform.Find("Container/Canvas/DefendValue")
                 .GetComponent<TMP_Text>();
 
             healthText.text = card.Health.ToString();

@@ -22,21 +22,27 @@ public class AbilityHighPriestess : PromptAbilityCard
         NumberCard enemyFirstCard = opponent.NumberCards[0];
 
         TMP_Text valueText =
-        hiddenCard.transform.Find("Card/Canvas/ValueLabel")
+        hiddenCard.transform.Find("Container/Canvas/ValueText")
+        .GetComponent<TMP_Text>();
+
+        TMP_Text valueShadowText =
+        hiddenCard.transform.Find("Container/Canvas/ValueTextShadow")
         .GetComponent<TMP_Text>();
 
         TMP_Text damageText =
-        hiddenCard.transform.Find("Card/Canvas/DamageLabel")
+        hiddenCard.transform.Find("Container/Canvas/DefendValue")
         .GetComponent<TMP_Text>();
 
         TMP_Text healthText =
-        hiddenCard.transform.Find("Card/Canvas/HealthLabel")
+        hiddenCard.transform.Find("Container/Canvas/AttackValue")
         .GetComponent<TMP_Text>();
 
         if (enemyFirstCard.Value == 12) {
             valueText.text = "A";
+            valueShadowText.text = "A";
         } else {
             valueText.text = enemyFirstCard.Value.ToString();
+            valueShadowText.text = enemyFirstCard.Value.ToString();
         }
         
         damageText.text = enemyFirstCard.Damage.ToString();

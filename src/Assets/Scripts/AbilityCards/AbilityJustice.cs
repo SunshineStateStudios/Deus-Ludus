@@ -24,10 +24,10 @@ public class AbilityJustice : AbilityCard
             Transform cardRepresentation = parent.transform.Find(i.ToString());
 
             TMP_Text healthText =
-                cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
+                cardRepresentation.transform.Find("Container/Canvas/DefendValue")
                 .GetComponent<TMP_Text>();
             TMP_Text damageText =
-                cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+                cardRepresentation.transform.Find("Container/Canvas/AttackValue")
                 .GetComponent<TMP_Text>();
 
             healthText.text = card.Health.ToString();

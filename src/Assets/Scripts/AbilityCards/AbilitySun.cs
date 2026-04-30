@@ -23,7 +23,7 @@ public class AbilitySun : AbilityCard
             if (cardRepresentation == null) continue;
 
             TMP_Text damageText =
-                cardRepresentation.Find("Card/Canvas/DamageLabel")
+                cardRepresentation.Find("Container/Canvas/AttackValue")
                 .GetComponent<TMP_Text>();
 
             damageText.text = card.Damage.ToString();

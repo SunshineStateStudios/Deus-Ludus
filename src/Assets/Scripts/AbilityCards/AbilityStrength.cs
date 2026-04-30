@@ -23,7 +23,7 @@ public class AbilityStrength : PromptAbilityCard
         Transform cardRepresentation = parent.transform.Find(indexChosen.ToString());
 
         TMP_Text damageLabel =
-            cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+            cardRepresentation.transform.Find("Container/Canvas/AttackValue")
             .GetComponent<TMP_Text>();
 
         damageLabel.text = owner.NumberCards[indexChosen].Damage.ToString();

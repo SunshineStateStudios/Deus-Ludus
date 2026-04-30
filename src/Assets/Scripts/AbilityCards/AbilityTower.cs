@@ -31,7 +31,7 @@ public class AbilityTower : PromptAbilityCard
 
         Transform cardRepresentation = parent.transform.Find(indexChosen.ToString());
         TMP_Text healthText =
-            cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
+            cardRepresentation.transform.Find("Container/Canvas/DefendValue")
             .GetComponent<TMP_Text>();
 
         healthText.text = oppCard.Health.ToString();

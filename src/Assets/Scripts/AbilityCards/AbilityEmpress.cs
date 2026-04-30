@@ -23,18 +23,23 @@ public class AbilityEmpress : AbilityCard
         cardRepresentation.name = (owner.NumberCards.Count-1).ToString();
 
         TMP_Text valueText =
-            cardRepresentation.transform.Find("Card/Canvas/ValueLabel")
+            cardRepresentation.transform.Find("Container/Canvas/ValueText")
+            .GetComponent<TMP_Text>();
+
+        TMP_Text valueShadowText =
+            cardRepresentation.transform.Find("Container/Canvas/ValueTextShadow")
             .GetComponent<TMP_Text>();
 
         TMP_Text damageText =
-            cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+            cardRepresentation.transform.Find("Container/Canvas/AttackValue")
             .GetComponent<TMP_Text>();
 
         TMP_Text healthText =
-            cardRepresentation.transform.Find("Card/Canvas/HealthLabel")
+            cardRepresentation.transform.Find("Container/Canvas/DefendValue")
             .GetComponent<TMP_Text>();
 
         valueText.text = card.Value.ToString();
+        valueShadowText.text = card.Value.ToString();
         damageText.text = card.Damage.ToString();
         healthText.text = card.Health.ToString();
 

@@ -23,7 +23,7 @@ public class AbilityWheelOfFortune : AbilityCard
 
         Transform cardRepresentation = parent.transform.Find((owner.NumberCards.Count-1).ToString());
         TMP_Text damageText =
-            cardRepresentation.transform.Find("Card/Canvas/DamageLabel")
+            cardRepresentation.transform.Find("Container/Canvas/AttackValue")
             .GetComponent<TMP_Text>();
         damageText.text = chosenNumberCard.Damage.ToString();
         canvasMngr.CalculateText(gm.ply1, gm.ply2, true);

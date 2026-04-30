@@ -22,8 +22,8 @@ public class AbilityCardUIScript : MonoBehaviour, IPointerEnterHandler, IPointer
 
     void CallbackPrompt()
     {
-        gameManager.DrawAbilityCard(1, index);
         ShowPanel(false);
+        gameManager.DrawAbilityCard(1, index);
     }
 
     void ShowPanel(bool show) {

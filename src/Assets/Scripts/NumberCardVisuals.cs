@@ -5,18 +5,15 @@ using UnityEngine.UI;
 
 public class NumberCardVisuals : MonoBehaviour
 {
-    public GameObject canvas;
-    public GameObject dashLabel;
-    public GameObject damageLabel;
-    public GameObject healthLabel;
     public GameObject[] Male_GodPrefabs; // indexes of the arrays correspond to models
     public GameObject[] Female_GodPrefabs;
+    public Material[] PossibleMaterials; // refer to Male_GodPrefabs
+    public GameObject particlesEmitter;
     public int cardSuit;
     public Transform GodPos;
-    public CanvasManager canvasManager;
-    public ParticleSystem particles;
+    private ParticleSystem particles;
+    private CanvasManager canvasManager;
     private AudioSource sound;
-    private bool canShowVisuals = false;
     private GameObject ChosenGodModel;
 
     IEnumerator CardSound()
@@ -31,37 +28,38 @@ public class NumberCardVisuals : MonoBehaviour
 
     void Start()
     {
-        if (transform.parent.parent.gameObject.name.Equals("EnemyNumberCards")) GodPos.Rotate(0f,-180f,0f);
+        if (transform.parent.gameObject.name.Equals("EnemyNumberCards")) GodPos.Rotate(0f,-180f,0f);
+
+        Material chosenMaterial = PossibleMaterials[4];
+
+        if (cardSuit >= 0 && cardSuit < PossibleMaterials.Length)
+        {
+            Material mat = PossibleMaterials[cardSuit];
+            if (mat != null)
+            {
+                chosenMaterial = mat;
+            }
+        }
+
+        transform.Find("Container/Card").GetComponent<MeshRenderer>().material = chosenMaterial;
+
+        particles = particlesEmitter.GetComponent<ParticleSystem>();
 
         sound = GetComponent<AudioSource>();
         sound.volume = 0.25f;
         StartCoroutine(CardSound());
     }
 
-    void OnMouseEnter() {
-        if (!canShowVisuals) { return; }
-        dashLabel.SetActive(true);
-        healthLabel.SetActive(true);
-        damageLabel.SetActive(true);
-    }
-
-    void OnMouseExit() {
-        dashLabel.SetActive(false);
-        healthLabel.SetActive(false);
-        damageLabel.SetActive(false);
-    }
-
     public void DoTheParticle()
     {
         particles.Emit(60);
-        canvas.SetActive(true);
 
         if (canvasManager == null) {
             canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
         }
         canvasManager.WhiteFlash();
 
-        GameObject chosenModel;
+        /*GameObject chosenModel;
         if (Random.value >= 0.5) {
             chosenModel = Male_GodPrefabs[cardSuit-1];
         } else {
@@ -69,9 +67,8 @@ public class NumberCardVisuals : MonoBehaviour
         }
 
         GameObject godFigureInstance = Instantiate(chosenModel, GodPos.transform);
-        ChosenGodModel = godFigureInstance;
+        ChosenGodModel = godFigureInstance;*/
         //GameObject suitInstance = Instantiate(suitPrefab, transform.position + new Vector3(0f,0.5f,0.1f), Quaternion.identity, transform);
-        canShowVisuals = true;
         /*suitInstance.transform.rotation = Quaternion.identity;
         suitInstance.transform.Rotate(90, 0, 0);
         suitInstance.transform.position = new Vector3(0f, 0f, 0f);*/
