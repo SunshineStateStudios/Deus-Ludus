@@ -414,6 +414,10 @@ MonoBehaviour:
   optionsMusic: {fileID: 437853983}
   mainMenuMusic: {fileID: 1493299190}
   checkCredits: {fileID: 1659403312}
+  settingsAudioTab: {fileID: 1879212594}
+  settingsGeneralTab: {fileID: 218567529}
+  masterSlider: {fileID: 814549107}
+  mainMenuMasterSound: {fileID: 24100000, guid: a350786aff11b9f4eba1875af711ba57, type: 2}
 --- !u!1 &121593075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,7 +1074,7 @@ GameObject:
   - component: {fileID: 359832137}
   - component: {fileID: 359832138}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: EffectSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1119,11 +1123,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_NormalColor: {r: 1, g: 0.9526843, b: 0, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.95294124, b: 0, a: 1}
+    m_PressedColor: {r: 1, g: 0.95294124, b: 0, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_DisabledColor: {r: 1, g: 0.95294124, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1306,7 +1310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 455.97525, y: -24.10545}
+  m_AnchoredPosition: {x: 322.4752, y: -24.10545}
   m_SizeDelta: {x: 614.62, y: 48.2109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &381359240
@@ -1505,7 +1509,7 @@ AudioSource:
   m_GameObject: {fileID: 437853983}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2998098945240517888, guid: a350786aff11b9f4eba1875af711ba57, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: eb2ec2ceb3e3a2c4497393e5a5fca452, type: 3}
   m_PlayOnAwake: 1
@@ -1769,7 +1773,7 @@ GameObject:
   - component: {fileID: 507742302}
   - component: {fileID: 507742303}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: MusicSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1818,11 +1822,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0, g: 0.4248581, b: 1, a: 1}
+    m_HighlightedColor: {r: 0, g: 0.42352945, b: 1, a: 1}
+    m_PressedColor: {r: 0, g: 0.42352945, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0.42352945, b: 1, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2511,7 +2515,7 @@ GameObject:
   - component: {fileID: 814549106}
   - component: {fileID: 814549107}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: MasterSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2560,11 +2564,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.89188766, g: 0, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.89019614, g: 0, b: 1, a: 1}
+    m_PressedColor: {r: 0.89019614, g: 0, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.89019614, g: 0, b: 1, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2589,7 +2593,19 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 108181841}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &867630364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2919,7 +2935,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 248.6802, y: -204.50078}
+  m_AnchoredPosition: {x: 115.180145, y: -172.5}
   m_SizeDelta: {x: 208.87, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &993684470
@@ -2965,7 +2981,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 993684471}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 108181846}
+        m_TargetAssemblyTypeName: MainMenuHandler, Assembly-CSharp
+        m_MethodName: checkAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &993684471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3789,7 +3817,7 @@ AudioSource:
   m_GameObject: {fileID: 1493299190}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2998098945240517888, guid: a350786aff11b9f4eba1875af711ba57, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: d399d81699fe08f459099efb75217894, type: 3}
   m_PlayOnAwake: 1
@@ -3928,7 +3956,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 391.9752, y: -28.37755}
+  m_AnchoredPosition: {x: 400.4752, y: -28.37755}
   m_SizeDelta: {x: 624.8335, y: 56.7551}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1529775964
@@ -4741,7 +4769,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 248.6802, y: -57.5}
+  m_AnchoredPosition: {x: 115.180145, y: -57.5}
   m_SizeDelta: {x: 208.87, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1688820881
@@ -4787,7 +4815,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1688820882}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 108181846}
+        m_TargetAssemblyTypeName: MainMenuHandler, Assembly-CSharp
+        m_MethodName: checkGeneral
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1688820882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4862,7 +4902,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 248.6802, y: -351.50156}
+  m_AnchoredPosition: {x: 115.180145, y: -287.5}
   m_SizeDelta: {x: 208.87, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1713246577
@@ -5072,7 +5112,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 455.97525, y: -72.316345}
+  m_AnchoredPosition: {x: 322.4752, y: -72.316345}
   m_SizeDelta: {x: 614.62, y: 48.2109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1760401233
@@ -5224,7 +5264,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 455.97525, y: -120.52725}
+  m_AnchoredPosition: {x: 322.4752, y: -120.52725}
   m_SizeDelta: {x: 614.62, y: 48.2109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1801677916
