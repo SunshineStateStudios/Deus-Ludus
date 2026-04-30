@@ -9,10 +9,8 @@ public class AbilityLovers : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        gm.GivePlayerAbilityCard(owner);
-        gm.GivePlayerAbilityCard(owner);
-        gm.GivePlayerAbilityCard(opponent);
-        gm.GivePlayerAbilityCard(opponent);
+        if (owner.AbilityCards.Count > 0) gm.DrawAbilityCard(owner, Random.Range(0,owner.AbilityCards.Count-1));
+        if (opponent.AbilityCards.Count > 0) gm.DrawAbilityCard(opponent, Random.Range(0,opponent.AbilityCards.Count-1));
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
