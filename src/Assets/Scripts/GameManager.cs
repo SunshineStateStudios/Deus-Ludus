@@ -376,11 +376,13 @@ public class GameManager : MonoBehaviour
         }
 
         canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
-        ply.NumberCards.RemoveAt(index); RepositionCards(cardsObject.transform, false);
+        ply.NumberCards.RemoveAt(index);
+        RepositionCards(cardsObject.transform, false);
     }
 
     public void RepositionCards(Transform parent, bool isAbilityCard = false)
     {
+        Debug.Log("yup");
         int cardCount = 0;
         foreach (Transform child in parent) {
             if (!child) continue;
@@ -395,32 +397,25 @@ public class GameManager : MonoBehaviour
         float startX = -totalWidth / 2f;
 
         int correctIndex = 0;
-        for (int i = 0; i < cardCount; i++)
+
+        for (int i = parent.childCount - 1; i >= 0; i--)
         {
-            Transform card = parent.Find(i.ToString());
-            if (!card) continue;
-            card = card.Find("Container");
-            if (!card) continue;
+            Transform child = parent.GetChild(i);
+            if (child == null) continue;
+
+            Transform container = child.Find("Container");
+            if (container == null) continue;
 
             Vector3 targetPos = new Vector3(
                 startX + (correctIndex * spacing),
                 0f,
                 0f
             );
+
             correctIndex++;
 
-            /*if (isAbilityCard)
-            {
-                if (parent == enemyAbilityCards.transform)
-                {
-                    targetPos += new Vector3(-0.8f,0.2f,-5.5f);
-                } else {
-                    targetPos += new Vector3(-0.8f,0.2f,-9f);
-                }
-            }*/
-
-            card.DOKill();
-            card.DOLocalMove(targetPos, 0.5f)
+            container.DOKill();
+            container.DOLocalMove(targetPos, 0.5f)
                 .SetEase(Ease.InOutSine);
         }
     }
@@ -523,7 +518,7 @@ public class GameManager : MonoBehaviour
         GameObject obj = Instantiate(abilityCard, parent);
         obj.name = index.ToString();
 
-        Image img = obj.transform.Find("Container/Canvas/Image").gameObject.GetComponent<Image>();
+        Image img = obj.transform.Find("Container/Card/Canvas/Image").gameObject.GetComponent<Image>();
         img.sprite = abilityCardPlayer.icon;
         img.preserveAspect = true;
 

@@ -291,6 +291,14 @@ public class CanvasManager : MonoBehaviour
             return;
         }
 
+        int availableCards = 0;
+        foreach (AbilityCard abilCard in ply.AbilityCards) {
+            if (abilCard.Drawn) continue;
+            availableCards++;
+        }
+
+        if (availableCards == 0) return;
+
         AbilityCardPromptPanel.SetActive(true);
 
         Transform promptContentsAbility = AbilityCardPromptPanel.transform.Find("Contents");
