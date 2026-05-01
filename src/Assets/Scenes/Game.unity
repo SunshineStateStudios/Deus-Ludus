@@ -458,9 +458,9 @@ RectTransform:
   - {fileID: 439719405}
   m_Father: {fileID: 187481887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 437}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 640, y: 263}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &114843540
@@ -513,7 +513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb095e60d1e0601419e53fd4e65d9876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InfoBarCotroller
-  infoBar: {fileID: 114843538}
+  infoBar: {fileID: 114843539}
+  offset: {x: 20, y: -20}
+  canvas: {fileID: 796785825}
 --- !u!1 &114911650
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,8 +812,8 @@ RectTransform:
   - {fileID: 1605564315}
   - {fileID: 988308243}
   - {fileID: 1161589425}
-  - {fileID: 1934126039}
   - {fileID: 114843539}
+  - {fileID: 1934126039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10034,7 +10036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!225 &1161589422
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using TMPro;
 //To whoever finds this, understand one thing.
 //Ryzer, your opponent, is not your enemy, he is you, a future you, you are fighting yourself.
 //Regardless of the outcome it is a losing battle.
-//You will defeat him and then you will become him, turn back Now
+//You will defeat him and then you will become him, turn back Now.
 public class AbilityChariot : AbilityCard
 {
     public override string name => "Chariot";
