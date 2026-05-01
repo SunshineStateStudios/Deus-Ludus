@@ -1,21 +1,74 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class InfoBarCotroller : MonoBehaviour
+public class InfoBarController : MonoBehaviour
 {
-    public RectTransform infoBar;
-    public Vector2 offset;
-    public Canvas canvas;
-
-    void Update()
+    public GameObject yourTotalInfo;
+    public GameObject yourStatsInfo;
+    public GameObject oppTotalInfo;
+    public GameObject oppStatsInfo;
+    private Coroutine Coroutines;
+    public void yourTotalShow()
     {
-        Vector2 pos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform,
-            Input.mousePosition,
-            canvas.worldCamera,
-            out pos
-        );
+        Coroutines = StartCoroutine(yourTotalShowDelay());
+    }
+    public IEnumerator yourTotalShowDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        yourTotalInfo.SetActive(true);
+    }
+    public void yourTotalHide()
+    {
+        StopCoroutine(Coroutines);
+        yourTotalInfo.SetActive(false);
+    }
 
-        infoBar.anchoredPosition = pos + offset;
+/// //////////////////////////////////////////////////
+    public void yourStatsShow()
+    {
+        Coroutines = StartCoroutine(yourStatsShowDelay());
+    }
+    public IEnumerator yourStatsShowDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        yourStatsInfo.SetActive(true);
+    }
+    public void yourStatsHide()
+    {
+        StopCoroutine(Coroutines);
+        yourStatsInfo.SetActive(false);
+    }
+
+/////////////////////////////////////////////////
+    public void oppTotalShow()
+    {
+        Coroutines = StartCoroutine(oppTotalShowDelay());
+    }
+    public IEnumerator oppTotalShowDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        oppTotalInfo.SetActive(true);
+    }
+    public void oppTotalHide()
+    {
+        StopCoroutine(Coroutines);
+        oppTotalInfo.SetActive(false);
+    }
+
+//////////////////////////////////////////////
+    public void oppStatsShow()
+    {
+        Coroutines = StartCoroutine(oppStatsShowDelay());
+    }
+    public IEnumerator oppStatsShowDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        oppStatsInfo.SetActive(true);
+    }
+    public void oppStatsHide()
+    {
+        StopCoroutine(Coroutines);
+        oppStatsInfo.SetActive(false);
     }
 }
