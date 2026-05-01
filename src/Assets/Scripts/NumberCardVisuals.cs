@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class NumberCardVisuals : MonoBehaviour
 {
-    public GameObject[] Male_GodPrefabs; // indexes of the arrays correspond to models
-    public GameObject[] Female_GodPrefabs;
-    public Material[] PossibleMaterials; // refer to Male_GodPrefabs
+    public GameObject[] CardVariations; // indexes of the arrays correspond to models
     public GameObject particlesEmitter;
     public int cardSuit;
     public Transform GodPos;
@@ -30,18 +28,13 @@ public class NumberCardVisuals : MonoBehaviour
     {
         if (transform.parent.gameObject.name.Equals("EnemyNumberCards")) GodPos.Rotate(0f,-180f,0f);
 
-        Material chosenMaterial = PossibleMaterials[4];
+        GameObject correctCard = CardVariations[4];
+        if (cardSuit >= 0 && cardSuit < CardVariations.Length) correctCard = CardVariations[cardSuit];
 
-        if (cardSuit >= 0 && cardSuit < PossibleMaterials.Length)
-        {
-            Material mat = PossibleMaterials[cardSuit];
-            if (mat != null)
-            {
-                chosenMaterial = mat;
-            }
+        foreach (GameObject chosenCard in CardVariations) {
+            if (chosenCard == correctCard) continue;
+            chosenCard.SetActive(false);
         }
-
-        transform.Find("Container/Card").GetComponent<MeshRenderer>().material = chosenMaterial;
 
         particles = particlesEmitter.GetComponent<ParticleSystem>();
 
