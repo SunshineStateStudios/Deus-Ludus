@@ -4,7 +4,7 @@ using TMPro;
 public class AbilityWorld : AbilityCard
 {
     public override string name => "World";
-    public override string description => "Set the <color=#ff8282>attack<color=#ffffff> of the opponent's <color=#fff0c4>Greek</color> number cards to 0";
+    public override string description => "Set the <color=#ff8282>attack<color=#ffffff> of the opponent's <color=#00cf37>Greek</color> number cards to 0";
     public override int triesDecayTime => 1;
 
     public override void Apply(GameManager gm, Player owner, Player opponent)

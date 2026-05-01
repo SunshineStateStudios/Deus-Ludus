@@ -13,6 +13,8 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject settingsAudioTab;
     public GameObject settingsGeneralTab;
     [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider soundEffectsSlider;
     [SerializeField] private AudioMixer mainMenuMasterSound;
     private string CurrentMenu = "Main";
 
@@ -58,6 +60,14 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void SetMaster() {
         float MasterVol = masterSlider.value;
-        mainMenuMasterSound.SetFloat("Master", MasterVol);
+        mainMenuMasterSound.SetFloat("Master", Mathf.Log10(MasterVol) * 20);
+    }
+    public void SetMusic() {
+        float MusicVol = musicSlider.value;
+        mainMenuMasterSound.SetFloat("Music", Mathf.Log10(MusicVol) * 20);
+    }
+    public void SetSoundEffects() {
+        float EffectsVol = soundEffectsSlider.value;
+        mainMenuMasterSound.SetFloat("SoundEffects", Mathf.Log10(EffectsVol) * 20);
     }
 }
