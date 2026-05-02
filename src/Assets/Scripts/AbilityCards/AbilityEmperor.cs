@@ -43,7 +43,7 @@ public class AbilityEmperor : AbilityCard
         healthText.text = card.Health.ToString();
 
         gm.RepositionCards(parent.transform);
-        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true, true);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
