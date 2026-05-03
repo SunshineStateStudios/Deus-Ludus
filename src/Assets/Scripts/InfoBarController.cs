@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
+using Unity.VisualScripting;
 
 public class InfoBarController : MonoBehaviour
 {
@@ -23,7 +25,7 @@ public class InfoBarController : MonoBehaviour
     {
         if (!drawButton.activeInHierarchy)
         {
-            drawInfo.SetActive(false);
+            drawInfo.gameObject.SetActive(false);
         }
     }
 

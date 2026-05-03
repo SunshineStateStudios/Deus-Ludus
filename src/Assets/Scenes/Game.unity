@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 6049400}
   - component: {fileID: 6049403}
   - component: {fileID: 6049402}
+  - component: {fileID: 6049404}
   m_Layer: 5
   m_Name: OppStatsInfo
   m_TagString: Untagged
@@ -154,8 +155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 289, y: -179}
-  m_SizeDelta: {x: 345.8, y: 101.70001}
+  m_AnchoredPosition: {x: 289, y: -190}
+  m_SizeDelta: {x: 345.8, y: 126.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6049402
 MonoBehaviour:
@@ -195,6 +196,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6049399}
   m_CullTransparentMesh: 1
+--- !u!225 &6049404
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6049399}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &38309830
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,7 +403,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Your <color=#ff8282>Attack<color=#ffffff> and <color=#8787ff>Defense.<color=#ffffff>
-    you Deal damage if you win and Defend if you lose
+    You deal damage if you win and Defend if you lose
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
   m_sharedMaterial: {fileID: 4166540614853541441, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
@@ -649,6 +662,7 @@ GameObject:
   - component: {fileID: 114843539}
   - component: {fileID: 114843541}
   - component: {fileID: 114843540}
+  - component: {fileID: 114843542}
   m_Layer: 5
   m_Name: YourTotalInfo
   m_TagString: Untagged
@@ -714,6 +728,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114843538}
   m_CullTransparentMesh: 1
+--- !u!225 &114843542
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114843538}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &114911650
 GameObject:
   m_ObjectHideFlags: 0
@@ -2110,6 +2136,7 @@ GameObject:
   - component: {fileID: 350296007}
   - component: {fileID: 350296010}
   - component: {fileID: 350296009}
+  - component: {fileID: 350296011}
   m_Layer: 5
   m_Name: YourStatsInfo
   m_TagString: Untagged
@@ -2175,6 +2202,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350296006}
   m_CullTransparentMesh: 1
+--- !u!225 &350296011
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350296006}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &420929792
 GameObject:
   m_ObjectHideFlags: 0
@@ -3247,7 +3286,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 122, y: -29}
+  m_AnchoredPosition: {x: 122, y: -33}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &632496680
@@ -3298,8 +3337,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.6
-  m_fontSizeBase: 26.6
+  m_fontSize: 29.5
+  m_fontSizeBase: 29.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3337,7 +3376,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -18.927795, y: -6.22007, z: -122.077866, w: -55.82159}
+  m_margin: {x: -18.927795, y: -6.22007, z: -122.077866, w: -67.184906}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -11065,7 +11104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!225 &1161589422
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -11302,8 +11341,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -11384,6 +11423,7 @@ GameObject:
   - component: {fileID: 1179300630}
   - component: {fileID: 1179300632}
   - component: {fileID: 1179300631}
+  - component: {fileID: 1179300633}
   m_Layer: 5
   m_Name: DrawInfo
   m_TagString: Untagged
@@ -11449,6 +11489,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179300629}
   m_CullTransparentMesh: 1
+--- !u!225 &1179300633
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179300629}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1215680115
 GameObject:
   m_ObjectHideFlags: 0
@@ -11589,6 +11641,7 @@ GameObject:
   - component: {fileID: 1244817905}
   - component: {fileID: 1244817908}
   - component: {fileID: 1244817907}
+  - component: {fileID: 1244817909}
   m_Layer: 5
   m_Name: 'OppTotalInfo '
   m_TagString: Untagged
@@ -11654,6 +11707,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244817904}
   m_CullTransparentMesh: 1
+--- !u!225 &1244817909
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244817904}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1280275112
 GameObject:
   m_ObjectHideFlags: 0
@@ -18396,6 +18461,7 @@ GameObject:
   - component: {fileID: 1619263972}
   - component: {fileID: 1619263974}
   - component: {fileID: 1619263973}
+  - component: {fileID: 1619263975}
   m_Layer: 5
   m_Name: roundWaveInfo
   m_TagString: Untagged
@@ -18461,6 +18527,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1619263971}
   m_CullTransparentMesh: 1
+--- !u!225 &1619263975
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619263971}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1630344004
 GameObject:
   m_ObjectHideFlags: 0
@@ -19637,6 +19715,7 @@ GameObject:
   - component: {fileID: 1909843304}
   - component: {fileID: 1909843306}
   - component: {fileID: 1909843305}
+  - component: {fileID: 1909843307}
   m_Layer: 5
   m_Name: StayInfo
   m_TagString: Untagged
@@ -19702,6 +19781,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909843303}
   m_CullTransparentMesh: 1
+--- !u!225 &1909843307
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909843303}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1912713470
 GameObject:
   m_ObjectHideFlags: 0
@@ -20202,6 +20293,7 @@ GameObject:
   - component: {fileID: 1982052978}
   - component: {fileID: 1982052977}
   - component: {fileID: 1982052976}
+  - component: {fileID: 1982052979}
   m_Layer: 5
   m_Name: HealthInfo
   m_TagString: Untagged
@@ -20267,6 +20359,18 @@ RectTransform:
   m_AnchoredPosition: {x: 206, y: 47}
   m_SizeDelta: {x: 205.5, y: 211.5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1982052979
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982052975}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2007848407
 GameObject:
   m_ObjectHideFlags: 0
