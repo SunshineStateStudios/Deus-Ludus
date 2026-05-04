@@ -796,6 +796,8 @@ public class GameManager : MonoBehaviour
         attackText.text = ply2.NumberCards[0].Damage.ToString();
 
         ConclusionText.SetActive(true);
+        blackFade.gameObject.SetActive(true);
+        blackFade.DOFade(0.5f, 0.3f);
         ConclusionTextAnimator.Play("Conclusion", 0, 0);
         TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
         if (whoWon == ply2) {
@@ -814,6 +816,8 @@ public class GameManager : MonoBehaviour
         phase = GamePhase.Combat;
 
         yield return new WaitForSeconds(4f);
+        blackFade.DOFade(0f, 0.3f);
+        blackFade.gameObject.SetActive(false);
         ConclusionText.SetActive(false);
 
         bool stop = false;

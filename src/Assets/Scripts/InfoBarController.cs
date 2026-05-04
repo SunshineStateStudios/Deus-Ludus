@@ -192,4 +192,6 @@ public class InfoBarController : MonoBehaviour
         StopCoroutine(Coroutines);
         roundWaveInfo.SetActive(false);
     }
+
+    ////////////////////////////////////////////////////
 }

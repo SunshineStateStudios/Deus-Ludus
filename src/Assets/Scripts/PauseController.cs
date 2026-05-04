@@ -69,6 +69,7 @@ public class PauseController : MonoBehaviour
     }
     public void Quit()
     {
+        paused = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
