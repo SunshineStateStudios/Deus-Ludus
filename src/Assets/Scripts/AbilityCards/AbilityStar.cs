@@ -9,35 +9,25 @@ public class AbilityStar : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
+        Transform parent = gm.playerNumberCards.transform;
+        if (owner == gm.ply2) parent = gm.enemyNumberCards.transform;
+
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
-        for (int i = 0; i < opponent.NumberCards.Count; i++)
+        for (int i = 0; i < owner.NumberCards.Count; i++)
         {
-            NumberCard card = opponent.NumberCards[i];
+            if (i == 0 && owner == gm.ply2) continue;
+            NumberCard card = owner.NumberCards[i];
             if (card.Suit != 3) continue;
             card.Health = card.Health * 2;
 
-            GameObject parent = gm.playerNumberCards;
-            if (owner == gm.ply2) parent = gm.enemyNumberCards;
-
-            Transform cardRepresentation = parent.transform.Find(i.ToString());
-        
-            if (parent == gm.enemyNumberCards && i == 0) continue;
-
-            Transform HealthLabel = cardRepresentation.transform.Find("Container/Canvas/DefendValue");
-            if (HealthLabel == null) continue;
-
-            TMP_Text healthText =
-                HealthLabel.gameObject
-                .GetComponent<TMP_Text>();
-
-            healthText.text = card.Health.ToString();
+            parent.Find(i.ToString() + "/Container/Canvas/DefendValue").GetComponent<TMP_Text>().text = card.Health.ToString();
         }
-        canvasMngr.CalculateText(gm.ply1, gm.ply2, true);
+        canvasMngr.CalculateText(gm.ply1, gm.ply2, true, true, 0f);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)
     {
-        gm.BlackjackThreshold -= 3;
+        
     }
 
     public override bool AIShouldDraw(GameManager gm, Player owner)

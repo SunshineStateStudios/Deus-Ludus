@@ -9,19 +9,15 @@ public class NumberCardVisuals : MonoBehaviour
     public GameObject particlesEmitter;
     public int cardSuit;
     public Transform GodPos;
+    public GameObject GodModel;
     private ParticleSystem particles;
     private CanvasManager canvasManager;
     private AudioSource sound;
-    private GameObject ChosenGodModel;
 
     IEnumerator CardSound()
     {
         yield return new WaitForSeconds(.3f);
         sound.Play();
-    }
-
-    public GameObject GetChosenGodModel() {
-        return ChosenGodModel;
     }
 
     void Start()

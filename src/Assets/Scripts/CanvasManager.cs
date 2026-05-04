@@ -25,6 +25,7 @@ public class CanvasManager : MonoBehaviour
     public GameObject NumberCardPromptPanel;
     public GameObject NumberCardButtonPrompt;
     public GameObject InventoryDescriptionPanel;
+    public GameObject UISoundsObject;
 
     private bool inventoryPanelHidden = true;
     private bool active = true;
@@ -220,10 +221,7 @@ public class CanvasManager : MonoBehaviour
         RecountAbilityCardCount();
 
         Transform inventoryList = transform.Find("InventoryPanel/Panel");
-
-        foreach (Transform child in inventoryList) {
-            Destroy(child.gameObject);
-        }
+        foreach (Transform child in inventoryList) Destroy(child.gameObject);
 
         for (int i = 0; i < gameManagerScript.ply1.AbilityCards.Count; i++) {
             AbilityCard card = gameManagerScript.ply1.AbilityCards[i];
@@ -238,6 +236,9 @@ public class CanvasManager : MonoBehaviour
             Image img = uiRepresentation.transform.Find("Image").gameObject.GetComponent<Image>();
             img.sprite = card.icon;
             img.preserveAspect = true;
+
+            GenericUISounds uiSoundsScript = uiRepresentation.GetComponent<GenericUISounds>();
+            uiSoundsScript.UISoundsObject = GameObject.Find("UISounds"); // idk why just using `UISoundsObject` doesnt work but whtv
 
             AbilityCardUIScript uiScript = uiRepresentation.GetComponent<AbilityCardUIScript>();
 
@@ -274,6 +275,25 @@ public class CanvasManager : MonoBehaviour
                 TMP_Text damageLabel = cardRepresentation.transform.Find("DamageLabel").gameObject.GetComponent<TMP_Text>();
                 TMP_Text healthLabel = cardRepresentation.transform.Find("HealthLabel").gameObject.GetComponent<TMP_Text>();
 
+                Image buttonImg = cardRepresentation.GetComponent<Image>();
+                Color chosenColour = new Color(1f,1f,1f,1f);
+                switch (numbCard.Suit) {
+                    case 1:
+                        chosenColour = new Color(0.72f, 0.67f, 1f, 1f);
+                        break;
+                    case 2:
+                        chosenColour = new Color(1f, 0.67f, 0.67f, 1f);
+                        break;
+                    case 3:
+                        chosenColour = new Color(1f, 1f, 0.67f, 1f);
+                        break;
+                    case 4:
+                        chosenColour = new Color(0.67f, 1f, 0.67f, 1f);
+                        break;
+                }
+
+                buttonImg.color = chosenColour;
+
                 if (numbCard.Value == 12) {
                     valueLabel.text = "A";
                 } else {
@@ -281,6 +301,9 @@ public class CanvasManager : MonoBehaviour
                 }
                 damageLabel.text = numbCard.Damage.ToString();
                 healthLabel.text = numbCard.Health.ToString();
+
+                GenericUISounds uiSoundsScript = cardRepresentation.GetComponent<GenericUISounds>();
+                uiSoundsScript.UISoundsObject = UISoundsObject;
 
                 NumberCardPromptScript promptScript = cardRepresentation.GetComponent<NumberCardPromptScript>();
                 promptScript.cardIndex = i;
@@ -320,6 +343,9 @@ public class CanvasManager : MonoBehaviour
 
             cardRepresentation.AddComponent<AbilityCardPromptScript>();
 
+            GenericUISounds uiSoundsScript = cardRepresentation.GetComponent<GenericUISounds>();
+            uiSoundsScript.UISoundsObject = UISoundsObject;
+
             AbilityCardPromptScript promptScript = cardRepresentation.GetComponent<AbilityCardPromptScript>();
             promptScript.cardIndex = i;
             promptScript.card = card;
@@ -337,8 +363,10 @@ public class CanvasManager : MonoBehaviour
 
         inventoryAnimator.StopPlayback();
         if (inventoryPanelHidden) {
+            UISoundsObject.GetComponents<AudioSource>()[4].Play();
             inventoryAnimator.Play("InventoryClose", 0, 0);
         } else {
+            UISoundsObject.GetComponents<AudioSource>()[3].Play();
             inventoryAnimator.Play("InventoryOpen", 0, 0);
             RebuildInventoryPanel();
         }

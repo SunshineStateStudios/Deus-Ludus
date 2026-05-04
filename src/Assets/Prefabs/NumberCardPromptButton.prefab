@@ -426,6 +426,7 @@ GameObject:
   - component: {fileID: 5813281099194220733}
   - component: {fileID: 3908604151647595992}
   - component: {fileID: 8429062188853422774}
+  - component: {fileID: 5148038708423230175}
   m_Layer: 5
   m_Name: NumberCardPromptButton
   m_TagString: Untagged
@@ -550,6 +551,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48843747ca4159b8c9a1a1559cbf4b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NumberCardPromptScript
+  cardIndex: 0
+  gameManager: {fileID: 0}
+--- !u!114 &5148038708423230175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6026728480752834025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71e6708e25446f1a3baaa81cc20ead93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GenericUISounds
+  UISoundsObject: {fileID: 0}
+  UseAltConfirmSound: 0
+  PlayConfirmSound: 1
 --- !u!1 &6731653129437082338
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ public class GameManager : MonoBehaviour
     public Player ply2;
     public Deck deck;
     public GamePhase phase;
-
     public GameObject numberCard;
     public GameObject abilityCard;
     public GameObject playerAbilityCards;
@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
     public AudioClip attackGodCubeClip;
     public GameObject inventoryPanelScroll;
     public int BlackjackThreshold = 21;
-
     public GameObject losingMusicObj;
     public GameObject winningMusicObj;
     public GameObject defaultMusicObj;
@@ -33,12 +32,17 @@ public class GameManager : MonoBehaviour
     public GameObject PauseOrNot;
     public MusicController musicController = new MusicController();
     public bool alreadyPrompted { get; set; }
-
     public CanvasGroup blackFade;
+    public GameObject ConclusionText;
+    public GameObject[] Male_Gods;
+    public GameObject[] Female_Gods;
+    public GameObject VictoryLossFrame;
+    public GameObject PauseMenu;
+    public GameObject BlowupParticle;
 
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
-
+    private Animator ConclusionTextAnimator;
     private List<AbilityCard> abilityCardList;
     private CanvasManager canvasManagerScript;
     private int rounds = 0;
@@ -54,6 +58,8 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(unfadeBlack());
         alreadyPrompted = false;
+
+        ConclusionTextAnimator = ConclusionText.GetComponent<Animator>();
         
         musicController.losingMusic = losingMusicObj;
         musicController.winningMusic = winningMusicObj;
@@ -116,7 +122,7 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityWheelOfFortune());
         abilityCardList.Add(new AbilityWorld());
 
-        //for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityJudgement());
+        //for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityStar());
 
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
@@ -201,7 +207,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
         }
 
-        bool draw = ply2.BlackjackTotal(BlackjackThreshold, false) < BlackjackThreshold;
+        bool draw = ply2.BlackjackTotal(BlackjackThreshold, false) < BlackjackThreshold && ply2.NumberCards.Count < 6;
 
         yield return new WaitForSeconds(1f);
 
@@ -377,12 +383,11 @@ public class GameManager : MonoBehaviour
 
         canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
         ply.NumberCards.RemoveAt(index);
-        RepositionCards(cardsObject.transform, false);
+        RepositionCards(cardsObject.transform);
     }
 
-    public void RepositionCards(Transform parent, bool isAbilityCard = false)
+    public void RepositionCards(Transform parent)
     {
-        Debug.Log("yup");
         int cardCount = 0;
         foreach (Transform child in parent) {
             if (!child) continue;
@@ -421,10 +426,24 @@ public class GameManager : MonoBehaviour
     }
 
     public void UpdateNumberCardSuit(Player ply, int cardIndex, int suit) {
+        if (ply == ply2 && cardIndex == 0) return;
+
         NumberCard card = ply.NumberCards[cardIndex];
         GameObject parent = (ply == ply2) ? enemyNumberCards : playerNumberCards;
         GameObject cardRepresentation = parent.transform.Find(cardIndex.ToString()).gameObject;
+
+        card.Suit = suit;
         
+        NumberCardVisuals cardVisualsScript = cardRepresentation.GetComponent<NumberCardVisuals>();
+
+        GameObject correctCard = cardVisualsScript.CardVariations[4];
+        if (suit >= 0 && suit < cardVisualsScript.CardVariations.Length) correctCard = cardVisualsScript.CardVariations[suit-1];
+
+        correctCard.SetActive(true);
+        foreach (GameObject chosenCard in cardVisualsScript.CardVariations) {
+            if (chosenCard == correctCard) continue;
+            chosenCard.SetActive(false);
+        }
     }
 
     void DrawNumberCard(Player ply)
@@ -457,7 +476,7 @@ public class GameManager : MonoBehaviour
             cardVisualsScript.cardSuit = card.Suit - 1;
         }
 
-        RepositionCards(parent.transform, false);
+        RepositionCards(parent.transform);
 
         TMP_Text valueText = cardRepresentation.transform.Find("Container/Canvas/ValueText").GetComponent<TMP_Text>();
         TMP_Text valueShadowText = cardRepresentation.transform.Find("Container/Canvas/ValueTextShadow").GetComponent<TMP_Text>();
@@ -466,8 +485,6 @@ public class GameManager : MonoBehaviour
 
         if (ply == ply2 && ply2.NumberCards.Count == 1)
         {
-            UpdateNumberCardSuit(ply, (ply.NumberCards.Count - 1), card.Suit);
-            
             valueText.text = "?";
             valueShadowText.text = "?";
             damageText.text = "?";
@@ -475,8 +492,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            UpdateNumberCardSuit(ply, (ply.NumberCards.Count - 1), card.Suit);
-
             if (card.Value == 12) {
                 valueText.text = "A";
                 valueShadowText.text = "A";
@@ -522,7 +537,7 @@ public class GameManager : MonoBehaviour
         img.sprite = abilityCardPlayer.icon;
         img.preserveAspect = true;
 
-        RepositionCards(parent.transform, true);
+        RepositionCards(parent.transform);
     }
 
     void MakeGodCubesPlayAnimation(string animationName, Transform transform)
@@ -709,120 +724,212 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    void SummonGods(Player ply) {
+        GameObject parent = playerNumberCards;
+        if (ply == ply2) parent = enemyNumberCards;
+
+        for (int i = 0; i < ply.NumberCards.Count; i++) {
+            NumberCard card = ply.NumberCards[i];
+            GameObject cardRepresentation = parent.transform.Find(i.ToString()).gameObject;
+            NumberCardVisuals cardVisuals = cardRepresentation.GetComponent<NumberCardVisuals>();
+
+            GameObject chosenGodModel;
+            if (Random.value <= 0.5) {
+                chosenGodModel = Male_Gods[Random.Range(0,Male_Gods.Length)];
+            } else {
+                chosenGodModel = Female_Gods[Random.Range(0,Female_Gods.Length)];
+            }
+            GameObject godCopy = Instantiate(chosenGodModel, cardVisuals.GodPos);
+            cardVisuals.GodModel = godCopy;
+        }
+    }
+
+    void PlayAttackAnimations(Player ply) {
+        string animName = "Attack";
+        GameObject parent = playerNumberCards;
+        if (ply == ply2) {
+            parent = enemyNumberCards;
+            animName = "AttackEnemy";
+        }
+
+        for (int i = 0; i < ply.NumberCards.Count; i++) {
+            NumberCard card = ply.NumberCards[i];
+            GameObject cardRepresentation = parent.transform.Find(i.ToString()).gameObject;
+            Animator cardAnimator = cardRepresentation.GetComponent<Animator>();
+            cardAnimator.Play(animName, 0, 0);
+        }
+    }
+
+    public void ReturnToMenu() {
+        SceneManager.LoadScene(0);
+    }
+
     IEnumerator CombatSection()
     {
-        phase = GamePhase.Combat;
-
         Player whoWon = DetermineBlackjackWinner();
         Player whoLost = ply1;
-
-        ////////reveal opp card
-
         if (whoWon == ply1) whoLost = ply2;
+        
+        // Reveal card
+        GameObject cardRepresentation = enemyNumberCards.transform.Find("0").gameObject;
+        NumberCardVisuals cardVisualsScript = cardRepresentation.GetComponent<NumberCardVisuals>();
 
-        yield return new WaitForSeconds(1f);
+        GameObject correctCard = cardVisualsScript.CardVariations[ply2.NumberCards[0].Suit];
+        correctCard.SetActive(true);
+        foreach (GameObject chosenCard in cardVisualsScript.CardVariations) {
+            if (chosenCard == correctCard) continue;
+            chosenCard.SetActive(false);
+        }
 
-        int YouDef = ply1.TotalHealth(BlackjackThreshold, false);
-        int YouAtk = ply1.TotalDamage(false);
-        int OppDef = ply2.TotalHealth(BlackjackThreshold, false);
-        int OppAtk = ply2.TotalDamage(false);
+        TMP_Text healthText = cardRepresentation.transform.Find("Container/Canvas/DefendValue").GetComponent<TMP_Text>();
+        TMP_Text attackText = cardRepresentation.transform.Find("Container/Canvas/AttackValue").GetComponent<TMP_Text>();
+        TMP_Text valueText = cardRepresentation.transform.Find("Container/Canvas/ValueText").GetComponent<TMP_Text>();
+        TMP_Text valueShadowText = cardRepresentation.transform.Find("Container/Canvas/ValueTextShadow").GetComponent<TMP_Text>();
+
+        if (ply2.NumberCards[0].Value == 12) {
+            valueText.text = "A";
+        } else {
+            valueText.text = ply2.NumberCards[0].Value.ToString();
+        }
+        valueShadowText.text = valueText.text;
+        healthText.text = ply2.NumberCards[0].Health.ToString();
+        attackText.text = ply2.NumberCards[0].Damage.ToString();
+
+        ConclusionTextAnimator.Play("Conclusion", 0, 0);
+        TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
+        if (whoWon == ply2) {
+            conclusiontxtcomponent.text = "You lost!";
+            conclusiontxtcomponent.color = new Color(1f, 1f, 0.59f, 1f);
+        } else if (whoWon == ply1) {
+            conclusiontxtcomponent.text = "You won!";
+            conclusiontxtcomponent.color = new Color(0.5f, 0.52f, 1f, 1f);
+        } else {
+            conclusiontxtcomponent.text = "Nobody won!";
+            conclusiontxtcomponent.color = new Color(1f, 1f, 1f, 1f);
+        }
 
         canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
-
         decidedSound.Play();
+        phase = GamePhase.Combat;
 
-        if (whoWon == ply1)
-        {
-            if (OppDef - YouAtk >= 0)
-            {
-                
-            } else
-            {
-                ply2.Life += OppDef - YouAtk; // formular for Ryzer Hp if you win
-                ply1.Life -= OppDef - YouAtk; // formular for Your Hp if you win
+        yield return new WaitForSeconds(4f);
+
+        bool stop = false;
+        if (whoWon != null) {
+            GetComponents<AudioSource>()[2].Play();
+            canvasManagerScript.WhiteFlash();
+
+            SummonGods(ply1);
+            SummonGods(ply2);
+
+            yield return new WaitForSeconds(1f);
+            PlayAttackAnimations(whoWon);
+
+            AudioSource boomSound = GetComponents<AudioSource>()[1];
+            boomSound.PlayOneShot(boomSound.clip);
+
+            yield return new WaitForSeconds(0.28f);
+
+            BlowupParticle.GetComponent<ParticleSystem>().Emit(15);
+
+            yield return new WaitForSeconds(1.2f);
+
+            PlayAttackAnimations(whoLost);
+            boomSound.PlayOneShot(boomSound.clip);
+
+            yield return new WaitForSeconds(0.28f);
+
+            BlowupParticle.GetComponent<ParticleSystem>().Emit(15);
+
+            yield return new WaitForSeconds(0.5f);
+
+            int WinnerDef = whoWon.TotalHealth(BlackjackThreshold, false);
+            int WinnerAtk = whoWon.TotalDamage(false);
+            int LoserDef = whoLost.TotalHealth(BlackjackThreshold, false);
+            int LoserAtk = whoLost.TotalDamage(false);
+
+            if (LoserDef - WinnerAtk < 0) {
+                whoLost.Life += LoserDef - WinnerAtk;
+                whoWon.Life -= LoserDef - WinnerAtk;
             }
 
-            StartCoroutine(Fight(whoWon));
-            yield return new WaitForSeconds(2.5f);
-            StartCoroutine(Fight(whoLost));
-            Debug.Log("yeah");
-        } else
-        {
-            if (YouDef - OppAtk >= 0)
-            {
-                
-            } else
-            {
-                ply1.Life += YouDef - OppAtk; // formular for Your Hp if you lose
-                ply2.Life -= YouDef - OppAtk; // formular for Ryzer Hp if you lose
+            canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
+            musicController.ControlMusic(this);
+
+            yield return new WaitForSeconds(1f);
+
+            if (ply1.Life <= 0) {
+                VictoryLossFrame.SetActive(true);
+                VictoryLossFrame.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>().text = "YOU LOST...\nLooks like you got beaten!";
+
+                stop = true;
+                Destroy(PauseMenu);
+            } else if (ply2.Life <= 0) {
+                VictoryLossFrame.SetActive(true);
+                stop = true;
+                Destroy(PauseMenu);
             }
-            StartCoroutine(Fight(whoLost));
-            yield return new WaitForSeconds(2.5f);
-            StartCoroutine(Fight(whoWon));
-            Debug.Log("yeah2");
         }
-        canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
-        yield return new WaitForSeconds(2f);
-        musicController.ControlMusic(this);
 
-        // remove expired ability cards
-        // ply
-        for (int i = 0; i < ply1.AbilityCards.Count; i++)
-        {
-            AbilityCard card = ply1.AbilityCards[i];
-            if (!card.Drawn) continue;
-            card.triesPassed += 1;
+        if (!stop) {
 
-            if (card.triesPassed >= card.triesDecayTime)
+            // remove expired ability cards
+            // ply
+            for (int i = 0; i < ply1.AbilityCards.Count; i++)
             {
-                card.Remove(this, ply1, ply2);
-                ply1.AbilityCards.RemoveAt(i);
+                AbilityCard card = ply1.AbilityCards[i];
+                if (!card.Drawn) continue;
+                card.triesPassed += 1;
 
-                Transform abilityCardManifestation = playerAbilityCards.transform.Find(i.ToString());
-                if (abilityCardManifestation != null) Destroy(abilityCardManifestation.gameObject);
-
-                for (int x = i + 1; x < ply1.AbilityCards.Count; x++)
+                if (card.triesPassed >= card.triesDecayTime)
                 {
-                    Transform physicalCard = playerAbilityCards.transform.Find(x.ToString());
-                    if (physicalCard != null)
+                    card.Remove(this, ply1, ply2);
+                    ply1.AbilityCards.RemoveAt(i);
+
+                    Transform abilityCardManifestation = playerAbilityCards.transform.Find(i.ToString());
+                    if (abilityCardManifestation != null) Destroy(abilityCardManifestation.gameObject);
+
+                    for (int x = i + 1; x < ply1.AbilityCards.Count; x++)
                     {
-                        physicalCard.gameObject.name = (x - 1).ToString();
+                        Transform physicalCard = playerAbilityCards.transform.Find(x.ToString());
+                        if (physicalCard != null)
+                        {
+                            physicalCard.gameObject.name = (x - 1).ToString();
+                        }
                     }
                 }
             }
-        }
-        // opponent
-        for (int i = 0; i < ply2.AbilityCards.Count; i++)
-        {
-            AbilityCard card = ply2.AbilityCards[i];
-            if (!card.Drawn) continue;
-            card.triesPassed += 1;
 
-            if (card.triesPassed >= card.triesDecayTime)
+            // opponent
+            for (int i = 0; i < ply2.AbilityCards.Count; i++)
             {
-                Transform cardRep = playerAbilityCards.transform.Find(i.ToString());
-                if (cardRep == null) continue;
-                Destroy(cardRep.gameObject);
-                card.Remove(this, ply2, ply1);
-                ply2.AbilityCards.RemoveAt(i);
+                AbilityCard card = ply2.AbilityCards[i];
+                if (!card.Drawn) continue;
+                card.triesPassed += 1;
 
-                for (int x = i + 1; x < ply2.AbilityCards.Count; x++)
+                if (card.triesPassed >= card.triesDecayTime)
                 {
-                    Transform physicalCard = playerAbilityCards.transform.Find(x.ToString());
-                    if (physicalCard != null)
+                    Transform cardRep = playerAbilityCards.transform.Find(i.ToString());
+                    if (cardRep == null) continue;
+                    Destroy(cardRep.gameObject);
+                    card.Remove(this, ply2, ply1);
+                    ply2.AbilityCards.RemoveAt(i);
+
+                    for (int x = i + 1; x < ply2.AbilityCards.Count; x++)
                     {
-                        physicalCard.gameObject.name = (x - 1).ToString();
+                        Transform physicalCard = playerAbilityCards.transform.Find(x.ToString());
+                        if (physicalCard != null)
+                        {
+                            physicalCard.gameObject.name = (x - 1).ToString();
+                        }
                     }
                 }
             }
+
+            Cleanup();
+            BlackjackThreshold = 21;
+            StartCoroutine(StartNewRound());
         }
-
-        RepositionCards(playerAbilityCards.transform, true);
-        RepositionCards(enemyAbilityCards.transform, true);
-
-        Cleanup();
-        BlackjackThreshold = 21;
-        StartCoroutine(StartNewRound());
     }
 
     void ResolveCombat(Player attacker, Player defender, float counterMultiplier = 1f)

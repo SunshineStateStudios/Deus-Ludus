@@ -3,15 +3,20 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using DG.Tweening;
+using System.Collections;
 
 public class MainMenuHandler : MonoBehaviour
 {
     public GameObject settingsMenu;
+    public GameObject mainMenu;
     public GameObject optionsMusic;
+    public GameObject playPrompt;
     public GameObject mainMenuMusic;
     public GameObject checkCredits;
     public GameObject settingsAudioTab;
     public GameObject settingsGeneralTab;
+    public GameObject UISoundsObject;
     public static bool infoBarsEnabled = true;
     private float MasterVolume = 1f;
     private float MusicVolume = 1f;
@@ -21,6 +26,7 @@ public class MainMenuHandler : MonoBehaviour
     [SerializeField] private Slider soundEffectsSlider;
     [SerializeField] private AudioMixer mainMenuMasterSound;
     private string CurrentMenu = "Main";
+    private Animator animator;
 
     void Start()
     {
@@ -30,36 +36,84 @@ public class MainMenuHandler : MonoBehaviour
         masterSlider.value = MasterVolume;
         musicSlider.value = MusicVolume;
         soundEffectsSlider.value = SfxVolume;
+        animator = GetComponent<Animator>();
     }
     public void GoToSettings()
     {
-        settingsMenu.SetActive(true); 
-        optionsMusic.SetActive(true);
-        mainMenuMusic.SetActive(false);
+        settingsMenu.SetActive(true);
+        mainMenu.SetActive(false);
+        
+        AudioSource optionsMusicSource = optionsMusic.GetComponent<AudioSource>();
+        AudioSource mainMenuMusicSource = mainMenuMusic.GetComponent<AudioSource>();
+
+        optionsMusicSource.DOKill();
+        mainMenuMusicSource.DOKill();
+
+        optionsMusicSource.DOFade(1f, 4f);
+        mainMenuMusicSource.DOFade(0f, 4f);
     }
     public void ExitSettings()
     {
-        settingsMenu.SetActive(false); 
-        optionsMusic.SetActive(false);
-        mainMenuMusic.SetActive(true);
+        settingsMenu.SetActive(false);
+        mainMenu.SetActive(true);
+        
+        AudioSource optionsMusicSource = optionsMusic.GetComponent<AudioSource>();
+        AudioSource mainMenuMusicSource = mainMenuMusic.GetComponent<AudioSource>();
+
+        optionsMusicSource.DOKill();
+        mainMenuMusicSource.DOKill();
+
+        optionsMusicSource.DOFade(0f, 4f);
+        mainMenuMusicSource.DOFade(1f, 4f);
     }
 
     public void Play()
     {
         if (!CurrentMenu.Equals("Main")) return;
-        SceneManager.LoadScene(1);
+        playPrompt.SetActive(true);
+        mainMenu.SetActive(false);
     }
     public void Quit()
     {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #else
         Application.Quit();
+        #endif
     }
     public void Credits()
     {
         checkCredits.SetActive(true);
+        mainMenu.SetActive(false);
     }
     public void exitCredits()
     {
         checkCredits.SetActive(false);
+        mainMenu.SetActive(true);
+    }
+    public void exitPrompt() {
+        playPrompt.SetActive(false);
+        mainMenu.SetActive(true);
+    }
+    public void acceptPrompt() {
+        StartCoroutine(transition());
+
+        GameObject yehButton = playPrompt.transform.Find("Panel/yeh").gameObject;
+        GameObject nahButton = playPrompt.transform.Find("Panel/nah").gameObject;
+
+        Destroy(yehButton.GetComponent<GenericUISounds>());
+        Destroy(nahButton.GetComponent<GenericUISounds>());
+
+        yehButton.GetComponent<Button>().interactable = false;
+        nahButton.GetComponent<Button>().interactable = false;
+
+        animator.Play("GodPromptChosen", 0, 0);
+        mainMenuMusic.SetActive(false);
+        UISoundsObject.GetComponents<AudioSource>()[6].Play();
+    }
+    IEnumerator transition() {
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene(1);
     }
     public void checkAudio()
     {
