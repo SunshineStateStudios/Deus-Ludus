@@ -1,1 +1,0 @@
-Before committing, make sure you delete all folders in the src/ folder except for "Assets", "Packages", and "ProjectSettings".
