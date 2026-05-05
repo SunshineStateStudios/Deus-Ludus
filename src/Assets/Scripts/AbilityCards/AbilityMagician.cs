@@ -88,20 +88,18 @@ public class AbilityMagician : PromptAbilityCard
     }
 
     public override int AICardDecision(Player player) {
-        int chosenIndex = -1;
+        int chosenIndex = 0;
 
-        while (chosenIndex == -1) {
-            for (int i = 1; i < player.AbilityCards.Count; i++) {
-                AbilityCard oldCard = player.AbilityCards[chosenIndex];
-                AbilityCard currentCard = player.AbilityCards[i];
+        for (int i = 0; i < player.AbilityCards.Count; i++) {
+            AbilityCard oldCard = player.AbilityCards[chosenIndex];
+            AbilityCard currentCard = player.AbilityCards[i];
 
-                if (currentCard.Drawn) continue;
-                if (currentCard.GetType().Name.Equals("AbilityMagician")) continue;
+            if (currentCard.Drawn) continue;
+            if (currentCard.GetType().Name.Equals("AbilityMagician")) continue;
 
-                if (Random.value < 0.25) {
-                    chosenIndex = i;
-                    break;
-                }
+            if (Random.value < 0.25) {
+                chosenIndex = i;
+                break;
             }
         }
 
