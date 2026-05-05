@@ -16,6 +16,7 @@ public class Deck
         for (int i = 1; i <= 12; i++)
         {
             cards.Add(new NumberCard(i, Random.Range(1, 5)));
+            //cards.Add(new NumberCard(12, Random.Range(1, 5)));
         }
 
         Shuffle();

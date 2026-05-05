@@ -15,11 +15,11 @@ public class AbilityStar : AbilityCard
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
         for (int i = 0; i < owner.NumberCards.Count; i++)
         {
-            if (i == 0 && owner == gm.ply2) continue;
             NumberCard card = owner.NumberCards[i];
             if (card.Suit != 3) continue;
             card.Health = card.Health * 2;
 
+            if (i == 0 && owner == gm.ply2) continue;
             parent.Find(i.ToString() + "/Container/Canvas/DefendValue").GetComponent<TMP_Text>().text = card.Health.ToString();
         }
         canvasMngr.CalculateText(gm.ply1, gm.ply2, true, true, 0f);

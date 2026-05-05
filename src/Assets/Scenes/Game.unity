@@ -2165,6 +2165,7 @@ MonoBehaviour:
   NumberCardButtonPrompt: {fileID: 6026728480752834025, guid: 69c97b5c537d4cadfb9fadacf3f8ef1d, type: 3}
   InventoryDescriptionPanel: {fileID: 223089754}
   UISoundsObject: {fileID: 972097979}
+  inventoryButton: {fileID: 2007848407}
 --- !u!114 &187481884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10334,7 +10335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!225 &1161589422
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -22873,6 +22874,7 @@ GameObject:
   - component: {fileID: 2007848410}
   - component: {fileID: 2007848409}
   - component: {fileID: 2007848412}
+  - component: {fileID: 2007848413}
   m_Layer: 5
   m_Name: InventoryButton
   m_TagString: Untagged
@@ -23010,6 +23012,28 @@ MonoBehaviour:
   UISoundsObject: {fileID: 972097979}
   UseAltConfirmSound: 1
   PlayConfirmSound: 0
+--- !u!95 &2007848413
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007848407}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e5407eea348029f12a57dd31113ac696, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2059569874
 GameObject:
   m_ObjectHideFlags: 0

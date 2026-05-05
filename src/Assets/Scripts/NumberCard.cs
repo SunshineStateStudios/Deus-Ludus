@@ -68,7 +68,7 @@ public class NumberCard : Card
                 break;
             default:
                 Damage = 4;
-                Health = 1;
+                Health = 4;
                 break;
         }
     }

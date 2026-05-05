@@ -26,6 +26,7 @@ public class CanvasManager : MonoBehaviour
     public GameObject NumberCardButtonPrompt;
     public GameObject InventoryDescriptionPanel;
     public GameObject UISoundsObject;
+    public GameObject inventoryButton;
 
     private bool inventoryPanelHidden = true;
     private bool active = true;
@@ -335,6 +336,7 @@ public class CanvasManager : MonoBehaviour
         for (int i = 0; i < ply.AbilityCards.Count; i++) {
             AbilityCard abilityCard = ply.AbilityCards[i];
             if (abilityCard.Drawn) continue;
+            if (abilityCard.GetType().Name.Equals(card.GetType().Name)) continue;
 
             GameObject cardRepresentation = Instantiate(AbilityCardUIPromptPrefab, promptContentsAbility);
             Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());

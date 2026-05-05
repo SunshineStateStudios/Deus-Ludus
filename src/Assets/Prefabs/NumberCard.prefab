@@ -141,8 +141,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294944119
-  m_fontColor: {r: 0.4666667, g: 0.64648414, b: 1, a: 1}
+    rgba: 4286069789
+  m_fontColor: {r: 0.11347453, g: 0.23463842, b: 0.4716981, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
@@ -593,6 +593,7 @@ MonoBehaviour:
   particlesEmitter: {fileID: 7695547296426129587}
   cardSuit: 0
   GodPos: {fileID: 433143071927600330}
+  GodModel: {fileID: 0}
 --- !u!114 &7615740395871497401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5908,8 +5909,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286019583
-  m_fontColor: {r: 1, g: 0.4669811, b: 0.4669811, a: 1}
+    rgba: 4280887699
+  m_fontColor: {r: 0.5754717, g: 0.16015486, b: 0.16015486, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:

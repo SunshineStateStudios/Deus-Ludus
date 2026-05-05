@@ -13,16 +13,7 @@ public class AbilityChariot : AbilityCard
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        Transform parentCards = gm.playerAbilityCards.transform;
-        if (owner == gm.ply2) parentCards = gm.enemyAbilityCards.transform;
-
-        for (int i = opponent.AbilityCards.Count-1; i >= 0; i--) {
-            AbilityCard abilityCard = opponent.AbilityCards[i];
-            if (!abilityCard.Drawn) continue;
-
-            gm.RemoveAbilityCard(opponent, i);
-            break;
-        }
+        gm.RemoveNumberCard(opponent, opponent.NumberCards.Count-1);
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

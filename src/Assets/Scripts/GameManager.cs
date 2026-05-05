@@ -150,7 +150,7 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityWheelOfFortune());
         abilityCardList.Add(new AbilityWorld());
 
-        //for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityStrength());
+        //for (int i = 0; i < 20; i++) abilityCardList.Add(new AbilityJudgement());
 
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
@@ -168,13 +168,23 @@ public class GameManager : MonoBehaviour
 
     public AbilityCard GivePlayerAbilityCard(Player ply)
     {
-        if (abilityCardList.Count > 0 && ply.AbilityCards.Count < 5)
+        int availableCards = 0;
+
+        foreach (AbilityCard card in ply.AbilityCards) {
+            if (card.Drawn) continue;
+            availableCards++;
+        }
+
+        if (availableCards < 5)
         {
+            canvasManagerScript.inventoryButton.GetComponent<Animator>().Play("Notify", 0, 0);
+            
             AbilityCard chosenCard = abilityCardList[0];
             ply.AbilityCards.Add(chosenCard);
             abilityCardList.RemoveAt(0);
             return chosenCard;
         }
+        
         return null;
     }
 
@@ -190,8 +200,8 @@ public class GameManager : MonoBehaviour
 
         RebuildAbilityCardPool();
 
-        for (int i = 0; i < 4; i++) GivePlayerAbilityCard(ply1);
-        for (int i = 0; i < 5; i++) GivePlayerAbilityCard(ply2);
+        for (int i = 0; i < 2; i++) GivePlayerAbilityCard(ply1);
+        for (int i = 0; i < 2; i++) GivePlayerAbilityCard(ply2);
 
         for (int i = 0; i < 2; i++)
         {
@@ -299,7 +309,13 @@ public class GameManager : MonoBehaviour
         if (alreadyPrompted) return;
         alreadyPrompted = true;
 
-        if (owner.AbilityCards.Count == 0) return;
+        int availableCards = 0;
+        foreach (AbilityCard abilCard in owner.AbilityCards) {
+            if (abilCard.Drawn) continue;
+            availableCards++;
+        }
+
+        if (availableCards == 0) return;
 
         if (owner == ply2)
         {
@@ -386,6 +402,7 @@ public class GameManager : MonoBehaviour
         Transform cardRepTransform = parentCards.Find(index.ToString());
         if (cardRepTransform == null) return;
         Destroy(cardRepTransform.gameObject);
+        RepositionCards(parentCards);
     }
 
     public void RemoveNumberCard(int ply, int index) {
@@ -463,6 +480,7 @@ public class GameManager : MonoBehaviour
         card.Suit = suit;
         
         NumberCardVisuals cardVisualsScript = cardRepresentation.GetComponent<NumberCardVisuals>();
+        cardVisualsScript.cardSuit = suit - 1;
 
         GameObject correctCard = cardVisualsScript.CardVariations[4];
         if (suit >= 0 && suit < cardVisualsScript.CardVariations.Length) correctCard = cardVisualsScript.CardVariations[suit-1];
@@ -472,9 +490,30 @@ public class GameManager : MonoBehaviour
             if (chosenCard == correctCard) continue;
             chosenCard.SetActive(false);
         }
+
+        if (ply.NumberCards[cardIndex].Value == 12) {
+            Renderer renderer = correctCard.GetComponent<Renderer>();
+            Material[] mats = renderer.materials;
+                
+            int frontIndex = -1;
+            int backIndex = -1;
+
+            for (int i = 0; i < mats.Length; i++) {
+                if (mats[i].name.Contains("-Front")) {
+                    frontIndex = i;
+                } else if (mats[i].name.Contains("-Back")) {
+                    backIndex = i;
+                }
+            }
+
+            if (frontIndex != -1 && backIndex != -1) {
+                mats[frontIndex] = mats[backIndex];
+                renderer.materials = mats;
+            }
+        }
     }
 
-    void DrawNumberCard(Player ply)
+    public void DrawNumberCard(Player ply)
     {
         NumberCard card = deck.Draw();
         ply.NumberCards.Add(card);
@@ -521,8 +560,28 @@ public class GameManager : MonoBehaviour
         else
         {
             if (card.Value == 12) {
-                valueText.text = "A";
-                valueShadowText.text = "A";
+                valueText.text = "";
+                valueShadowText.text = "";
+
+                GameObject cardModel = cardVisualsScript.CardVariations[cardVisualsScript.cardSuit];
+                Renderer renderer = cardModel.GetComponent<Renderer>();
+                Material[] mats = renderer.materials;
+                
+                int frontIndex = -1;
+                int backIndex = -1;
+
+                for (int i = 0; i < mats.Length; i++) {
+                    if (mats[i].name.Contains("-Front")) {
+                        frontIndex = i;
+                    } else if (mats[i].name.Contains("-Back")) {
+                        backIndex = i;
+                    }
+                }
+
+                if (frontIndex != -1 && backIndex != -1) {
+                    mats[frontIndex] = mats[backIndex];
+                    renderer.materials = mats;
+                }
             } else {
                 valueText.text = card.Value.ToString();
                 valueShadowText.text = card.Value.ToString();
@@ -815,7 +874,25 @@ public class GameManager : MonoBehaviour
         TMP_Text valueShadowText = cardRepresentation.transform.Find("Container/Canvas/ValueTextShadow").GetComponent<TMP_Text>();
 
         if (ply2.NumberCards[0].Value == 12) {
-            valueText.text = "A";
+            GameObject cardModel = cardVisualsScript.CardVariations[cardVisualsScript.cardSuit];
+            Renderer renderer = cardModel.GetComponent<Renderer>();
+            Material[] mats = renderer.materials;
+                
+            int frontIndex = -1;
+            int backIndex = -1;
+
+            for (int i = 0; i < mats.Length; i++) {
+                if (mats[i].name.Contains("-Front")) {
+                    frontIndex = i;
+                } else if (mats[i].name.Contains("-Back")) {
+                    backIndex = i;
+                }
+            }
+
+            if (frontIndex != -1 && backIndex != -1) {
+                mats[frontIndex] = mats[backIndex];
+                renderer.materials = mats;
+            }
         } else {
             valueText.text = ply2.NumberCards[0].Value.ToString();
         }

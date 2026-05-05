@@ -4,13 +4,24 @@ using TMPro;
 public class AbilityLovers : AbilityCard
 {
     public override string name => "Lovers";
-    public override string description => "You and the opponent draw a random <color=#ff8282>ability</color> card (will not work for player with one or less ability cards).";
+    public override string description => "Replaces this card with a random <color=#ff8282>ability</color> card if the pool has any.";
     public override int triesDecayTime => 1;
+
+    void GiveCard(GameManager gm, Player ply) {
+        while (true) {
+            AbilityCard chosenCard = gm.GivePlayerAbilityCard(ply);
+            if (chosenCard != null) {
+                if (!chosenCard.GetType().Name.Equals("AbilityLovers")) {
+                    break;
+                }
+            }
+        }
+    }
 
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
-        if (owner.AbilityCards.Count > 0) gm.DrawAbilityCard(owner, Random.Range(0,owner.AbilityCards.Count-1));
-        if (opponent.AbilityCards.Count > 0) gm.DrawAbilityCard(opponent, Random.Range(0,opponent.AbilityCards.Count-1));
+        gm.GivePlayerAbilityCard(owner);
+        gm.canvasObject.GetComponent<CanvasManager>().RebuildInventoryPanel();
     }
 
     public override void Remove(GameManager gm, Player owner, Player opponent)

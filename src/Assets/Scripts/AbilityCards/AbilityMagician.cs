@@ -84,6 +84,7 @@ public class AbilityMagician : PromptAbilityCard
 
         newInstance.icon = Resources.Load<Sprite>("Icons/" + newInstance.GetType().Name.Replace("Ability", ""));
         owner.AbilityCards.Add(newInstance);
+        gm.canvasObject.GetComponent<CanvasManager>().inventoryButton.GetComponent<Animator>().Play("Notify", 0, 0);
     }
 
     public override int AICardDecision(Player player) {

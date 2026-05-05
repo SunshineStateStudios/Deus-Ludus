@@ -37,9 +37,38 @@ public class AbilityHighPriestess : PromptAbilityCard
         hiddenCard.transform.Find("Container/Canvas/AttackValue")
         .GetComponent<TMP_Text>();
 
+        NumberCardVisuals cardVisualsScript = hiddenCard.GetComponent<NumberCardVisuals>();
+        GameObject cardModel = cardVisualsScript.CardVariations[4];
+        if (enemyFirstCard.Suit-1 >= 0 && enemyFirstCard.Suit-1 < cardVisualsScript.CardVariations.Length) cardModel = cardVisualsScript.CardVariations[enemyFirstCard.Suit-1];
+
+        cardModel.SetActive(true);
+        foreach (GameObject chosenCard in cardVisualsScript.CardVariations) {
+            if (chosenCard == cardModel) continue;
+            chosenCard.SetActive(false);
+        }
+
         if (enemyFirstCard.Value == 12) {
-            valueText.text = "A";
-            valueShadowText.text = "A";
+            valueText.text = "";
+            valueShadowText.text = "";
+
+            Renderer renderer = cardModel.GetComponent<Renderer>();
+            Material[] mats = renderer.materials;
+                
+            int frontIndex = -1;
+            int backIndex = -1;
+
+            for (int i = 0; i < mats.Length; i++) {
+                if (mats[i].name.Contains("-Front")) {
+                    frontIndex = i;
+                } else if (mats[i].name.Contains("-Back")) {
+                    backIndex = i;
+                }
+            }
+
+            if (frontIndex != -1 && backIndex != -1) {
+                mats[frontIndex] = mats[backIndex];
+                renderer.materials = mats;
+            }
         } else {
             valueText.text = enemyFirstCard.Value.ToString();
             valueShadowText.text = enemyFirstCard.Value.ToString();

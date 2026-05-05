@@ -25,7 +25,6 @@ public class AbilityHangedMan : AbilityCard
         if (owner == gm.ply2) parent = gm.playerNumberCards.transform;
 
         gm.RemoveNumberCard(opponent, chosenIndex);
-        gm.RepositionCards(parent);
         canvasMngr.CalculateText(gm.ply1, gm.ply2, true, true);
     }
 
