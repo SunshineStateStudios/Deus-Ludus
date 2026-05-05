@@ -150,8 +150,6 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityWheelOfFortune());
         abilityCardList.Add(new AbilityWorld());
 
-        //for (int i = 0; i < 20; i++) abilityCardList.Add(new AbilityJudgement());
-
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
         }
@@ -200,8 +198,8 @@ public class GameManager : MonoBehaviour
 
         RebuildAbilityCardPool();
 
-        for (int i = 0; i < 2; i++) GivePlayerAbilityCard(ply1);
-        for (int i = 0; i < 2; i++) GivePlayerAbilityCard(ply2);
+        for (int i = 0; i < 3; i++) GivePlayerAbilityCard(ply1);
+        for (int i = 0; i < 3; i++) GivePlayerAbilityCard(ply2);
 
         for (int i = 0; i < 2; i++)
         {

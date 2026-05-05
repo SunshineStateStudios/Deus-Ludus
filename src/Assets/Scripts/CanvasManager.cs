@@ -336,13 +336,17 @@ public class CanvasManager : MonoBehaviour
         for (int i = 0; i < ply.AbilityCards.Count; i++) {
             AbilityCard abilityCard = ply.AbilityCards[i];
             if (abilityCard.Drawn) continue;
-            if (abilityCard.GetType().Name.Equals(card.GetType().Name)) continue;
+            //if (abilityCard.GetType().Name.Equals(card.GetType().Name)) continue;
 
             GameObject cardRepresentation = Instantiate(AbilityCardUIPromptPrefab, promptContentsAbility);
             Destroy(cardRepresentation.GetComponent<AbilityCardUIScript>());
 
             TMP_Text nameLabel = cardRepresentation.transform.Find("Name").gameObject.GetComponent<TMP_Text>();
             nameLabel.text = abilityCard.name.ToString();
+
+            Image iconLabel = cardRepresentation.transform.Find("Image").gameObject.GetComponent<Image>();
+            iconLabel.sprite = abilityCard.icon;
+            iconLabel.preserveAspect = true;
 
             cardRepresentation.AddComponent<AbilityCardPromptScript>();
 
