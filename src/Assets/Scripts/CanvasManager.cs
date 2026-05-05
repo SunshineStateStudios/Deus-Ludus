@@ -258,6 +258,7 @@ public class CanvasManager : MonoBehaviour
 
     public void ShowPrompt(string type, Player ply, PromptAbilityCard card) {
         if (type.Equals("number")) {
+            if (ply.NumerCards.Count == 0) return;
             NumberCardPromptPanel.SetActive(true);
 
             Transform promptContents = NumberCardPromptPanel.transform.Find("Contents");
