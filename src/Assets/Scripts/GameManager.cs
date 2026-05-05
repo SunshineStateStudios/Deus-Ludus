@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
 
-        /*abilityCardList.Add(new AbilityChariot());
+        abilityCardList.Add(new AbilityChariot());
         abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityDevil());
         abilityCardList.Add(new AbilityEmperor());
@@ -148,9 +148,9 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityTower());
         abilityCardList.Add(new AbilityWheelOfFortune());
-        abilityCardList.Add(new AbilityWorld());*/
+        abilityCardList.Add(new AbilityWorld());
 
-        for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityStrength());
+        //for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityStrength());
 
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
         RebuildAbilityCardPool();
 
         for (int i = 0; i < 4; i++) GivePlayerAbilityCard(ply1);
-        //for (int i = 0; i < 5; i++) GivePlayerAbilityCard(ply2);
+        for (int i = 0; i < 5; i++) GivePlayerAbilityCard(ply2);
 
         for (int i = 0; i < 2; i++)
         {
