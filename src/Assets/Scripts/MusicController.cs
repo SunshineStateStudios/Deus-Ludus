@@ -118,6 +118,15 @@ public class MusicController
             }
         }
     }
+    public void FinaleMusic(GameManager gm)
+    {
+        losingAudio.DOFade(0.5f, 1f).SetUpdate(true);
+        winningAudio.DOFade(0.5f, 1f).SetUpdate(true);
+        defaultAudio.DOFade(0.5f, 1f).SetUpdate(true);
+        pauseSunAudio.DOFade(0f, 1f).SetUpdate(true);
+        pauseMoonAudio.DOFade(0f, 1f).SetUpdate(true);
+        pauseDefaultAudio.DOFade(0f, 1f).SetUpdate(true);
+    }
 
     private void StartCoroutine(IEnumerator enumerator)
     {

@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     public GameObject VictoryLossFrame;
     public GameObject PauseMenu;
     public GameObject BlowupParticle;
+    public GameObject[] EndingText;
 
     private AudioSource decidedSound;
     private AudioSource attackGodCubeSound;
@@ -81,14 +82,41 @@ public class GameManager : MonoBehaviour
         deck = new Deck();
 
         canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
-
         StartCoroutine(StartNewRound());
     }
+    IEnumerator playEndingSequence()
+    {
+        foreach (GameObject obj in EndingText)
+        {
+            GameEndingText endingLine = obj.GetComponent<GameEndingText>();
+            if (endingLine != null)
+            {
+                endingLine.gameObject.SetActive(true);
+                endingLine.runRevealText();
+            }
+            yield return new WaitForSeconds(5f);
+        }
+    }
+    IEnumerator TurnOffEndingText() {
+        yield return new WaitForSeconds(58f);
+        foreach (GameObject obj in EndingText) {
+            if (obj != null) {
+                obj.SetActive(false);
+                yield return new WaitForSeconds(0.1f);
+            }
+    }
+}
     IEnumerator unfadeBlack()
     {
         blackFade.DOFade(0f, 1.5f);
         yield return new WaitForSeconds(1.5f);
         blackFade.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+    }
+    IEnumerator fadeBlack()
+    {
+        blackFade.gameObject.SetActive(true);
+        blackFade.DOFade(1f, 1.5f);
         yield return new WaitForSeconds(0.5f);
     }
 
@@ -100,7 +128,7 @@ public class GameManager : MonoBehaviour
     {
         abilityCardList = new List<AbilityCard>();
 
-        abilityCardList.Add(new AbilityChariot());
+        /*abilityCardList.Add(new AbilityChariot());
         abilityCardList.Add(new AbilityDeath());
         abilityCardList.Add(new AbilityDevil());
         abilityCardList.Add(new AbilityEmperor());
@@ -120,9 +148,9 @@ public class GameManager : MonoBehaviour
         abilityCardList.Add(new AbilityTemperance());
         abilityCardList.Add(new AbilityTower());
         abilityCardList.Add(new AbilityWheelOfFortune());
-        abilityCardList.Add(new AbilityWorld());
+        abilityCardList.Add(new AbilityWorld());*/
 
-        //for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityStar());
+        for (int i = 0; i < 10; i++) abilityCardList.Add(new AbilityStrength());
 
         foreach (AbilityCard card in abilityCardList) {
             card.icon = Resources.Load<Sprite>("Icons/" + card.GetType().Name.Replace("Ability", ""));
@@ -163,7 +191,7 @@ public class GameManager : MonoBehaviour
         RebuildAbilityCardPool();
 
         for (int i = 0; i < 4; i++) GivePlayerAbilityCard(ply1);
-        for (int i = 0; i < 5; i++) GivePlayerAbilityCard(ply2);
+        //for (int i = 0; i < 5; i++) GivePlayerAbilityCard(ply2);
 
         for (int i = 0; i < 2; i++)
         {
@@ -799,6 +827,7 @@ public class GameManager : MonoBehaviour
         blackFade.gameObject.SetActive(true);
         blackFade.DOFade(0.5f, 0.3f);
         ConclusionTextAnimator.Play("Conclusion", 0, 0);
+
         TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
         if (whoWon == ply2) {
             conclusiontxtcomponent.text = "You lost!";
@@ -860,7 +889,9 @@ public class GameManager : MonoBehaviour
             }
 
             canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
+            if (ply2.Life > 0) {
             musicController.ControlMusic(this);
+            }
 
             yield return new WaitForSeconds(1f);
 
@@ -871,6 +902,14 @@ public class GameManager : MonoBehaviour
                 stop = true;
                 Destroy(PauseMenu);
             } else if (ply2.Life <= 0) {
+                //StartCoroutine(StartNewRound());
+                StartCoroutine(fadeBlack());
+                yield return new WaitForSeconds(3f);
+                musicController.FinaleMusic(this);
+                StartCoroutine(playEndingSequence());
+                StartCoroutine(TurnOffEndingText());
+                yield return new WaitForSeconds(60f);
+                StartCoroutine(TurnOffEndingText());
                 VictoryLossFrame.SetActive(true);
                 stop = true;
                 Destroy(PauseMenu);
