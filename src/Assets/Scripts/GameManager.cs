@@ -820,9 +820,9 @@ public class GameManager : MonoBehaviour
 
             GameObject chosenGodModel;
             if (Random.value <= 0.5) {
-                chosenGodModel = Male_Gods[Random.Range(0,Male_Gods.Length)];
+                chosenGodModel = Male_Gods[card.Suit-1];
             } else {
-                chosenGodModel = Female_Gods[Random.Range(0,Female_Gods.Length)];
+                chosenGodModel = Female_Gods[card.Suit-1];
             }
             GameObject godCopy = Instantiate(chosenGodModel, cardVisuals.GodPos);
             cardVisuals.GodModel = godCopy;
