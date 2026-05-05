@@ -27,6 +27,7 @@ public class PauseSettings : MonoBehaviour
         musicSlider.value = MusicVolume;
         soundEffectsSlider.value = SfxVolume;
     }
+    
     public void SetMaster() {
         float MasterVol = masterSlider.value;
         MasterVolume = masterSlider.value;

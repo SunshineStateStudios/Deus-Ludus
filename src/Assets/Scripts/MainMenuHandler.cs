@@ -30,9 +30,9 @@ public class MainMenuHandler : MonoBehaviour
 
     void Start()
     {
-        MasterVolume = PlayerPrefs.GetFloat("MasterVol");
-        MusicVolume = PlayerPrefs.GetFloat("MusicVol");
-        SfxVolume = PlayerPrefs.GetFloat("SfxVol");
+        MasterVolume = PlayerPrefs.GetFloat("MasterVol", 1f);
+        MusicVolume = PlayerPrefs.GetFloat("MusicVol", 1f);
+        SfxVolume = PlayerPrefs.GetFloat("SfxVol", 1f);
         masterSlider.value = MasterVolume;
         musicSlider.value = MusicVolume;
         soundEffectsSlider.value = SfxVolume;
