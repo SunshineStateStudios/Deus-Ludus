@@ -872,7 +872,7 @@ public class GameManager : MonoBehaviour
         TMP_Text valueShadowText = cardRepresentation.transform.Find("Container/Canvas/ValueTextShadow").GetComponent<TMP_Text>();
 
         if (ply2.NumberCards[0].Value == 12) {
-            GameObject cardModel = cardVisualsScript.CardVariations[cardVisualsScript.cardSuit];
+            GameObject cardModel = cardVisualsScript.CardVariations[ply2.NumberCards[0].Suit-1];
             Renderer renderer = cardModel.GetComponent<Renderer>();
             Material[] mats = renderer.materials;
                 
