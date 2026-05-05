@@ -859,7 +859,7 @@ public class GameManager : MonoBehaviour
         GameObject cardRepresentation = enemyNumberCards.transform.Find("0").gameObject;
         NumberCardVisuals cardVisualsScript = cardRepresentation.GetComponent<NumberCardVisuals>();
 
-        GameObject correctCard = cardVisualsScript.CardVariations[ply2.NumberCards[0].Suit];
+        GameObject correctCard = cardVisualsScript.CardVariations[ply2.NumberCards[0].Suit-1];
         correctCard.SetActive(true);
         foreach (GameObject chosenCard in cardVisualsScript.CardVariations) {
             if (chosenCard == correctCard) continue;
