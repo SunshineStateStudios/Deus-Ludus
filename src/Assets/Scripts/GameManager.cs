@@ -831,10 +831,10 @@ public class GameManager : MonoBehaviour
         TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
         if (whoWon == ply2) {
             conclusiontxtcomponent.text = "You lost!";
-            conclusiontxtcomponent.color = new Color(1f, 1f, 0.59f, 1f);
+            conclusiontxtcomponent.color = new Color(1f, 0.98f, 0f, 1f);
         } else if (whoWon == ply1) {
             conclusiontxtcomponent.text = "You won!";
-            conclusiontxtcomponent.color = new Color(0.5f, 0.52f, 1f, 1f);
+            conclusiontxtcomponent.color = new Color(0f, 0.85f, 1f, 1f);
         } else {
             conclusiontxtcomponent.text = "Nobody won!";
             conclusiontxtcomponent.color = new Color(1f, 1f, 1f, 1f);
@@ -897,7 +897,7 @@ public class GameManager : MonoBehaviour
 
             if (ply1.Life <= 0) {
                 VictoryLossFrame.SetActive(true);
-                VictoryLossFrame.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>().text = "YOU LOST...\nLooks like you got beaten!";
+                VictoryLossFrame.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>().text = "YOU LOST...\nBetter luck next time!";
 
                 stop = true;
                 Destroy(PauseMenu);
