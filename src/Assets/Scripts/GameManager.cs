@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
     private CanvasManager canvasManagerScript;
     private int rounds = 0;
     private int turns = 0;
-    private float abilityCardDebounce = 0;
 
     bool IsPlayerTurn()
     {
@@ -118,10 +117,6 @@ public class GameManager : MonoBehaviour
         blackFade.gameObject.SetActive(true);
         blackFade.DOFade(1f, 1.5f);
         yield return new WaitForSeconds(0.5f);
-    }
-
-    void Update() {
-        abilityCardDebounce += Time.deltaTime;
     }
 
     void RebuildAbilityCardPool()
@@ -424,7 +419,7 @@ public class GameManager : MonoBehaviour
             if (card != null) { card.gameObject.name = (i - 1).ToString(); }
         }
 
-        canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
+        canvasManagerScript.CalculateText(ply1,ply2,true,true,0f);
         ply.NumberCards.RemoveAt(index);
         RepositionCards(cardsObject.transform);
     }
@@ -599,8 +594,6 @@ public class GameManager : MonoBehaviour
     public void DrawAbilityCard(Player ply, int index)
     {
         if (alreadyPrompted) return;
-        if (abilityCardDebounce <= 0.75f) return;
-        abilityCardDebounce = 0;
 
         AbilityCard abilityCardPlayer = ply.AbilityCards[index];
 
