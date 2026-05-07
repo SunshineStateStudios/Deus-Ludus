@@ -38,7 +38,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         yourTotalInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -58,7 +58,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         yourStatsInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -78,7 +78,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         oppTotalInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -98,7 +98,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         oppStatsInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -119,7 +119,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         drawInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -140,7 +140,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         stayInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -161,7 +161,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         healthInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
@@ -182,7 +182,7 @@ public class InfoBarController : MonoBehaviour
     {
         if(infoBarsEnabled)
         {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         roundWaveInfo.SetActive(true);
         }
         yield return new WaitForSeconds(0);
