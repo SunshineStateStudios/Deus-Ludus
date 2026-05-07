@@ -56,17 +56,19 @@ public class CanvasManager : MonoBehaviour
     }
 
     void Update() {
-        timePassed += Time.deltaTime;
+        if (!gameManagerScript.IntroTextHolder.gameObject.activeInHierarchy){
+            timePassed += Time.deltaTime;
 
-        int minutes = (int) timePassed/60;
-        int seconds = (int) timePassed%60;
+            int minutes = (int) timePassed/60;
+            int seconds = (int) timePassed%60;
 
-        TMP_Text timerLabelText = timerLabel.GetComponent<TMP_Text>();
+            TMP_Text timerLabelText = timerLabel.GetComponent<TMP_Text>();
 
-        if (seconds < 10) {
-            timerLabelText.text = minutes.ToString() + ":0" + seconds.ToString();
-        } else {
-            timerLabelText.text = minutes.ToString() + ":" + seconds.ToString();
+            if (seconds < 10) {
+                timerLabelText.text = minutes.ToString() + ":0" + seconds.ToString();
+            } else {
+                timerLabelText.text = minutes.ToString() + ":" + seconds.ToString();
+            }
         }
     }
 
@@ -118,12 +120,12 @@ public class CanvasManager : MonoBehaviour
         } else {
             ply2ADLabel.text = "<color=#d62d2dff>A: " + ply2AttackTotalRevealed.ToString() + "</color> / <color=#2d6ed6ff>D: " + ply2HealthTotalRevealed.ToString() + "</color>";
         }
-        plyTotalText.text = "Total: " + total.ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
+        plyTotalText.text = "Total: " + total.ToString() + "/<color=#ff85f7>" + gameManagerScript.BlackjackThreshold.ToString();
         
         if (hideFirstCard) {
-            enemyTotalText.text = "Total: ? + " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, true).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
+            enemyTotalText.text = "Total: ? + " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, true).ToString() + "/<color=#ff85f7>" + gameManagerScript.BlackjackThreshold.ToString();
         } else {
-            enemyTotalText.text = "Total: " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, false).ToString() + "/" + gameManagerScript.BlackjackThreshold.ToString();
+            enemyTotalText.text = "Total: " + ply2.BlackjackTotal(gameManagerScript.BlackjackThreshold, false).ToString() + "/<color=#ff85f7>" + gameManagerScript.BlackjackThreshold.ToString();
         }
     }
 

@@ -39,6 +39,13 @@ public class GameManager : MonoBehaviour
     public GameObject VictoryLossFrame;
     public GameObject PauseMenu;
     public GameObject BlowupParticle;
+    public GameObject[] IntroText;
+    public CanvasGroup IntroTextHolder;
+    public CanvasGroup IntroDrawDisplay;
+    public CanvasGroup IntroStayDisplay;
+    public CanvasGroup IntroInvDisplay;
+    public CanvasGroup IntroOptionsPanelDisplay;
+
     public GameObject[] EndingText;
 
     private AudioSource decidedSound;
@@ -46,6 +53,7 @@ public class GameManager : MonoBehaviour
     private Animator ConclusionTextAnimator;
     private List<AbilityCard> abilityCardList;
     private CanvasManager canvasManagerScript;
+    private Coroutine IntroCoroutine;
     private int rounds = 0;
     private int turns = 0;
 
@@ -53,8 +61,60 @@ public class GameManager : MonoBehaviour
     {
         return phase == GamePhase.PlayerTurn;
     }
-
     void Start()
+    {
+        IntroCoroutine = StartCoroutine(IntroSequence());
+    }
+    IEnumerator IntroSequence()
+    {
+        IntroTextHolder.gameObject.SetActive(true);
+        int linesGoneThrough = 0;
+        foreach (GameObject obj in IntroText)
+        {
+            linesGoneThrough += 1;
+            GameIntroEndingText introLines = obj.GetComponent<GameIntroEndingText>();
+            if (introLines != null)
+            {
+                introLines.gameObject.SetActive(true);
+                introLines.runRevealText();
+            }
+            if (linesGoneThrough == 3)
+            {
+                IntroDrawDisplay.DOFade(1f, 5f);
+                yield return new WaitForSeconds(2.5f);
+                IntroStayDisplay.DOFade(1f, 5f);
+            }
+            if (linesGoneThrough == 6)
+            {
+                IntroInvDisplay.DOFade(1f, 5f);
+            }
+            if (linesGoneThrough == 9)
+            {
+                yield return new WaitForSeconds(5f);
+                blackFade.DOFade(0f, 10f);
+                IntroTextHolder.DOFade(0f, 10f);
+                IntroOptionsPanelDisplay.DOFade(0f, 10f);
+                linesGoneThrough = 0;
+                yield return new WaitForSeconds(10f);
+                endIntroSequence();
+            }
+            yield return new WaitForSeconds(7f);
+        }
+    }
+    public void endIntroSequence()
+    {
+        StopCoroutine(IntroCoroutine);
+        foreach (GameObject obj in IntroText) {
+            GameIntroEndingText introLines = obj.GetComponent<GameIntroEndingText>();
+            if (obj != null) {
+                StopCoroutine(introLines.RevealText());
+            }
+        }
+        IntroTextHolder.gameObject.SetActive(false);
+        IntroOptionsPanelDisplay.gameObject.SetActive(false);
+        StartGame();
+    }
+    void StartGame()
     {
         StartCoroutine(unfadeBlack());
         alreadyPrompted = false;
@@ -87,7 +147,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject obj in EndingText)
         {
-            GameEndingText endingLine = obj.GetComponent<GameEndingText>();
+            GameIntroEndingText endingLine = obj.GetComponent<GameIntroEndingText>();
             if (endingLine != null)
             {
                 endingLine.gameObject.SetActive(true);
@@ -103,7 +163,7 @@ public class GameManager : MonoBehaviour
                 obj.SetActive(false);
                 yield return new WaitForSeconds(0.1f);
             }
-    }
+        }
 }
     IEnumerator unfadeBlack()
     {

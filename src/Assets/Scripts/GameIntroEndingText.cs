@@ -2,11 +2,10 @@ using UnityEngine;
 using System.Collections;
 using TMPro; // Include TMP namespace
 
-public class GameEndingText : MonoBehaviour
+public class GameIntroEndingText : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public float timePerChar = 0.05f;
-
     public void runRevealText()
     {
         StartCoroutine(RevealText());

@@ -14,6 +14,7 @@ public class PauseController : MonoBehaviour
     public GameObject pause;
     public SceneManager sceneManager;
     public GameManager gm;
+    public GameObject IntroTextHolder;
     [SerializeField] private CanvasGroup pauseGroup;
     public static bool canPressEscape = true;
     public static bool paused = false;
@@ -28,8 +29,12 @@ public class PauseController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && canPressEscape)
         {
-            switch (paused)
+            if (IntroTextHolder.activeInHierarchy)
             {
+                gm.endIntroSequence();
+            } else {
+                switch (paused)
+                {
                 case true:
                     Resume();
                     canPressEscape = false;
@@ -42,6 +47,7 @@ public class PauseController : MonoBehaviour
                     await Task.Delay(300);
                     canPressEscape = true;
                     break;
+                }
             }
         }
     }
