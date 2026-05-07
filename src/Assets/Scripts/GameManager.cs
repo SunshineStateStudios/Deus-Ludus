@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public MusicController musicController = new MusicController();
     public bool alreadyPrompted { get; set; }
     public CanvasGroup blackFade;
+    public GameObject blackFadeText;
     public GameObject ConclusionText;
     public GameObject[] Male_Gods;
     public GameObject[] Female_Gods;
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour
     }
     void StartGame()
     {
-        StartCoroutine(unfadeBlack());
+        StartCoroutine(unfadeBlack(false));
         alreadyPrompted = false;
 
         ConclusionTextAnimator = ConclusionText.GetComponent<Animator>();
@@ -165,17 +166,26 @@ public class GameManager : MonoBehaviour
             }
         }
 }
-    IEnumerator unfadeBlack()
+    IEnumerator unfadeBlack(bool includeText)
     {
         blackFade.DOFade(0f, 1.5f);
         yield return new WaitForSeconds(1.5f);
         blackFade.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.5f);
+        
+        if (includeText) {
+            blackFadeText.GetComponent<TMP_Text>().DOFade(0f, 2f);
+            yield return new WaitForSeconds(2f);
+            blackFadeText.SetActive(false);
+        }
     }
     IEnumerator fadeBlack()
     {
         blackFade.gameObject.SetActive(true);
         blackFade.DOFade(1f, 1.5f);
+
+        blackFadeText.SetActive(true);
+        blackFadeText.GetComponent<TMP_Text>().DOFade(148f/255f, 2f);
         yield return new WaitForSeconds(0.5f);
     }
 
@@ -603,7 +613,7 @@ public class GameManager : MonoBehaviour
         TMP_Text damageText = cardRepresentation.transform.Find("Container/Canvas/AttackValue").GetComponent<TMP_Text>();
         TMP_Text healthText = cardRepresentation.transform.Find("Container/Canvas/DefendValue").GetComponent<TMP_Text>();
 
-        if (ply == ply2 && ply2.NumberCards.Count == 1)
+        if (ply == ply2 && ply.NumberCards[0] == card)
         {
             valueText.text = "?";
             valueShadowText.text = "?";
@@ -958,10 +968,10 @@ public class GameManager : MonoBehaviour
 
         TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
         if (whoWon == ply2) {
-            conclusiontxtcomponent.text = "You lost!";
+            conclusiontxtcomponent.text = "You lost!\n<i>The opponent will deal damage.</i>";
             conclusiontxtcomponent.color = new Color(1f, 0.98f, 0f, 1f);
         } else if (whoWon == ply1) {
-            conclusiontxtcomponent.text = "You won!";
+            conclusiontxtcomponent.text = "You won!\n<i>You will deal damage.</i>";
             conclusiontxtcomponent.color = new Color(0f, 0.85f, 1f, 1f);
         } else {
             conclusiontxtcomponent.text = "Nobody won!";
@@ -987,24 +997,14 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
             PlayAttackAnimations(whoWon);
+            PlayAttackAnimations(whoLost);
 
             AudioSource boomSound = GetComponents<AudioSource>()[1];
             boomSound.PlayOneShot(boomSound.clip);
 
-            yield return new WaitForSeconds(0.28f);
+            yield return new WaitForSeconds(0.32f);
 
             BlowupParticle.GetComponent<ParticleSystem>().Emit(15);
-
-            yield return new WaitForSeconds(1.2f);
-
-            PlayAttackAnimations(whoLost);
-            boomSound.PlayOneShot(boomSound.clip);
-
-            yield return new WaitForSeconds(0.28f);
-
-            BlowupParticle.GetComponent<ParticleSystem>().Emit(15);
-
-            yield return new WaitForSeconds(0.5f);
 
             int WinnerDef = whoWon.TotalHealth(BlackjackThreshold, false);
             int WinnerAtk = whoWon.TotalDamage(false);
@@ -1018,10 +1018,10 @@ public class GameManager : MonoBehaviour
 
             canvasManagerScript.SetHealth(ply1.Life, ply2.Life);
             if (ply2.Life > 0) {
-            musicController.ControlMusic(this);
+                musicController.ControlMusic(this);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.25f);
 
             if (ply1.Life <= 0) {
                 VictoryLossFrame.SetActive(true);
@@ -1030,7 +1030,9 @@ public class GameManager : MonoBehaviour
                 stop = true;
                 Destroy(PauseMenu);
             } else if (ply2.Life <= 0) {
-                //StartCoroutine(StartNewRound());
+                Destroy(PauseMenu);
+                GetComponent<EscapeToMenu>().enabled = true;
+
                 StartCoroutine(fadeBlack());
                 yield return new WaitForSeconds(3f);
                 musicController.FinaleMusic(this);
@@ -1040,7 +1042,6 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(TurnOffEndingText());
                 VictoryLossFrame.SetActive(true);
                 stop = true;
-                Destroy(PauseMenu);
             }
         }
 
