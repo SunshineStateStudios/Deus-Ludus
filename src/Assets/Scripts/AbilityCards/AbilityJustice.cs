@@ -21,6 +21,8 @@ public class AbilityJustice : AbilityCard
             card.Damage = card.Health;
             card.Health = DamageTempValue;
 
+            if (i == 0 && owner == gm.ply2) continue;
+
             Transform cardRepresentation = parent.transform.Find(i.ToString());
 
             TMP_Text healthText =
