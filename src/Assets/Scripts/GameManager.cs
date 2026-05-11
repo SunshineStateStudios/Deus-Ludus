@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject BlowupParticle;
     public GameObject[] IntroText;
+    public GameObject invHeyListen;
     public CanvasGroup IntroTextHolder;
     public CanvasGroup IntroDrawDisplay;
     public CanvasGroup IntroStayDisplay;
@@ -240,14 +241,11 @@ public class GameManager : MonoBehaviour
 
         if (availableCards < 5)
         {
-            canvasManagerScript.inventoryButton.GetComponent<Animator>().Play("Notify", 0, 0);
-            
             AbilityCard chosenCard = abilityCardList[0];
             ply.AbilityCards.Add(chosenCard);
             abilityCardList.RemoveAt(0);
             return chosenCard;
-        }
-        
+        }     
         return null;
     }
 
@@ -285,6 +283,8 @@ public class GameManager : MonoBehaviour
             canvasManagerScript.SetStatus("It's your turn!");
             if (rounds > 1) canvasManagerScript.SetActive(true);
         }
+        invHeyListen.SetActive(true);
+        canvasManagerScript.inventoryButton.GetComponent<Animator>().Play("Notify", -1, 0);
     }
 
     public IEnumerator EndRound(bool didStay)

@@ -5511,7 +5511,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hover Info Guide
+  m_text: UI Hover Info Guide
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1fa92693498ac3947a938afac2d77209, type: 2}
   m_sharedMaterial: {fileID: 630950936364446140, guid: 1fa92693498ac3947a938afac2d77209, type: 2}
