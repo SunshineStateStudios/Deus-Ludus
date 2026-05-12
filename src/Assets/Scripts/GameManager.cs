@@ -968,10 +968,10 @@ public class GameManager : MonoBehaviour
 
         TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
         if (whoWon == ply2) {
-            conclusiontxtcomponent.text = "You lost!\n<i>The opponent will deal damage.</i>";
+            conclusiontxtcomponent.text = "YOU LOST!\n<i>The opponent attack.</i>";
             conclusiontxtcomponent.color = new Color(1f, 0.98f, 0f, 1f);
         } else if (whoWon == ply1) {
-            conclusiontxtcomponent.text = "You won!\n<i>You will deal damage.</i>";
+            conclusiontxtcomponent.text = "YOU WON!\n<i>You will attack.</i>";
             conclusiontxtcomponent.color = new Color(0f, 0.85f, 1f, 1f);
         } else {
             conclusiontxtcomponent.text = "Nobody won!";
@@ -1026,6 +1026,10 @@ public class GameManager : MonoBehaviour
             if (ply1.Life <= 0) {
                 VictoryLossFrame.SetActive(true);
                 VictoryLossFrame.transform.Find("Text (TMP)").gameObject.GetComponent<TMP_Text>().text = "YOU LOST...\nBetter luck next time!";
+                VictoryLossFrame.transform.Find("Text (TMP) behind 1").gameObject.SetActive(false);
+                VictoryLossFrame.transform.Find("Text (TMP) behind 2").gameObject.SetActive(false);
+                VictoryLossFrame.transform.Find("Text (TMP) behind 3").gameObject.SetActive(false);
+                VictoryLossFrame.transform.Find("Text (TMP) behind 4").gameObject.SetActive(false);
 
                 stop = true;
                 Destroy(PauseMenu);
