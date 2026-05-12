@@ -1037,7 +1037,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Your <color=#ff8282>Attack<color=#ffffff> and <color=#8787ff>Defense.<color=#ffffff>
-    You deal damage if you win and Defend if you lose
+    You Attack if you win and Defend if you lose
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
   m_sharedMaterial: {fileID: 4166540614853541441, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
