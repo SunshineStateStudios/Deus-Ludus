@@ -1617,8 +1617,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bc3c5c9e972bc1937a7adfad208172bc, type: 2}
-  m_sharedMaterial: {fileID: 4166540614853541441, guid: bc3c5c9e972bc1937a7adfad208172bc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
+  m_sharedMaterial: {fileID: 4166540614853541441, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3485,6 +3485,10 @@ MonoBehaviour:
   blackFade: {fileID: 1161589422}
   blackFadeText: {fileID: 1786648394}
   ConclusionText: {fileID: 94487699}
+  ConclusionTextFonts:
+  - {fileID: 11400000, guid: ae0095ec6f0a7534fbf22bd8c2440ee2, type: 2}
+  - {fileID: 11400000, guid: 6a7d28fafcc46a8d9a6a4df40c5cbedc, type: 2}
+  - {fileID: 11400000, guid: 07526ace71b01de298e3506a450dc5fd, type: 2}
   Male_Gods:
   - {fileID: 9210034742198521899, guid: 14a10e75cd5baa18eb4d83a9d80893f9, type: 3}
   - {fileID: 8934803563554401430, guid: 568298536361e030bb276399d17cd6c0, type: 3}
