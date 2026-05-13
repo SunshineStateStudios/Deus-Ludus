@@ -43,21 +43,9 @@ public class MusicController
         pauseMoonAudio.Play();
         pauseDefaultAudio.Play();
     }
-    /*public IEnumerator musicFade(AudioSource music, float duration, float targetVolume)
-    {
-        float currentTime = 0;
-        float start = music.volume;
-        while (currentTime < duration)
-        {
-            currentTime += Time.deltaTime;
-            music.volume = Mathf.Lerp(start, targetVolume, currentTime / duration);
-            yield return null;
-        }
-        music.volume = targetVolume;
-    }*/
+
     public void ControlMusic(GameManager gm)
     {
-        //PauseController pauseController = pauseornot.GetComponent<PauseController>();
         yourHp = gm.ply1.Life;
         if (yourHp <= 9)
         {
