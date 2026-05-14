@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public CanvasGroup blackFade;
     public GameObject blackFadeText;
     public GameObject ConclusionText;
+    public TMP_FontAsset[] ConclusionTextFonts = new TMP_FontAsset[3];
     public GameObject[] Male_Gods;
     public GameObject[] Female_Gods;
     public GameObject VictoryLossFrame;
@@ -968,14 +969,14 @@ public class GameManager : MonoBehaviour
 
         TMP_Text conclusiontxtcomponent = ConclusionText.GetComponent<TMP_Text>();
         if (whoWon == ply2) {
-            conclusiontxtcomponent.text = "YOU LOST!\n<i>The opponent attack.</i>";
-            conclusiontxtcomponent.color = new Color(1f, 0.98f, 0f, 1f);
+            conclusiontxtcomponent.text = "YOU LOST!\n<i>The opponent will attack.</i>";
+            conclusiontxtcomponent.font = ConclusionTextFonts[1];
         } else if (whoWon == ply1) {
             conclusiontxtcomponent.text = "YOU WON!\n<i>You will attack.</i>";
-            conclusiontxtcomponent.color = new Color(0f, 0.85f, 1f, 1f);
+            conclusiontxtcomponent.font = ConclusionTextFonts[2];
         } else {
             conclusiontxtcomponent.text = "Nobody won!";
-            conclusiontxtcomponent.color = new Color(1f, 1f, 1f, 1f);
+            conclusiontxtcomponent.font = ConclusionTextFonts[0];
         }
 
         canvasManagerScript.CalculateText(ply1,ply2,false,false,0f);
