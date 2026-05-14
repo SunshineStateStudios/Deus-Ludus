@@ -27,6 +27,8 @@ public class CanvasManager : MonoBehaviour
     public GameObject InventoryDescriptionPanel;
     public GameObject UISoundsObject;
     public GameObject inventoryButton;
+    public GameObject endgameTime;
+    public GameObject endgameRoundsWaves;
 
     private bool inventoryPanelHidden = true;
     private bool active = true;
@@ -63,11 +65,18 @@ public class CanvasManager : MonoBehaviour
             int seconds = (int) timePassed%60;
 
             TMP_Text timerLabelText = timerLabel.GetComponent<TMP_Text>();
+            TMP_Text endgameTimeText = endgameTime.GetComponent<TMP_Text>();
 
             if (seconds < 10) {
                 timerLabelText.text = minutes.ToString() + ":0" + seconds.ToString();
+                if (!gameManagerScript.blackFade.gameObject.activeInHierarchy) {
+                    endgameTimeText.text = "Time spent: " + minutes.ToString() + ":0" + seconds.ToString();
+                }
             } else {
                 timerLabelText.text = minutes.ToString() + ":" + seconds.ToString();
+                if (!gameManagerScript.blackFade.gameObject.activeInHierarchy) {
+                    endgameTimeText.text = "Time spent: " + minutes.ToString() + ":" + seconds.ToString();
+                }
             }
         }
     }
@@ -181,9 +190,11 @@ public class CanvasManager : MonoBehaviour
     public void SetRounds(int rounds, int turns) {
         TMP_Text roundsLabelText = roundsLabel.GetComponent<TMP_Text>();
         TMP_Text turnsLabelText = turnsLabel.GetComponent<TMP_Text>();
+        TMP_Text endgameRoundsWavesText = endgameRoundsWaves.GetComponent<TMP_Text>();
 
         roundsLabelText.text = rounds.ToString();
         turnsLabelText.text = turns.ToString();
+        endgameRoundsWavesText.text = "Won on Round: " + rounds.ToString() + ", Wave: " + turns.ToString();
     }
 
     public void SetStatus(string status, Color colour) {
