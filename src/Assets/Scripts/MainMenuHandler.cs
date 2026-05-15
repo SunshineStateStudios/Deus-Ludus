@@ -4,7 +4,11 @@ using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using DG.Tweening;
+using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Collections;
+using System.Threading;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -86,12 +90,84 @@ public class MainMenuHandler : MonoBehaviour
         checkCredits.SetActive(true);
         mainMenu.SetActive(false);
     }
+
+    void ShowErrorLol(string title, string message) {
+        RuntimePlatform platform = Application.platform;
+
+            if (platform == RuntimePlatform.WindowsPlayer ||
+                platform == RuntimePlatform.WindowsEditor)
+            {
+                ShowWindowsPopup(title, message);
+            }
+            else if (platform == RuntimePlatform.LinuxPlayer ||
+                    platform == RuntimePlatform.LinuxEditor)
+            {
+                ShowLinuxPopup(title, message);
+            }
+    }
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern int MessageBox(
+        IntPtr hWnd,
+        string text,
+        string caption,
+        uint type
+    );
+
+    private static void ShowWindowsPopup(string title, string message) {
+        const uint MB_ICONERROR = 0x10;
+
+        MessageBox(
+            IntPtr.Zero,
+            message,
+            title,
+            MB_ICONERROR
+        );
+    }
+
+    private static void ShowLinuxPopup(string title, string message) {
+        string desktop = Environment.GetEnvironmentVariable("XDG_CURRENT_DESKTOP");
+
+        if (!string.IsNullOrEmpty(desktop))
+        {
+            desktop = desktop.ToLower();
+        }
+
+        try
+        {
+            if (desktop.Contains("kde"))
+            {
+                Process.Start("kdialog",
+                    $"--error \"{message}\" --title \"{title}\"");
+            }
+
+            else
+            {
+                Process.Start("zenity",
+                    $"--error --title=\"{title}\" --text=\"{message}\"");
+            }
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogException(e);
+        }
+    }
+
     public void exitCredits()
     {
         checkCredits.SetActive(false);
         mainMenu.SetActive(true);
     }
     public void exitPrompt() {
+        if (UnityEngine.Random.value <= 1) {
+            UnityEngine.Debug.Log("ha");
+            Destroy(mainMenuMusic);
+            Thread.Sleep(5000);
+            ShowErrorLol("CRASH", "The application attempted to allocate memory that is no longer available (UNITY_PARADOX_CONFLICT).");
+            Quit();
+            return;
+        }
+
         playPrompt.SetActive(false);
         mainMenu.SetActive(true);
     }

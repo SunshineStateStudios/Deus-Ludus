@@ -3490,15 +3490,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a7d28fafcc46a8d9a6a4df40c5cbedc, type: 2}
   - {fileID: 11400000, guid: 07526ace71b01de298e3506a450dc5fd, type: 2}
   Male_Gods:
-  - {fileID: 9210034742198521899, guid: 14a10e75cd5baa18eb4d83a9d80893f9, type: 3}
-  - {fileID: 8934803563554401430, guid: 568298536361e030bb276399d17cd6c0, type: 3}
-  - {fileID: 1583769202442956140, guid: 3657ab05d376ec07fa704eaa3e89cc77, type: 3}
-  - {fileID: 6619706558493928582, guid: ab229ce3bf753e544bcc98f776863406, type: 3}
+  - {fileID: 1792430659729264092, guid: 497f25052fedcefe0b149cf632c02cb2, type: 3}
+  - {fileID: 6244302674575778982, guid: bce5edac91bc8c06ead1c57e055275e9, type: 3}
+  - {fileID: 4312434149203686954, guid: 634a0f9d9148560409419e7f6c7d8e6a, type: 3}
+  - {fileID: 6092041335360051060, guid: 55c70ffb5036de2678999fe6c6877e40, type: 3}
   Female_Gods:
   - {fileID: 7437372322972655242, guid: 86e7fb3ea8548c856a82f1196c4eed18, type: 3}
-  - {fileID: 8934803563554401430, guid: 568298536361e030bb276399d17cd6c0, type: 3}
-  - {fileID: 4048881507817990027, guid: 6a087a757175583408689eabcfc17a2e, type: 3}
-  - {fileID: 5911143614412926438, guid: e16e82f7ea1563deeb35f447bda62960, type: 3}
+  - {fileID: 5728822103215232787, guid: 1baa60e33471702388f576f82da3ce3c, type: 3}
+  - {fileID: 7904563620506604198, guid: deae88b1ca433bde28dcd02094b30f8b, type: 3}
+  - {fileID: 386213136710439805, guid: 016d137518a266bf5b97da1008e83363, type: 3}
   VictoryLossFrame: {fileID: 1978674467}
   PauseMenu: {fileID: 1934126038}
   BlowupParticle: {fileID: 1491118550}

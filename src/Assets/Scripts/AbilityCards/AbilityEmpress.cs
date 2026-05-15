@@ -10,7 +10,7 @@ public class AbilityEmpress : AbilityCard
     public override void Apply(GameManager gm, Player owner, Player opponent)
     {
         CanvasManager canvasMngr = gm.canvasObject.GetComponent<CanvasManager>();
-        NumberCard card = new NumberCard(Random.Range(1,4), Random.Range(1,4));
+        NumberCard card = new NumberCard(Random.Range(1,5), Random.Range(1,4));
         owner.NumberCards.Add(card);
 
         if (owner == gm.ply1 && owner.BlackjackTotal(gm.BlackjackThreshold, false) >= 21) gm.canvasObject.GetComponent<CanvasManager>().ShowDrawButton(false);

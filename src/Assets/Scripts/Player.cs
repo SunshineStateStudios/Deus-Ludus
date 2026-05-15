@@ -8,7 +8,7 @@ public class Player
 {
     public List<NumberCard> NumberCards = new();
     public List<AbilityCard> AbilityCards = new();
-    public int Life = 10;
+    public int Life = 1/*0*/;
     
     public int BlackjackTotal(int currentThreshold, bool ignoreFirstCard = true)
     {
