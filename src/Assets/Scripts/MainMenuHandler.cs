@@ -25,6 +25,7 @@ public class MainMenuHandler : MonoBehaviour
     private float MasterVolume = 1f;
     private float MusicVolume = 1f;
     private float SfxVolume = 1f;
+    private bool hasRunBefore;
     [SerializeField] private Slider masterSlider;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider soundEffectsSlider;
@@ -37,6 +38,8 @@ public class MainMenuHandler : MonoBehaviour
         MasterVolume = PlayerPrefs.GetFloat("MasterVol", 1f);
         MusicVolume = PlayerPrefs.GetFloat("MusicVol", 1f);
         SfxVolume = PlayerPrefs.GetFloat("SfxVol", 1f);
+        hasRunBefore = PlayerPrefs.HasKey("HasRunBefore");
+        
         masterSlider.value = MasterVolume;
         musicSlider.value = MusicVolume;
         soundEffectsSlider.value = SfxVolume;
@@ -159,11 +162,23 @@ public class MainMenuHandler : MonoBehaviour
         mainMenu.SetActive(true);
     }
     public void exitPrompt() {
+        bool isFirstRun = !hasRunBefore;
+
+        if (isFirstRun) {
+            PlayerPrefs.SetInt("HasRunBefore", 1);
+            PlayerPrefs.Save();
+
+            playPrompt.SetActive(false);
+            mainMenu.SetActive(true);
+
+            return;
+        }
+
         if (UnityEngine.Random.value <= 1) {
             UnityEngine.Debug.Log("ha");
             Destroy(mainMenuMusic);
             Thread.Sleep(5000);
-            ShowErrorLol("CRASH", "The application attempted to allocate memory that is no longer available (UNITY_PARADOX_CONFLICT).");
+            ShowErrorLol("CRASH", "Unity Engine Exception [0xC0000005]\nFailed to allocate memory for object 'MainMenuController' (UNITY_PARADOX_CONFLICT).");
             Quit();
             return;
         }
