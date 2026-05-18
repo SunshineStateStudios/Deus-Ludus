@@ -254,7 +254,8 @@ public class GameManager : MonoBehaviour
     {
         rounds++;
         turns = 1;
-
+        
+        ConclusionText.SetActive(false);
         canvasManagerScript.SetRounds(rounds, turns);
 
         ply1.NumberCards.Clear();
@@ -986,7 +987,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(4f);
         blackFade.DOFade(0f, 0.3f);
         blackFade.gameObject.SetActive(false);
-        ConclusionText.SetActive(false);
 
         bool stop = false;
         if (whoWon != null) {
