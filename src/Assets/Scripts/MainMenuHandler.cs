@@ -174,8 +174,8 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        if (UnityEngine.Random.value <= 1) {
-            UnityEngine.Debug.Log("ha");
+        if (UnityEngine.Random.value <= 0.1) {
+            UnityEngine.Debug.Log("HAHAHA NICE TRY BACKING OUT OF IT");
             Destroy(mainMenuMusic);
             Thread.Sleep(5000);
             ShowErrorLol("CRASH", "Unity Engine Exception [0xC0000005]\nFailed to allocate memory for object 'MainMenuController' (UNITY_PARADOX_CONFLICT).");
